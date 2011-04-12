@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+
+<project name="carcassonne" default="execute">
+	
+	<target name="init">
+		<mkdir dir="build/classes"/>
+		<mkdir dir="dist"/>
+	</target>
+
+	<target name="compile" depends="init">
+		<javac 
+			srcdir="src" 
+			destdir="build/classes"
+			includeantruntime="true"/>
+	</target>
+
+	<target name="execute" depends="compile,test">
+		<java classname="org.gla.carcassonne.Main"
+			classpath="build/classes">
+		</java>
+	</target>
+
+	<target name="archive" depends="compile">
+		<jar basedir="build/classes" destfile="dist/carcassonne_project.jar"/>
+	</target>
+
+	<target name="clean" depends="init">
+		<delete dir="build"/>
+		<delete dir="dist"/>
+	</target>
+	
+	<target name="test-init">
+		<delete dir="build/test/data"/>
+		<delete dir="build/test/reports"/>
+		<mkdir dir="build/test/classes"/>
+		<mkdir dir="build/test/data"/>
+		<mkdir dir="build/test/reports"/>
+	</target>
+
+	<target name="test-compile" depends="compile,archive,test-init">
+		<javac 
+			includeantruntime="true" 
+			destdir="build/test/classes" 
+			srcdir="test">
+			<classpath>
+				<pathelement path="dist/carcassonne_project.jar"/>
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="test" depends="test-compile">
+		<junit printsummary="yes" haltonfailure="false">
+		  <classpath>
+				<pathelement location="build/test/classes"/>
+				<pathelement location="build/classes"/>
+			</classpath>
+			<formatter type="brief" usefile="false"/>
+			<formatter type="xml"/>
+			<batchtest todir="build/test/data">
+			  <fileset dir="build/test/classes"
+				    includes="**/test/*Test.class"/>
+			</batchtest>
+		</junit>
+		<junitreport todir="build/test/data">
+			<fileset dir="build/test/data">
+				<include name="TEST-*.xml"/>
+			</fileset>
+			<report format="frames" todir="build/test/reports"/>
+		</junitreport>
+	</target>
+
+</project>
