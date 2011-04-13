@@ -4,7 +4,6 @@ projets :
 [X] Ecriture du fichier de compilation, de test, d'exécution et d'archivage ('build.xml')
 [X] Creation des dossiers pour les tests et les sources (dossier 'test' et 'src')
 [X] Ecriture du premier test pour tester tout le système.
-[X]
 [ ] Améliorer le fichier build.xml en utilisant des propriétés et des références
 
 - cachier des charges
