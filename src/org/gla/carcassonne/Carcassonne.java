@@ -1,13 +1,21 @@
 package org.gla.carcassonne;
 
-public class CarcassonneGame {
+public class Carcassonne implements Game {
 	
-	public CarcassonneGame(){
+	public Carcassonne(){
 
 	}
 
 	public void start() {
 		System.out.println("Le jeu carcassonne commence ici.");		
+	}
+
+	public void quit() {
+
+	}
+
+	public void save() {
+
 	}
 }
 

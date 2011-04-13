@@ -1,13 +1,13 @@
 package org.gla.carcassonne.test;
 
-import org.gla.carcassonne.CarcassonneGame;
+import org.gla.carcassonne.Carcassonne;
 import junit.framework.TestCase;
 
-public class CarcassonneGameTest extends TestCase {
+public class CarcassonneTest extends TestCase {
 	
-	private CarcassonneGame carcassonneGame = new CarcassonneGame();
+	private Carcassonne carcassonne = new Carcassonne();
 
-	public CarcassonneGameTest(String s) {
+	public CarcassonneTest(String s) {
 		super(s);
 	}
 
