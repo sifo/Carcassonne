@@ -11,44 +11,44 @@ import javax.swing.event.EventListenerList;
 
 public class CarcassonneModelTest extends TestCase {
 	
-	private CarcassonneModel carcassonneModel;
-	private CarcassonneController carcassonneController;
-	private CarcassonneListener carcassonneListener;
+	private CarcassonneModel model;
+	private CarcassonneController controller;
+	private CarcassonneListener listener;
 
 	protected void setUp() {
-		carcassonneModel = new CarcassonneModel();
-		carcassonneController = new CarcassonneController(carcassonneModel);
-		carcassonneListener = new JFrameCarcassonne(carcassonneController);
+		model = new CarcassonneModel();
+		controller = new CarcassonneController(model);
+		listener = new JFrameCarcassonne(controller);
 	}
 
-	public void CarcassonneModelTest() {
-
+	public void testCarcassonneModel() {
+		assertNotNull(model.getListeners());
 	}
 
 	public void testAddCarcassonneListener() {
-		carcassonneModel = new CarcassonneModel();
-		carcassonneModel.addCarcassonneListener(carcassonneListener);
-		int count = carcassonneModel.getListeners()
+		model = new CarcassonneModel();
+		model.addCarcassonneListener(listener);
+		int count = model.getListeners()
 			.getListenerCount(CarcassonneListener.class);
 		
-		EventListener [] eventListeners = carcassonneModel.getListeners()
+		EventListener [] eventListeners = model.getListeners()
 				.getListeners(CarcassonneListener.class);
 
 		CarcassonneListener lastListener = 
 			(CarcassonneListener) eventListeners[count - 1];
 
-		assertEquals(carcassonneListener, lastListener);
+		assertEquals(listener, lastListener);
 	}
 
 	public void testRemoveCarcassonneListener() {
-		carcassonneModel = new CarcassonneModel();
-		carcassonneModel.addCarcassonneListener(carcassonneListener);
-		int count = carcassonneModel.getListeners()
+		model = new CarcassonneModel();
+		model.addCarcassonneListener(listener);
+		int count = model.getListeners()
 			.getListenerCount(CarcassonneListener.class);
 		assertEquals("count = " + count, 1, count);
 
-		carcassonneModel.removeCarcassonneListener(carcassonneListener);
-		count = carcassonneModel.getListeners()
+		model.removeCarcassonneListener(listener);
+		count = model.getListeners()
 			.getListenerCount(CarcassonneListener.class);
 		assertEquals("count = " + count, 0, count);
 	}

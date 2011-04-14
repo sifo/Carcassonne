@@ -1,4 +1,5 @@
 package org.gla.carcassonne;
+
 import org.gla.carcassonne.CarcassonneView;
 import org.gla.carcassonne.CarcassonneModel;
 
@@ -12,7 +13,7 @@ public class CarcassonneController {
 		addListenersToModel();
 	}
 
-	private void addListenersToModel() {
+	public void addListenersToModel() {
 		carcassonneModel.addCarcassonneListener(carcassonneView);
 	}
 
@@ -22,5 +23,13 @@ public class CarcassonneController {
 
 	public void closeViews() {
 		carcassonneView.close();
+	}
+
+	public CarcassonneView getCarcassonneView(){
+		return carcassonneView;
+	}
+
+	public CarcassonneModel getCarcassonneModel() {
+		return carcassonneModel;
 	}
 }

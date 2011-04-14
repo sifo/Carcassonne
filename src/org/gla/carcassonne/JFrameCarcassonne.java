@@ -12,7 +12,7 @@ public class JFrameCarcassonne extends CarcassonneView
 	implements ActionListener {
 
 	private JFrame jframe;
-	private JPanel jpane;
+	private JPanel jpanel;
 	private final static String TITLE = "Carcassonne";
 	private final static int WIDTH = 450;
 	private final static int HEIGHT = 350;
@@ -20,7 +20,7 @@ public class JFrameCarcassonne extends CarcassonneView
 	public JFrameCarcassonne(CarcassonneController controller) {
 		super(controller);
 		jframe = new JFrame(TITLE);
-		jpane = new JPanel();
+		jpanel = new JPanel();
 		jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		jframe.getContentPane().setLayout(new FlowLayout());
 		jframe.pack();
@@ -37,5 +37,13 @@ public class JFrameCarcassonne extends CarcassonneView
 
 	public void actionPerformed(ActionEvent arg) {
 
+	}
+
+	public JFrame getJFrame() {
+		return jframe;
+	}
+
+	public JPanel getJPanel() {
+		return jpanel;
 	}
 }
