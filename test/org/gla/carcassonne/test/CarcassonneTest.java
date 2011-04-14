@@ -7,16 +7,11 @@ public class CarcassonneTest extends TestCase {
 	
 	private Carcassonne carcassonne = new Carcassonne();
 
-	public CarcassonneTest(String s) {
-		super(s);
+	public CarcassonneTest() {
+	
 	}
 
 	public void testStart() {
-		assertTrue("probleme!", true);
-	}
-	
-	public void testIgnore() {
-		System.out.println("ignore!");
-	}
 
+	}
 }

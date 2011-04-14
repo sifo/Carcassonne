@@ -10,13 +10,14 @@
 	<target name="compile" depends="init">
 		<javac 
 			srcdir="src" 
+			debug="true"
 			destdir="build/classes"
 			includeantruntime="true"/>
 	</target>
 
 	<target name="execute" depends="compile,test">
 		<java classname="org.gla.carcassonne.Main"
-			classpath="build/classes">
+			classpath="build/classes" fork="true">
 		</java>
 	</target>
 
@@ -40,6 +41,7 @@
 	<target name="test-compile" depends="compile,archive,test-init">
 		<javac 
 			includeantruntime="true" 
+			debug="true"
 			destdir="build/test/classes" 
 			srcdir="test">
 			<classpath>

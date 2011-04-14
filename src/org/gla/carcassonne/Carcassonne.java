@@ -6,10 +6,6 @@ public class Carcassonne implements Game {
 
 	}
 
-	public void start() {
-		System.out.println("Le jeu carcassonne commence ici.");		
-	}
-
 	public void quit() {
 
 	}
