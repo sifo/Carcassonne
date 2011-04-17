@@ -5,50 +5,33 @@ import java.awt.event.ActionEvent;
 import java.awt.Image;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.ImageIcon;
-import java.awt.FlowLayout;
-import org.gla.carcassonne.CarcassonneView;
-import org.gla.carcassonne.JPanelMain;
-import org.gla.carcassonne.CarcassonneController;
+import javax.swing.JLabel;
+import java.awt.GridLayout;
+import org.gla.carcassonne.JPanelBoard;
+import org.gla.carcassonne.JPanelTile;
 
-public class JFrameCarcassonne extends CarcassonneView 
-	implements ActionListener {
+public class JFrameCarcassonne extends JFrame {
 
-	private JFrame jframe;
-	private JPanel jpanel;
-	private Image imageInitial;
-	private final static String TITLE = "Carcassonne";
-	private final static int WIDTH = 450;
-	private final static int HEIGHT = 350;
+	private JPanel jpanelBoard;
+	private JPanel jpanelTile;
+	private JLabel remainingTileNumberLabel;
 
-	public JFrameCarcassonne(CarcassonneController controller) {
-		super(controller);
-		jframe = new JFrame(TITLE);
-		jpanel = new JPanelMain();
-		jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		jframe.getContentPane().setLayout(new FlowLayout());
-		jframe.getContentPane().add(jpanel);
-		jframe.pack();
-		jframe.setSize(WIDTH, HEIGHT);
+	public JFrameCarcassonne(String title) {
+		super(title);
+		jpanelBoard = new JPanelBoard();
+		jpanelBoard.setLayout(new GridLayout(1, 1));
+		jpanelTile = new JPanelTile("res/drawable/tile-x.png");
+		remainingTileNumberLabel = new JLabel("10 Remaining");
+		getContentPane().add(jpanelBoard);
+		getContentPane().add(remainingTileNumberLabel);
+		getContentPane().add(jpanelTile); 
 	}
 
-	public void close() {
-		jframe.dispose();
+	public JPanel getJPanelTile() {
+		return jpanelTile;
 	}
 
-	public void display() {
-		jframe.setVisible(true);
-	}
-
-	public void actionPerformed(ActionEvent arg) {
-
-	}
-
-	public JFrame getJFrame() {
-		return jframe;
-	}
-
-	public JPanel getJPanel() {
-		return jpanel;
+	public JPanel getJPanelBoard() {
+		return jpanelBoard;
 	}
 }

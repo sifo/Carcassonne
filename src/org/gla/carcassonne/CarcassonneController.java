@@ -9,7 +9,7 @@ public class CarcassonneController {
 
 	public CarcassonneController(CarcassonneModel model) {
 		carcassonneModel = model;
-		carcassonneView = new JFrameCarcassonne(this);
+		carcassonneView = new SwingCarcassonneView(this);
 		addListenersToModel();
 	}
 

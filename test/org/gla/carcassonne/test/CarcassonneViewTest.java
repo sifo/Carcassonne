@@ -2,6 +2,7 @@ package org.gla.carcassonne.test;
 
 import junit.framework.TestCase;
 import org.gla.carcassonne.CarcassonneView;
+import org.gla.carcassonne.SwingCarcassonneView;
 import org.gla.carcassonne.CarcassonneModel;
 import org.gla.carcassonne.JFrameCarcassonne;
 import org.gla.carcassonne.CarcassonneController;
@@ -15,7 +16,7 @@ public class CarcassonneViewTest extends TestCase {
 	protected void setUp() {
 		model = new CarcassonneModel();
 		controller = new CarcassonneController(model);
-		view = new JFrameCarcassonne(controller);	
+		view = new SwingCarcassonneView(controller);	
 	}
 
 	public void testCarcassonneView() {

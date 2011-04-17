@@ -4,7 +4,7 @@ import org.gla.carcassonne.CarcassonneModel;
 import org.gla.carcassonne.CarcassonneView;
 import org.gla.carcassonne.CarcassonneListener;
 import org.gla.carcassonne.CarcassonneController;
-import org.gla.carcassonne.JFrameCarcassonne;
+import org.gla.carcassonne.SwingCarcassonneView;
 import junit.framework.TestCase;
 import java.util.EventListener;
 import javax.swing.event.EventListenerList;
@@ -18,7 +18,7 @@ public class CarcassonneModelTest extends TestCase {
 	protected void setUp() {
 		model = new CarcassonneModel();
 		controller = new CarcassonneController(model);
-		listener = new JFrameCarcassonne(controller);
+		listener = new SwingCarcassonneView(controller);
 	}
 
 	public void testCarcassonneModel() {

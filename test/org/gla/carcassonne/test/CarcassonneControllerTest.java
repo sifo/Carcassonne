@@ -4,7 +4,7 @@ import org.gla.carcassonne.CarcassonneController;
 import org.gla.carcassonne.CarcassonneModel;
 import org.gla.carcassonne.CarcassonneView;
 import org.gla.carcassonne.CarcassonneListener;
-import org.gla.carcassonne.JFrameCarcassonne;
+import org.gla.carcassonne.SwingCarcassonneView;
 import junit.framework.TestCase;
 
 public class CarcassonneControllerTest extends TestCase {
@@ -32,13 +32,13 @@ public class CarcassonneControllerTest extends TestCase {
 	public void testCloseViews() {
 		controller.displayViews();
 		controller.closeViews();
-		assertFalse(((JFrameCarcassonne)controller.getCarcassonneView())
+		assertFalse(((SwingCarcassonneView)controller.getCarcassonneView())
 			.getJFrame().isVisible());
 	}
 
 	public void testDisplayViews() {
 		controller.displayViews();
-		assertTrue(((JFrameCarcassonne)controller.getCarcassonneView())
+		assertTrue(((SwingCarcassonneView)controller.getCarcassonneView())
 			.getJFrame().isVisible());
 	}
 
