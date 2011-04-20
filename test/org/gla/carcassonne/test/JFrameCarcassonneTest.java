@@ -18,6 +18,6 @@ public class JFrameCarcassonneTest extends TestCase {
 
 	public void testJFrameCarcassonne() {
 		assertNotNull(jframeCarcassonne.getJPanelBoard());
-		assertNotNull(jframeCarcassonne.getJPanelTileToPlace());
+		assertNotNull(jframeCarcassonne.getJPanelTile());
 	}
 }
