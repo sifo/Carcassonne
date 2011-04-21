@@ -1,8 +1,6 @@
 package org.gla.carcassonne;
 
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.Image;
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
@@ -18,8 +16,6 @@ public class JFrameCarcassonne extends JFrame {
 	private JPanel jpanelBoard;
 	private JPanel jpanelTile;
 	private JLabel remainingTileNumberLabel;
-	private JLabel test;
-	private JLabel test2;
 
 	public JFrameCarcassonne(String title) {
 		super(title);
@@ -28,25 +24,24 @@ public class JFrameCarcassonne extends JFrame {
 		jpanelBoard.setLayout(new GridLayout(1, 1));
 		jpanelTile = new JPanelTile("res/drawable/tile-x.png");
 		remainingTileNumberLabel = new JLabel("10 Remaining");
-		test = new JLabel("test");
-		test2 = new JLabel("test2");
 		addComponents();
 	}
 
 	private void addComponents() {
 		GridBagConstraints constraints = new GridBagConstraints();
-
-		/*
+		
+		// Plateau de jeu principal : échiquier sur lequel on posera les tuiles
 		constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.gridheight = 3;
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		constraints.ipady = 450;
-		jpanelBoard.setBackground(Color.RED);
+		constraints.ipady = 400;	// Board hauteur
+		constraints.ipadx = 435;	// Board largeur
+		jpanelBoard.setBorder(BorderFactory.createLineBorder(Color.black));//.setBackground(Color.RED);
 		jpanelBoard.setOpaque(true); 
 		getContentPane().add(jpanelBoard, constraints);
-		*/
-
+		
 		constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 1;
@@ -55,35 +50,15 @@ public class JFrameCarcassonne extends JFrame {
 		remainingTileNumberLabel.setOpaque(true); 
 		getContentPane().add(remainingTileNumberLabel, constraints);
 
-		/*
 		constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 1;
 		constraints.gridy = 1;
-		constraints.ipady = 50;
-		jpanelTile.setBackground(Color.RED);
+		constraints.ipady = 90;
+		constraints.ipadx = 90;
+		jpanelTile.setBackground(Color.WHITE);
 		jpanelTile.setOpaque(true); 
 		getContentPane().add(jpanelTile, constraints); 
-		*/
-
-		constraints = new GridBagConstraints();
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridheight = 3;
-		constraints.gridx = 0;
-		constraints.gridy = 0;
-		constraints.ipady = 400;	// Board hauteur
-		constraints.ipadx = 435;	// Board largeur
-		test.setBackground(Color.RED);
-		test.setOpaque(true); 
-		getContentPane().add(test, constraints);
-
-		constraints = new GridBagConstraints();
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridx = 1;
-		constraints.gridy = 1;
-		test2.setBackground(Color.BLACK);
-		test2.setOpaque(true); 
-		getContentPane().add(test2, constraints);
 	}
 
 	public JPanel getJPanelTile() {
