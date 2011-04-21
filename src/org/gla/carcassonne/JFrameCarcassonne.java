@@ -30,7 +30,7 @@ public class JFrameCarcassonne extends JFrame {
 	private void addComponents() {
 		GridBagConstraints constraints = new GridBagConstraints();
 		
-		// Plateau de jeu principal : échiquier sur lequel on posera les tuiles
+		// Plateau de jeu principal : Ã©chiquier sur lequel on posera les tuiles
 		constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridheight = 3;
@@ -38,7 +38,7 @@ public class JFrameCarcassonne extends JFrame {
 		constraints.gridy = 0;
 		constraints.ipady = 400;	// Board hauteur
 		constraints.ipadx = 435;	// Board largeur
-		jpanelBoard.setBorder(BorderFactory.createLineBorder(Color.black));//.setBackground(Color.RED);
+		jpanelBoard.setBorder(BorderFactory.createLineBorder(Color.black));
 		jpanelBoard.setOpaque(true); 
 		getContentPane().add(jpanelBoard, constraints);
 		
