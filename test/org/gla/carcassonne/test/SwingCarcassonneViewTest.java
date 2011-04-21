@@ -29,7 +29,9 @@ public class SwingCarcassonneViewTest extends TestCase {
 			JFrame.EXIT_ON_CLOSE);
 		assertTrue(view.getJFrame().getWidth() != 0);
 		assertTrue(view.getJFrame().getHeight() != 0);
-		assertEquals(GridBagLayout.class, view.getJFrame().getLayout().getClass());
+		assertEquals(GridBagLayout.class, view.getJFrame()
+			.getContentPane().getLayout().getClass());
+
 	}
 
 	public void testDisplay() {
