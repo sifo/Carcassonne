@@ -68,10 +68,11 @@ public class JFrameCarcassonne extends JFrame {
 
 		constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridheight = 2;
+		constraints.gridheight = 3;
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		constraints.ipady = 50;
+		constraints.ipady = 400;	// Board hauteur
+		constraints.ipadx = 435;	// Board largeur
 		test.setBackground(Color.RED);
 		test.setOpaque(true); 
 		getContentPane().add(test, constraints);
