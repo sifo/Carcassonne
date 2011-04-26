@@ -4,7 +4,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
-import javax.swing.JMenuBar;
 import javax.swing.JLabel;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
