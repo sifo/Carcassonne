@@ -5,8 +5,8 @@ import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import org.gla.carcassonne.JPanelBoard;
@@ -14,7 +14,9 @@ import org.gla.carcassonne.JPanelTile;
 import org.gla.carcassonne.JPanelMenu;
 
 public class JFrameCarcassonne extends JFrame {
-
+	public static final int GRID_LENGTH = 6;
+	public static final int GRID_HEIGHT = 6;
+	
 	private JPanel jpanelBoard;
 	private JPanel jpanelTile;
 	private JMenuBar menuBar;
@@ -25,8 +27,9 @@ public class JFrameCarcassonne extends JFrame {
 	public JFrameCarcassonne(String title) {
 		super(title);
 		getContentPane().setLayout(new GridBagLayout());
-		jpanelBoard = new JPanelBoard();
-		jpanelBoard.setLayout(new GridLayout(1, 1));
+		
+		jpanelBoard = new JPanelBoard(GRID_LENGTH, GRID_HEIGHT);
+		
 		jpanelTile = new JPanelTile("res/drawable/tile-x.png");
 		remainingTileNumberLabel = new JLabel("10 Remaining");
 		menuBar = new JPanelMenu();
@@ -41,13 +44,12 @@ public class JFrameCarcassonne extends JFrame {
 		GridBagConstraints constraints = new GridBagConstraints();
 		
 		// Plateau de jeu principal : échiquier sur lequel on posera les tuiles
-		constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridheight = 3;
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		constraints.ipady = 400;	// Board hauteur
-		constraints.ipadx = 435;	// Board largeur
+		constraints.ipady = 500;	// Board hauteur
+		constraints.ipadx = 500;	// Board largeur
 		jpanelBoard.setBorder(BorderFactory.createLineBorder(Color.black));
 		jpanelBoard.setOpaque(true); 
 		getContentPane().add(jpanelBoard, constraints);

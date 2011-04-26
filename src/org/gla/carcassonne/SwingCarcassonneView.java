@@ -12,8 +12,8 @@ public class SwingCarcassonneView extends CarcassonneView
 
 	private JFrame jframe;
 	private final static String TITLE = "Carcassonne";
-	private final static int WIDTH = 580;
-	private final static int HEIGHT = 460;
+	private final static int WIDTH = 800;
+	private final static int HEIGHT = 700;
 
 	public SwingCarcassonneView(CarcassonneController controller) {
 		super(controller);
