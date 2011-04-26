@@ -12,15 +12,7 @@ public class CarcassonneTest extends TestCase {
 	}
 	
 	public void testCarcassonne() {
-		assertNotNull(carcassonne.getPlayers());
-		assertNotNull(carcassonne.getTiles());
-		assertNotNull(carcassonne.getTilesOnBoard());
-		assertFalse(carcassonne.getPlayerNumber() == 0);
-	}
-
-	public void testAddPlayer() {
-		int playerNumber = carcassonne.getPlayerNumber();
-		carcassonne.addPlayer();
-		assertEquals(playerNumber + 1, carcassonne.getPlayerNumber());
+		assertNotNull(carcassonne.getTileManager());
+		assertNotNull(carcassonne.getPlayerManager());
 	}
 }
