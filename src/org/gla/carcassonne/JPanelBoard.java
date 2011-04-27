@@ -1,8 +1,5 @@
 package org.gla.carcassonne;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.JLabel;
@@ -19,8 +16,9 @@ public class JPanelBoard extends JPanel {
 	public JPanelBoard(int gridLength, int gridHeight) {
 
 		this.setLayout(new GridLayout(gridLength, gridHeight));
-
-		for (int i = 0; i < gridLength*gridHeight; i++) {
+		tiles = new JPanel[TOTAL_NUMBER_OF_TILES];
+		numberOfTiles = 0;
+		/*for (int i = 0; i < gridLength*gridHeight; i++) {
             //JPanel square = new JPanel(new BorderLayout());
             //add(square);
             
@@ -37,6 +35,13 @@ public class JPanelBoard extends JPanel {
                 square.setBackground(i % 2 == 0 ? Color.black : Color.white);
             else
                 square.setBackground(i % 2 == 0 ? Color.white : Color.black);*/
-        }
 	}
+
+	public void addTileOnBoard(Tile tile) {
+		tiles[numberOfTiles++] = new JPanelTile(tile);
+		add(tiles[0]);
+		revalidate();
+	}
+
+	
 }

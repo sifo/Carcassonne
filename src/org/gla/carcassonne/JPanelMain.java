@@ -1,10 +1,10 @@
 package org.gla.carcassonne;
 
-import javax.swing.ImageIcon;
-import java.awt.Image;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Toolkit;
+
 import javax.swing.JPanel;
 
 public class JPanelMain extends JPanel {

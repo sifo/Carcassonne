@@ -3,7 +3,7 @@ package org.gla.carcassonne;
 import org.gla.carcassonne.Tile;
 
 public class TileManager {
-
+	private int numberOfTileOnBoard;
 	private Tile [] tilesOnBoard;
 	private Tile [] tiles = 
 		{ new Tile(TileType.TILE_A), new Tile(TileType.TILE_A), 
@@ -14,7 +14,7 @@ public class TileManager {
 		new Tile(TileType.TILE_C),
 
 		new Tile(TileType.TILE_D), new Tile(TileType.TILE_D), 
-		new Tile(TileType.TILE_D), 
+		new Tile(TileType.TILE_D), new Tile(TileType.TILE_D), 
 
 		new Tile(TileType.TILE_E), new Tile(TileType.TILE_E), 
 		new Tile(TileType.TILE_E), 	new Tile(TileType.TILE_E), 
@@ -54,7 +54,7 @@ public class TileManager {
 		new Tile(TileType.TILE_U), new Tile(TileType.TILE_U), 
 		new Tile(TileType.TILE_U), new Tile(TileType.TILE_U), 
 		new Tile(TileType.TILE_U), new Tile(TileType.TILE_U), 
-		new Tile(TileType.TILE_U), 
+		new Tile(TileType.TILE_U), new Tile(TileType.TILE_U), 
 
 		new Tile(TileType.TILE_V), new Tile(TileType.TILE_V), 
 		new Tile(TileType.TILE_V), new Tile(TileType.TILE_V), 
@@ -69,11 +69,29 @@ public class TileManager {
 		new Tile(TileType.TILE_X) 
 	};
 
-	private final static int MAX_TILE_NUMBER = 100;
+	private final static int MAX_TILE_NUMBER = 72;
 
 	public TileManager() {
-		tiles = new Tile[MAX_TILE_NUMBER];
+		numberOfTileOnBoard = 0;
 		tilesOnBoard = new Tile[MAX_TILE_NUMBER];
+	}
+
+	public void addTileOnBoard(Tile t) {
+		tilesOnBoard[numberOfTileOnBoard++] = t;
+	}
+
+	public void putFirstTileOnBoard() {
+		addTileOnBoard(selectTileRandomly());
+	}
+
+	public Tile selectTileRandomly() {
+		int lower = 0;
+		int higher = MAX_TILE_NUMBER - numberOfTileOnBoard;
+		int random = (int)(Math.random() * (higher - lower)) + lower;
+		Tile res = tiles[random];
+		tiles[random] = tiles[higher - 1]; 
+		// Permet d'effacer l'élément, pour ne pas être resélectionné
+		return res;
 	}
 
 	public Tile[] getTiles() {
@@ -82,6 +100,18 @@ public class TileManager {
 
 	public Tile[] getTilesOnBoard() {
 		return tilesOnBoard;
+	}
+
+	public int getNumberOfTileOnBoard() {
+		return numberOfTileOnBoard;
+	}
+
+	public int getNumberOfTileRemaining() {
+		return MAX_TILE_NUMBER - numberOfTileOnBoard;
+	}
+
+	public Tile getNextTile() {
+		return selectTileRandomly(); 
 	}
 
 }

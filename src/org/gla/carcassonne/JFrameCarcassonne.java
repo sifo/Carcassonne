@@ -1,24 +1,19 @@
 package org.gla.carcassonne;
 
-import javax.swing.BorderFactory;
-import javax.swing.JFrame;
-import javax.swing.JMenuBar;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-
-import java.awt.GridBagLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
-import org.gla.carcassonne.JPanelBoard;
-import org.gla.carcassonne.JPanelTile;
-import org.gla.carcassonne.JPanelMenu;
+import java.awt.GridBagLayout;
+import javax.swing.BorderFactory;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenuBar;
 
 public class JFrameCarcassonne extends JFrame {
 	public static final int GRID_LENGTH = 6;
 	public static final int GRID_HEIGHT = 6;
 	
-	private JPanel jpanelBoard;
-	private JPanel jpanelTile;
+	private JPanelBoard jpanelBoard;
+	private JPanelTile jpanelTile;
 	private JMenuBar menuBar;
 	private JLabel remainingTileNumberLabel;
 	private JLabel test;
@@ -30,8 +25,8 @@ public class JFrameCarcassonne extends JFrame {
 		
 		jpanelBoard = new JPanelBoard(GRID_LENGTH, GRID_HEIGHT);
 		
-		jpanelTile = new JPanelTile("res/drawable/tile-x.png");
-		remainingTileNumberLabel = new JLabel("10 Remaining");
+		jpanelTile = new JPanelTile(new Tile(TileType.TILE_X));
+		remainingTileNumberLabel = new JLabel();
 		menuBar = new JPanelMenu();
 		test = new JLabel("test");
 		test2 = new JLabel("test2");
@@ -58,7 +53,6 @@ public class JFrameCarcassonne extends JFrame {
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 1;
 		constraints.gridy = 0;
-		remainingTileNumberLabel.setBackground(Color.WHITE);
 		remainingTileNumberLabel.setOpaque(true); 
 		getContentPane().add(remainingTileNumberLabel, constraints);
 
@@ -73,11 +67,15 @@ public class JFrameCarcassonne extends JFrame {
 		getContentPane().add(jpanelTile, constraints); 
 	}
 
-	public JPanel getJPanelTile() {
+	public JPanelTile getJPanelTile() {
 		return jpanelTile;
 	}
 
-	public JPanel getJPanelBoard() {
+	public JPanelBoard getJPanelBoard() {
 		return jpanelBoard;
+	}
+
+	public JLabel getRemainingTileNumber() {
+		return remainingTileNumberLabel;
 	}
 }

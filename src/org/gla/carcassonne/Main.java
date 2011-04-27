@@ -7,5 +7,8 @@ public class Main {
 		CarcassonneModel model = new CarcassonneModel();
 		CarcassonneController controller = new CarcassonneController(model);
 		controller.displayViews();
+		model.fireFirstCardPicked();
+		model.fireRemainingTile();
+		model.fireNextTile();
 	}
 }

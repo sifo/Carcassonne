@@ -9,6 +9,7 @@ public class CarcassonneModel extends Carcassonne {
 
 	public CarcassonneModel() {
 		listeners = new EventListenerList();
+		getTileManager().putFirstTileOnBoard();
 	}
 	
 	public void addCarcassonneListener(CarcassonneListener listener){
@@ -19,7 +20,31 @@ public class CarcassonneModel extends Carcassonne {
 		listeners.remove(CarcassonneListener.class, listener);
 	}
 
-	public void fireCarcassonneChanged() {
+	public void fireFirstCardPicked() {
+		CarcassonneListener[] listenerList = (CarcassonneListener[])listeners
+					.getListeners(CarcassonneListener.class);
+		for(CarcassonneListener listener : listenerList){
+			listener.firstCardPicked(new FirstCardPickedEvent(this, 
+				getTileManager().getTilesOnBoard()[0]));
+		}
+	}
+
+	public void fireRemainingTile() {
+		CarcassonneListener[] listenerList = (CarcassonneListener[])listeners
+					.getListeners(CarcassonneListener.class);
+		for(CarcassonneListener listener : listenerList){
+			listener.remainingTile(new RemainingTileEvent(this, 
+				getTileManager().getNumberOfTileRemaining() + " remaining"));
+		}
+	}
+
+	public void fireNextTile() {
+		CarcassonneListener[] listenerList = (CarcassonneListener[])listeners
+					.getListeners(CarcassonneListener.class);
+		for(CarcassonneListener listener : listenerList){
+			listener.nextTile(new NextTileEvent(this, 
+				getTileManager().getNextTile()));
+		}
 	}
 
 	public EventListenerList getListeners() {

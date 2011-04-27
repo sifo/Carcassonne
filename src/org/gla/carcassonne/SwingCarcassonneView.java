@@ -10,7 +10,7 @@ import org.gla.carcassonne.JFrameCarcassonne;
 public class SwingCarcassonneView extends CarcassonneView
 	implements ActionListener {
 
-	private JFrame jframe;
+	private JFrameCarcassonne jframe;
 	private final static String TITLE = "Carcassonne";
 	private final static int WIDTH = 800;
 	private final static int HEIGHT = 700;
@@ -32,6 +32,18 @@ public class SwingCarcassonneView extends CarcassonneView
 
 	public JFrame getJFrame() {
 		return jframe;
+	}
+
+	public void firstCardPicked(FirstCardPickedEvent event) {
+		jframe.getJPanelBoard().addTileOnBoard(event.getNewTile());
+	}
+
+	public void remainingTile(RemainingTileEvent event) {
+		jframe.getRemainingTileNumber().setText(event.getNewText());
+	}
+
+	public void nextTile(NextTileEvent event) {
+		jframe.getJPanelTile().setTile(event.getNewTile());
 	}
 
 	public void actionPerformed(ActionEvent arg) {

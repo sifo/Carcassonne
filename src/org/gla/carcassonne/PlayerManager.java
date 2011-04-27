@@ -9,7 +9,6 @@ public class PlayerManager {
 	private String[] names = 
 		{"Bleu", "Rouge", "Jaune", "Vert", "Orange", "Violet"};
 
-	private final static int DEFAULT_PLAYER_NUMBER = 2;
 	private final static int MAX_PLAYER_NUMBER = 6;	
 
 	public PlayerManager() {
