@@ -25,7 +25,7 @@ public class CarcassonneModel extends Carcassonne {
 					.getListeners(CarcassonneListener.class);
 		for(CarcassonneListener listener : listenerList){
 			listener.firstCardPicked(new FirstCardPickedEvent(this, 
-				getTileManager().getTilesOnBoard()[0]));
+				getTileManager().getBoard().getBoard()[1][1]));
 		}
 	}
 

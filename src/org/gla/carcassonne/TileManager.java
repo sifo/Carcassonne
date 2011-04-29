@@ -1,11 +1,11 @@
 package org.gla.carcassonne;
 
 import org.gla.carcassonne.Tile;
+import org.gla.carcassonne.Board;
 
 public class TileManager {
-	private int numberOfTileOnBoard;
 	private int numberOfTileRemaining;
-	private Tile [] tilesOnBoard;
+	private Board board;
 	private Tile [] tilesRemaining = 
 		{ new Tile(TileType.TILE_A), new Tile(TileType.TILE_A), 
 
@@ -74,17 +74,12 @@ public class TileManager {
 
 	public TileManager() {
 		numberOfTileRemaining = MAX_TILE_NUMBER;
-		numberOfTileOnBoard = 0;
-		tilesOnBoard = new Tile[MAX_TILE_NUMBER];
-	}
-
-	public void addTileOnBoard(Tile tile) {
-		tilesOnBoard[numberOfTileOnBoard++] = tile;
+		board = new Board();
 	}
 
 	public void putFirstTileOnBoard() {
 		int tilePosition = selectTileRemainingRandomly();
-		addTileOnBoard(tilesRemaining[tilePosition]);
+		board.add(0, 0, tilesRemaining[tilePosition]);
 		removeTileRemaining(tilePosition);
 	}
 
@@ -115,23 +110,12 @@ public class TileManager {
 		return tile;
 	}
 
-	public boolean tilesOnBoardContains(Tile tile) {
-		for(int i = 0; i < numberOfTileOnBoard; i++)
-			if(tilesOnBoard[i] == tile)
-				return true;
-		return false;
-	}
-
 	public Tile[] getTilesRemaining() {
 		return tilesRemaining;
 	}
 
-	public Tile[] getTilesOnBoard() {
-		return tilesOnBoard;
-	}
-
-	public int getNumberOfTileOnBoard() {
-		return numberOfTileOnBoard;
+	public Board getBoard() {
+		return board;
 	}
 
 	public int getNumberOfTileRemaining() {

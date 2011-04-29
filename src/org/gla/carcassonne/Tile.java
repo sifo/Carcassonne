@@ -7,6 +7,13 @@ enum TileSideValue {
 	CITY
 }
 
+enum Direction {
+	NORTH,
+	EAST,
+	SOUTH,
+	WEST
+}
+
 public class Tile {
 	// Définition des 4 côtés d'une tuile
 	public final static int NORTH = 0;

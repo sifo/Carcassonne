@@ -14,25 +14,18 @@ public class TileManagerTest extends TestCase {
 
 	public void testTileManager() {
 		assertNotNull(tileManager.getTilesRemaining());
-		assertNotNull(tileManager.getTilesOnBoard());
+		assertNotNull(tileManager.getBoard());
 	}
 
-	public void testAddTileOnBoard() {
-		Tile tile = new Tile(TileType.TILE_A);
-		tileManager.addTileOnBoard(tile);
-		assertTrue(tileManager.tilesOnBoardContains(tile));
-	}
-	
 	public void testPutFirstTileOnBoard() {
 		int numberOfTileRemaining = tileManager.getNumberOfTileRemaining();
-		int numberOfTileOnBoard = tileManager.getNumberOfTileOnBoard();
+		int numberOfTileOnBoard = tileManager.getBoard().getTileCount();
 		tileManager.putFirstTileOnBoard();
-		assertEquals(numberOfTileOnBoard + 1, tileManager.getNumberOfTileOnBoard());
+		assertEquals(numberOfTileOnBoard + 1, tileManager.getBoard().getTileCount());
 		assertEquals(numberOfTileRemaining - 1, tileManager.getNumberOfTileRemaining());
 	}
 
 	public void testSelectTileRemainingRandomly() {
-		int min = 0;
 		int max = tileManager.getNumberOfTileRemaining();
 
 		int tilePosition = tileManager.selectTileRemainingRandomly();
@@ -62,13 +55,5 @@ public class TileManagerTest extends TestCase {
 		int numberOfTileRemaining = tileManager.getNumberOfTileRemaining();
 		tileManager.putFirstTileOnBoard();
 		assertEquals(numberOfTileRemaining - 1, tileManager.getNumberOfTileRemaining());
-	}
-
-	public void testTilesOnBoardContains() {
-		Tile tile = new Tile(TileType.TILE_A);
-		tileManager.addTileOnBoard(tile);
-		Tile randomTile = new Tile(TileType.TILE_X);
-		assertTrue(tileManager.tilesOnBoardContains(tile));
-		assertFalse(tileManager.tilesOnBoardContains(randomTile));
 	}
 }
