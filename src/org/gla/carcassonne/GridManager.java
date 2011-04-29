@@ -1,5 +1,6 @@
 package org.gla.carcassonne;
 
-public class MapManager {
+public class GridManager {
+
 
 }

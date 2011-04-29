@@ -16,8 +16,6 @@ public class JFrameCarcassonne extends JFrame {
 	private JPanelTile jpanelTile;
 	private JMenuBar menuBar;
 	private JLabel remainingTileNumberLabel;
-	private JLabel test;
-	private JLabel test2;
 
 	public JFrameCarcassonne(String title) {
 		super(title);
@@ -28,8 +26,6 @@ public class JFrameCarcassonne extends JFrame {
 		jpanelTile = new JPanelTile(new Tile(TileType.TILE_X));
 		remainingTileNumberLabel = new JLabel();
 		menuBar = new JPanelMenu();
-		test = new JLabel("test");
-		test2 = new JLabel("test2");
 		addComponents();
 	}
 
