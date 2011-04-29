@@ -4,8 +4,9 @@ import org.gla.carcassonne.Tile;
 
 public class TileManager {
 	private int numberOfTileOnBoard;
+	private int numberOfTileRemaining;
 	private Tile [] tilesOnBoard;
-	private Tile [] tiles = 
+	private Tile [] tilesRemaining = 
 		{ new Tile(TileType.TILE_A), new Tile(TileType.TILE_A), 
 
 		new Tile(TileType.TILE_B), new Tile(TileType.TILE_B), 
@@ -72,30 +73,57 @@ public class TileManager {
 	private final static int MAX_TILE_NUMBER = 72;
 
 	public TileManager() {
+		numberOfTileRemaining = MAX_TILE_NUMBER;
 		numberOfTileOnBoard = 0;
 		tilesOnBoard = new Tile[MAX_TILE_NUMBER];
 	}
 
-	public void addTileOnBoard(Tile t) {
-		tilesOnBoard[numberOfTileOnBoard++] = t;
+	public void addTileOnBoard(Tile tile) {
+		tilesOnBoard[numberOfTileOnBoard++] = tile;
 	}
 
 	public void putFirstTileOnBoard() {
-		addTileOnBoard(selectTileRandomly());
+		int tilePosition = selectTileRemainingRandomly();
+		addTileOnBoard(tilesRemaining[tilePosition]);
+		removeTileRemaining(tilePosition);
 	}
 
-	public Tile selectTileRandomly() {
+	public int selectTileRemainingRandomly() {
 		int lower = 0;
-		int higher = MAX_TILE_NUMBER - numberOfTileOnBoard;
-		int random = (int)(Math.random() * (higher - lower)) + lower;
-		Tile res = tiles[random];
-		tiles[random] = tiles[higher - 1]; 
-		// Permet d'effacer l'élément, pour ne pas être resélectionné
-		return res;
+		int higher = numberOfTileRemaining;
+		int tilePosition = (int)(Math.random() * (higher - lower)) + lower;
+		return tilePosition;
 	}
 
-	public Tile[] getTiles() {
-		return tiles;
+	public void removeTileRemaining(int tilePosition) {
+		int lastTile = numberOfTileRemaining - 1; 
+		tilesRemaining[tilePosition] = tilesRemaining[lastTile];
+		numberOfTileRemaining--;
+	}
+
+	public boolean tilesRemainingContains(Tile tile) {
+		for(int i = 0; i < numberOfTileRemaining; i++)
+			if(tilesRemaining[i] == tile)
+				return true;
+		return false;
+	}
+
+	public Tile getNextTile() {
+		int tilePosition = selectTileRemainingRandomly(); 
+		Tile tile = tilesRemaining[tilePosition];
+		removeTileRemaining(tilePosition);
+		return tile;
+	}
+
+	public boolean tilesOnBoardContains(Tile tile) {
+		for(int i = 0; i < numberOfTileOnBoard; i++)
+			if(tilesOnBoard[i] == tile)
+				return true;
+		return false;
+	}
+
+	public Tile[] getTilesRemaining() {
+		return tilesRemaining;
 	}
 
 	public Tile[] getTilesOnBoard() {
@@ -107,11 +135,6 @@ public class TileManager {
 	}
 
 	public int getNumberOfTileRemaining() {
-		return MAX_TILE_NUMBER - numberOfTileOnBoard;
+		return numberOfTileRemaining;
 	}
-
-	public Tile getNextTile() {
-		return selectTileRandomly(); 
-	}
-
 }

@@ -51,7 +51,7 @@
 	</target>
 
 	<target name="test" depends="test-compile">
-		<junit printsummary="yes" haltonfailure="false">
+		<junit printsummary="yes" haltonfailure="false" fork="true">
 		  <classpath>
 				<pathelement location="build/test/classes"/>
 				<pathelement location="build/classes"/>
@@ -63,12 +63,12 @@
 				    includes="**/test/*Test.class"/>
 			</batchtest>
 		</junit>
-		<junitreport todir="build/test/data">
+		<!-- <junitreport todir="build/test/data">
 			<fileset dir="build/test/data">
 				<include name="TEST-*.xml"/>
 			</fileset>
 			<report format="frames" todir="build/test/reports"/>
-		</junitreport>
+		</junitreport> -->
 	</target>
 
 </project>
