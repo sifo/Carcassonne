@@ -1,12 +1,12 @@
 package org.gla.carcassonne;
 
-public class Map {
+public class Grid {
 	public static final int LENGTH = 10;
 	public static final int HEIGHT = 10;
 	
 	private Tile[][] grid;
 	
-	public Map() {
+	public Grid() {
 		grid = new Tile[LENGTH][HEIGHT];
 	}
 	

@@ -1,79 +1,54 @@
 package org.gla.carcassonne;
 
+import java.util.EnumMap;
+import java.util.Map;
+
 import org.gla.carcassonne.Tile;
 
 public class TileManager {
 	private int numberOfTileOnBoard;
 	private Tile [] tilesOnBoard;
-	private Tile [] tiles = 
-		{ new Tile(TileType.TILE_A), new Tile(TileType.TILE_A), 
-
-		new Tile(TileType.TILE_B), new Tile(TileType.TILE_B), 
-		new Tile(TileType.TILE_B), new Tile(TileType.TILE_B), 
-
-		new Tile(TileType.TILE_C),
-
-		new Tile(TileType.TILE_D), new Tile(TileType.TILE_D), 
-		new Tile(TileType.TILE_D), new Tile(TileType.TILE_D), 
-
-		new Tile(TileType.TILE_E), new Tile(TileType.TILE_E), 
-		new Tile(TileType.TILE_E), 	new Tile(TileType.TILE_E), 
-		new Tile(TileType.TILE_E),
-
-		new Tile(TileType.TILE_G), new Tile(TileType.TILE_G), 
-		new Tile(TileType.TILE_G), 
-
-		new Tile(TileType.TILE_H), new Tile(TileType.TILE_H), 
-		new Tile(TileType.TILE_H), 
-
-		new Tile(TileType.TILE_I), new Tile(TileType.TILE_I), 
-
-		new Tile(TileType.TILE_J), new Tile(TileType.TILE_J), 
-		new Tile(TileType.TILE_J), 
 	
-		new Tile(TileType.TILE_K), new Tile(TileType.TILE_K), 
-		new Tile(TileType.TILE_K),
-	
-		new Tile(TileType.TILE_L), new Tile(TileType.TILE_L), 
-		new Tile(TileType.TILE_L),
-
-		new Tile(TileType.TILE_N), new Tile(TileType.TILE_N), 
-		new Tile(TileType.TILE_N), new Tile(TileType.TILE_N), 
-		new Tile(TileType.TILE_N),
-
-		new Tile(TileType.TILE_P), new Tile(TileType.TILE_P), 
-		new Tile(TileType.TILE_P), new Tile(TileType.TILE_P), 
-		new Tile(TileType.TILE_P),
-
-		new Tile(TileType.TILE_R), new Tile(TileType.TILE_R), 
-		new Tile(TileType.TILE_R), new Tile(TileType.TILE_R), 
-
-		new Tile(TileType.TILE_T), new Tile(TileType.TILE_T), 
-		new Tile(TileType.TILE_T), 
-		
-		new Tile(TileType.TILE_U), new Tile(TileType.TILE_U), 
-		new Tile(TileType.TILE_U), new Tile(TileType.TILE_U), 
-		new Tile(TileType.TILE_U), new Tile(TileType.TILE_U), 
-		new Tile(TileType.TILE_U), new Tile(TileType.TILE_U), 
-
-		new Tile(TileType.TILE_V), new Tile(TileType.TILE_V), 
-		new Tile(TileType.TILE_V), new Tile(TileType.TILE_V), 
-		new Tile(TileType.TILE_V), new Tile(TileType.TILE_V), 
-		new Tile(TileType.TILE_V), new Tile(TileType.TILE_V), 
-		new Tile(TileType.TILE_V),
-
-
-		new Tile(TileType.TILE_W), new Tile(TileType.TILE_W), 
-		new Tile(TileType.TILE_W), new Tile(TileType.TILE_W), 
-
-		new Tile(TileType.TILE_X) 
+	private Map<TileType, Integer> tiles;
+	private static final int[] tilesCount = new int[] {
+		2,	// Tuile A
+		2,	// Tuile B
+		2,	// Tuile C
+		2,	// Tuile D
+		2,	// Tuile E
+		2,	// Tuile F
+		2,	// Tuile G
+		2,	// Tuile H
+		2,	// Tuile I
+		2,	// Tuile J
+		2,	// Tuile K
+		2,	// Tuile L
+		2,	// Tuile M
+		2,	// Tuile N
+		2,	// Tuile O
+		2,	// Tuile P
+		2,	// Tuile Q
+		2,	// Tuile R
+		2,	// Tuile S
+		2,	// Tuile T
+		2,	// Tuile U
+		2,	// Tuile V
+		2,	// Tuile W
+		2	// Tuile X
 	};
 
 	private final static int MAX_TILE_NUMBER = 72;
 
 	public TileManager() {
+		int i = 0;	// numéro de tuile
+		
 		numberOfTileOnBoard = 0;
 		tilesOnBoard = new Tile[MAX_TILE_NUMBER];
+		tiles = new EnumMap<TileType, Integer>(TileType.class);
+		
+		for (TileType t : TileType.values()) {
+			tiles.put(t, tilesCount[i++]);
+		}
 	}
 
 	public void addTileOnBoard(Tile t) {
@@ -83,18 +58,14 @@ public class TileManager {
 	public void putFirstTileOnBoard() {
 		addTileOnBoard(selectTileRandomly());
 	}
-
+	
 	public Tile selectTileRandomly() {
-		int lower = 0;
-		int higher = MAX_TILE_NUMBER - numberOfTileOnBoard;
-		int random = (int)(Math.random() * (higher - lower)) + lower;
-		Tile res = tiles[random];
-		tiles[random] = tiles[higher - 1]; 
-		// Permet d'effacer l'élément, pour ne pas être resélectionné
-		return res;
+		RandomGenerator<EnumMap<TileType, Integer>> generator = new RandomGenerator<EnumMap<TileType, Integer>>(TileType.class);
+		TileType t = generator.random();
+		return new Tile(t);
 	}
 
-	public Tile[] getTiles() {
+	public Map<TileType, Integer> getTiles() {
 		return tiles;
 	}
 
@@ -113,5 +84,4 @@ public class TileManager {
 	public Tile getNextTile() {
 		return selectTileRandomly(); 
 	}
-
 }
