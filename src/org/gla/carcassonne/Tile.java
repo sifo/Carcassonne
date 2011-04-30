@@ -7,13 +7,6 @@ enum TileSideValue {
 	CITY
 }
 
-enum Direction {
-	NORTH,
-	EAST,
-	SOUTH,
-	WEST
-}
-
 public class Tile {
 	// Définition des 4 côtés d'une tuile
 	public final static int NORTH = 0;
@@ -32,6 +25,8 @@ public class Tile {
 	}
 	
 	public void setSideValues(TileType type) {
+		//f, m, n o, q, s sont des tuiles d'extensions 
+		// inutiles pour l'instant
 		switch(type) {
 			case TILE_A:
 				sideValue = new TileSideValue[] {
@@ -68,13 +63,13 @@ public class Tile {
 						TileSideValue.GRASS,
 						TileSideValue.GRASS};
 				break;
-			case TILE_F:
+			/*case TILE_F:
 				sideValue = new TileSideValue[] {
 						TileSideValue.GRASS,
 						TileSideValue.CITY,
 						TileSideValue.GRASS,
 						TileSideValue.CITY};
-				break;
+				break;*/
 			case TILE_G:
 				sideValue = new TileSideValue[] {
 						TileSideValue.CITY,
@@ -117,13 +112,13 @@ public class Tile {
 						TileSideValue.ROAD,
 						TileSideValue.ROAD};
 				break;
-			case TILE_M:
+			/*case TILE_M:
 				sideValue = new TileSideValue[] {
 						TileSideValue.CITY,
 						TileSideValue.GRASS,
 						TileSideValue.GRASS,
 						TileSideValue.CITY};
-				break;
+				break;*/
 			case TILE_N:
 				sideValue = new TileSideValue[] {
 						TileSideValue.CITY,
@@ -131,13 +126,13 @@ public class Tile {
 						TileSideValue.GRASS,
 						TileSideValue.CITY};
 				break;
-			case TILE_O:
+			/*case TILE_O:
 				sideValue = new TileSideValue[] {
 						TileSideValue.CITY,
 						TileSideValue.ROAD,
 						TileSideValue.ROAD,
 						TileSideValue.CITY};
-				break;
+				break;*/
 			case TILE_P:
 				sideValue = new TileSideValue[] {
 						TileSideValue.CITY,
@@ -145,13 +140,13 @@ public class Tile {
 						TileSideValue.ROAD,
 						TileSideValue.CITY};
 				break;
-			case TILE_Q:
+			/*case TILE_Q:
 				sideValue = new TileSideValue[] {
 						TileSideValue.CITY,
 						TileSideValue.CITY,
 						TileSideValue.GRASS,
 						TileSideValue.CITY};
-				break;
+				break;*/
 			case TILE_R:
 				sideValue = new TileSideValue[] {
 						TileSideValue.CITY,
@@ -159,13 +154,13 @@ public class Tile {
 						TileSideValue.GRASS,
 						TileSideValue.CITY};
 				break;
-			case TILE_S:
+			/*case TILE_S:
 				sideValue = new TileSideValue[] {
 						TileSideValue.CITY,
 						TileSideValue.CITY,
 						TileSideValue.ROAD,
 						TileSideValue.CITY};
-				break;
+				break;*/
 			case TILE_T:
 				sideValue = new TileSideValue[] {
 						TileSideValue.CITY,
