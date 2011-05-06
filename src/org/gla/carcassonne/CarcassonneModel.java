@@ -46,7 +46,70 @@ public class CarcassonneModel extends Carcassonne {
 				getTileManager().getNextTile()));
 		}
 	}
-
+	
+	public void fireExitGame() {
+		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
+				.getListeners(CarcassonneListener.class);
+		for (CarcassonneListener listener : listenerList) {
+			//listener.exitGame(new ExitGameEvent(this));
+		}
+	}
+	
+	public void fireNextPlayer() {
+		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
+				.getListeners(CarcassonneListener.class);
+		for (CarcassonneListener listener : listenerList) {
+			//listener.NextPlayer(new NextPlayerEvent(this));
+		}
+	}
+	
+	public void firePickTile() {
+		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
+				.getListeners(CarcassonneListener.class);
+		for (CarcassonneListener listener : listenerList) {
+			//listener.PickTile(new PickTileEvent(this));
+		}
+	}
+	
+	public void firePlacePieceOnTile() {
+		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
+				.getListeners(CarcassonneListener.class);
+		for (CarcassonneListener listener : listenerList) {
+			//listener.PlacePieceOnTile(new PlacePieceOnTileEvent(this));
+		}
+	}
+	
+	public void fireRotateLeft() {
+		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
+				.getListeners(CarcassonneListener.class);
+		for (CarcassonneListener listener : listenerList) {
+			//listener.RotateLeft(new RotateLeftEvent(this));
+		}
+	}
+	
+	public void fireRotateRight() {
+		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
+				.getListeners(CarcassonneListener.class);
+		for (CarcassonneListener listener : listenerList) {
+			//listener.RotateRight(new RotateRightEvent(this));
+		}
+	}
+	
+	public void fireAddPlayer() {
+		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
+				.getListeners(CarcassonneListener.class);
+		for (CarcassonneListener listener : listenerList) {
+			//listener.AddPlayer(new AddPlayerEvent(this));
+		}
+	}
+	
+	public void fireRemovePlayer() {
+		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
+				.getListeners(CarcassonneListener.class);
+		for (CarcassonneListener listener : listenerList) {
+			//listener.RemovePlayer(new RemovePlayerEvent(this));
+		}
+	}
 	public EventListenerList getListeners() {
 		return listeners;
 	}
