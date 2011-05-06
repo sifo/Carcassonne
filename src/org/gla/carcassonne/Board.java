@@ -19,8 +19,7 @@ public class Board {
 	}
 
 	public void add(int x, int y, Tile tile) {
-		if (tileCount == 0 
-			|| (board[x][y] == null && canPlace(x, y, tile)))
+		if (canPlace(x, y, tile))
 			board[x][y] = tile;
 		else return;
 		tileCount++;
