@@ -1,17 +1,15 @@
 package org.gla.carcassonne.test;
 
-import org.gla.carcassonne.CarcassonneController;
-import org.gla.carcassonne.CarcassonneModel;
-import org.gla.carcassonne.CarcassonneView;
-import org.gla.carcassonne.CarcassonneListener;
-import org.gla.carcassonne.SwingCarcassonneView;
 import junit.framework.TestCase;
+import org.gla.carcassonne.CarcassonneController;
+import org.gla.carcassonne.CarcassonneListener;
+import org.gla.carcassonne.CarcassonneModel;
+import org.gla.carcassonne.ui.SwingCarcassonneView;
 
 public class CarcassonneControllerTest extends TestCase {
 
 	private CarcassonneController controller;
 	private CarcassonneModel model;
-	private CarcassonneView view;
 
 	protected void setUp() {
 		model = new CarcassonneModel();

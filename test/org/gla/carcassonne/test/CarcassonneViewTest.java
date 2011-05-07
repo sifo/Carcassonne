@@ -1,11 +1,10 @@
 package org.gla.carcassonne.test;
 
 import junit.framework.TestCase;
-import org.gla.carcassonne.CarcassonneView;
-import org.gla.carcassonne.SwingCarcassonneView;
-import org.gla.carcassonne.CarcassonneModel;
-import org.gla.carcassonne.JFrameCarcassonne;
 import org.gla.carcassonne.CarcassonneController;
+import org.gla.carcassonne.CarcassonneModel;
+import org.gla.carcassonne.CarcassonneView;
+import org.gla.carcassonne.ui.SwingCarcassonneView;
 
 public class CarcassonneViewTest extends TestCase {
 	

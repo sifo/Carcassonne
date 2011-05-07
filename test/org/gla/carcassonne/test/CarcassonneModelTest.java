@@ -1,13 +1,12 @@
 package org.gla.carcassonne.test;
 
-import org.gla.carcassonne.CarcassonneModel;
-import org.gla.carcassonne.CarcassonneView;
-import org.gla.carcassonne.CarcassonneListener;
-import org.gla.carcassonne.CarcassonneController;
-import org.gla.carcassonne.SwingCarcassonneView;
-import junit.framework.TestCase;
 import java.util.EventListener;
-import javax.swing.event.EventListenerList;
+
+import junit.framework.TestCase;
+import org.gla.carcassonne.CarcassonneController;
+import org.gla.carcassonne.CarcassonneListener;
+import org.gla.carcassonne.CarcassonneModel;
+import org.gla.carcassonne.ui.SwingCarcassonneView;
 
 public class CarcassonneModelTest extends TestCase {
 	

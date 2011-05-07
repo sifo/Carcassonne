@@ -2,6 +2,7 @@ package org.gla.carcassonne;
 
 import org.gla.carcassonne.CarcassonneView;
 import org.gla.carcassonne.CarcassonneModel;
+import org.gla.carcassonne.ui.SwingCarcassonneView;
 
 public class CarcassonneController {
 	private CarcassonneView carcassonneView;

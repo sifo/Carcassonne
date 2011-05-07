@@ -1,7 +1,11 @@
 package org.gla.carcassonne;
 
-import org.gla.carcassonne.Carcassonne;
 import org.gla.carcassonne.CarcassonneListener;
+import org.gla.carcassonne.entities.Carcassonne;
+import org.gla.carcassonne.events.FirstCardPickedEvent;
+import org.gla.carcassonne.events.NextTileEvent;
+import org.gla.carcassonne.events.RemainingTileEvent;
+
 import javax.swing.event.EventListenerList;
 
 public class CarcassonneModel extends Carcassonne {
