@@ -84,37 +84,43 @@ public class Board {
 		return false;
 	}
 	
-	public boolean canPlace(int x, int y, Tile tile){
-		if(tileCount == 0){
+	public boolean canPlace(int x, int y, Tile tile) {
+		if (tileCount == 0){
 			return true;
 		}
-		if ( board[x][y] != null) {
+		
+		if (board[x][y] != null) {
 			return false;
 		}
-		if(y > 0
+		
+		if (y > 0
 			&& board[x][y - 1] != null
 			&& tile.getSideValue(Tile.SOUTH) 
-			!= board[x][y - 1].getSideValue(Tile.NORTH)){
+			!= board[x][y - 1].getSideValue(Tile.NORTH)) {
 			return false;
 		}
-		if(y < board[x].length - 1
+		
+		if (y < board[x].length - 1
 			&& board[x][y + 1] != null
 			&& tile.getSideValue(Tile.NORTH) 
-			!= board[x][y + 1].getSideValue(Tile.SOUTH)){
+			!= board[x][y + 1].getSideValue(Tile.SOUTH)) {
 			return false;
 		}
-		if(x > 0
+		
+		if (x > 0
 			&& board[x - 1][y] != null
 			&& tile.getSideValue(Tile.WEST) 
-			!= board[x - 1][y].getSideValue(Tile.EAST)){
+			!= board[x - 1][y].getSideValue(Tile.EAST)) {
 			return false;
 		}
-		if(x < board.length - 1
+		
+		if (x < board.length - 1
 			&& board[x + 1][y] != null
 			&& tile.getSideValue(Tile.EAST) 
-			!= board[x + 1][y].getSideValue(Tile.WEST)){
+			!= board[x + 1][y].getSideValue(Tile.WEST)) {
 			return false;
 		}
+		
 		return true;
 	}
 }
