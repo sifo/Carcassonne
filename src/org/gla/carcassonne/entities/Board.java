@@ -119,7 +119,7 @@ public class Board {
 					return true;
 		return false;
 	}
-
+	
 	public boolean canPlace(int x, int y, Tile tile) {
 		if (tileCount == 0) {
 			return true;
