@@ -1,0 +1,92 @@
+﻿PROTOCOLE 1.6 :
+
+Utilitaire externe :
+- Basé sur le code modifié de : Parseur et formateur de messages
+Crédits : Juliusz Chroboczek
+
+REPRESENTATION DU JEU :
+Grille dont les coordonnées sont désignées par un couple (x,y) représentant respectivement les axes d'abscisse et d'ordonnée dans un repère orthonormé.
+Le point d'origine (0,0) est situé en haut à gauche de la grille.
+
+
+Le module multijoueur tourne autour d'un serveur indépendant lancé par un joueur auquel un maximum de 5 clients peuvent s'y connecter.
+Le serveur se contentera de transmettre des messages entre les clients et gèrera les connexions/déconnexions de chacun d'entre eux.
+Lorsqu'un joueur emet un message au serveur, ce dernier le transmet aux autres.
+Le protocole de communication employé est TCP/IP.
+
+Il existe différents messages :
+
+===========================
+======   Connexion   ======
+===========================
+
+HELLO
+HELLOACK
+HELLONACK
+
+Lorsqu'un joueur se connecte au serveur de jeu, il envoit un HELLO.
+Si aucun autre joueur n'est connecté, le serveur répond par HELLONACK. Le joueur peut alors soit attendre, soit quitter et envoyer CLOSE (voir plus bas).
+Si d'autres joueurs sont en attente, le message est transmis aux autres clients par le serveur. Ceux-là répondent par HELLOACK.
+Côté client, chacun HELLOACK se solde par la "création" d'un joueur adverse.
+
+
+=============================
+======   Déconnexion   ======
+=============================
+
+CLOSE nonce
+
+Lorsqu'un joueur se déconnecte du serveur de jeu, il envoit un CLOSE.
+S'il était seul, il quitte et le serveur ferme la connexion.
+S'il était en présence d'autres joueurs, le message est envoyé aux autres clients. Ces derniers agissent en conséquence en supprimant le joueur adverse et l'emetteur quitte.
+Si un client constate qu'il est le dernier joueur, il termine la partie en conséquence et peut envoyer un CLOSE pour quitter.
+
+=====================================
+======   Démarrage de partie   ======
+=====================================
+
+START
+
+Lorsqu'un joueur est prêt, il envoi au serveur le message START.
+Lorsque tous les joueurs sont prêts, la partie peut démarrer, autrement, le serveur est en attente jusqu'à la déconnexion d'un client.
+
+
+======================================
+======   Placements de tuiles   ======
+======================================
+
+MOVE (tile) (x) (y) (piece) token
+MOVEACK
+MOVENACK
+
+Lorsqu'un joueur décide de placer une tuile, une condition est requise :
+- le joueur doit posséder un token désignant que c'est son tour de jouer.
+Lors d'un placement de tuile, le client envoi le nom de la tuile (type), les coordonnées selon la représentation définie par le protocole, éventuellement une pièce placée sur la tuile et son token.
+Si les clients acceptent la tuile et les coordonnées placées, ils envoient un MOVEACK. Sinon, un MOVENACK est envoyé. Si au moins un MOVENACK est envoyé, la partie s'arrête (cas d'un bug d'implementation ou d'une tricherie ?).
+
+
+===============================
+======   Fin de partie   ======
+===============================
+
+TODO :
+
+Représentation du score ?
+
+===============================
+
+
+ROLES :
+Le client fait office d'interface entre le moteur de jeu et le serveur (et par conséquent, les autres clients).
+Le respect des règles est assuré par le moteur du jeu. Il n'est PAS assuré par le client, ni par le serveur. Ces derniers ont pour rôle d'assurer le respect du protocole défini.
+Si une entrave aux règles du jeu ou un conflit quelconque intervient, la partie est arrêtée. Il est estimé que s'il y a eu une erreur d'implémentation d'un des joueurs, il est inutile de continuer le jeu au risque d'une corruption de la partie.
+
+Si un joueur tente de tricher en détournant le protocole, le comportement est encore indéfini.
+
+
+Le serveur s'assure de gérer les connexions et déconnexions des clients. Il démarre la partie et donne la main au joueur qui doit effectuer son tour. Globalement, il se contente de transmettre les informations entre clients.
+
+
+
+
+
