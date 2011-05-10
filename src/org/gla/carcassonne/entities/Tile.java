@@ -14,8 +14,10 @@ enum Status {
 }
 
 public class Tile {
-	private int x;
-	private int y;
+	private int xOnTile;
+	private int yOnTile;
+	private int xOnBoard;
+	private int yOnBoard;
 	private int rotationCount;
 	private TileType type;
 	private TileSideValue[] sideValues;
@@ -28,8 +30,10 @@ public class Tile {
 	public final static int WEST = 3;
 
 	public Tile(TileType type) {
-		this.x = -1;
-		this.y = -1;
+		this.xOnTile = -1;
+		this.yOnTile = -1;
+		this.xOnBoard = -1;
+		this.yOnBoard = -1;
 		this.rotationCount = 0;
 		this.setType(type);
 		this.setSideValues(type);
@@ -439,7 +443,7 @@ public class Tile {
 	}
 
 	public TileSideValue getSideValue(int side) {
-		return sideValues[side];
+		return sideValues[side % 4];
 	}
 
 	public TileSideValue[] getSideValues() {
@@ -463,19 +467,19 @@ public class Tile {
 	}
 
 	public int getX() {
-		return x;
+		return xOnTile;
 	}
 
 	public void setX(int x) {
-		this.x = x;
+		this.xOnTile = x;
 	}
 
 	public int getY() {
-		return y;
+		return yOnTile;
 	}
 
 	public void setY(int y) {
-		this.y = y;
+		this.yOnTile = y;
 	}
 
 	public void setRotationCount(int rotationCount) {
@@ -493,4 +497,66 @@ public class Tile {
 	public Status[][] getZones() {
 		return zones;
 	}
+
+	public int getxOnBoard() {
+		return xOnBoard;
+	}
+
+	public void setxOnBoard(int xOnBoard) {
+		this.xOnBoard = xOnBoard;
+	}
+
+	public int getyOnBoard() {
+		return yOnBoard;
+	}
+
+	public void setyOnBoard(int yOnBoard) {
+		this.yOnBoard = yOnBoard;
+	}
+
+	public void rotateLeft() {
+		if(rotationCount == 0)
+			rotationCount = 3;
+		else 
+			rotationCount--;
+		rotateSides(-1);
+	}
+
+	public void rotateRight() {
+		if(rotationCount == 3)
+			rotationCount = 0;
+		else
+			rotationCount++;
+		rotateSides(1);
+	}
+	
+    public  void rotateSides(int rot) {
+    	TileSideValue repVal;
+        int repIdx = 0;
+        int cpIdx = 0;
+        int srcStart = 0;
+        int dstStart = 0;
+        TileSideValue[] sides = new TileSideValue[sideValues.length];
+        System.arraycopy(sideValues, 0, sides, 0, sideValues.length);
+        if (rot >= 0) {
+            srcStart = 0;
+            dstStart = 1;
+            repIdx = 0;
+            cpIdx = sides.length - 1;
+            repVal = sides[cpIdx];
+        } else {
+            srcStart = 1;
+            dstStart = 0;
+            repIdx = sides.length - 1;
+            cpIdx = 0;
+            repVal = sides[cpIdx];
+        }
+        for (int t = 0; t < Math.abs(rot); t++) {
+            System.arraycopy(sides, srcStart, sides, dstStart, sides.length - 1);
+            sides[repIdx] = repVal;
+            repVal = sides[cpIdx];
+        }
+        
+        sideValues = sides;
+    }
 }

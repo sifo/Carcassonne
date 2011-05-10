@@ -1,15 +1,16 @@
 package org.gla.carcassonne.test.entities;
 
-import org.gla.carcassonne.entities.Carcassonne;
-
 import junit.framework.TestCase;
+
+import org.gla.carcassonne.CarcassonneModel;
+import org.gla.carcassonne.entities.Carcassonne;
 
 public class CarcassonneTest extends TestCase {
 	
 	Carcassonne carcassonne;  
 
 	protected void setUp() {
-		carcassonne = new Carcassonne();
+		carcassonne = new Carcassonne(new CarcassonneModel());
 	}
 	
 	public void testCarcassonne() {

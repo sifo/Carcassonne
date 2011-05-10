@@ -1,17 +1,18 @@
 package org.gla.carcassonne.test.entities;
 
+import junit.framework.TestCase;
+
+import org.gla.carcassonne.CarcassonneModel;
 import org.gla.carcassonne.entities.Board;
 import org.gla.carcassonne.entities.Tile;
 import org.gla.carcassonne.entities.TileType;
-
-import junit.framework.TestCase;
 
 public class BoardTest extends TestCase {
 	
 	private Board board;
 	
 	protected void setUp() {
-		board = new Board();
+		board = new Board(new CarcassonneModel());
 	}
 	
 	public void testBoard() {

@@ -3,15 +3,15 @@ package org.gla.carcassonne.events;
 import java.util.EventObject;
 
 public class RemainingTileEvent extends EventObject {
-	private String newText;
+	private int number;
 	private static final long serialVersionUID = -1816818068189927448L;
 
-	public RemainingTileEvent(Object source, String newText) {
+	public RemainingTileEvent(Object source, int number) {
 		super(source);
-		this.newText = newText;
+		this. number = number;
 	}
 
-	public String getNewText() {
-		return newText;
+	public int getNumber() {
+		return number;
 	}
 }

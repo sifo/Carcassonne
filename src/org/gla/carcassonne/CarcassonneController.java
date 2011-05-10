@@ -1,7 +1,6 @@
 package org.gla.carcassonne;
 
-import org.gla.carcassonne.CarcassonneView;
-import org.gla.carcassonne.CarcassonneModel;
+import org.gla.carcassonne.entities.Tile;
 import org.gla.carcassonne.ui.SwingCarcassonneView;
 
 public class CarcassonneController {
@@ -12,6 +11,7 @@ public class CarcassonneController {
 		carcassonneModel = model;
 		carcassonneView = new SwingCarcassonneView(this);
 		addListenersToModel();
+		model.start();
 	}
 
 	public void addListenersToModel() {
@@ -33,4 +33,19 @@ public class CarcassonneController {
 	public CarcassonneModel getCarcassonneModel() {
 		return carcassonneModel;
 	}
+	
+	public void notifyAddTile(int x, int y) {
+		Tile currentTile = carcassonneModel.getTileManager().getCurrentTile();
+		carcassonneModel.getTileManager().getBoard().add(x, y, currentTile);
+	}
+
+	public void notifyRotateLeft() {
+		carcassonneModel.getTileManager().rotateLeft();
+	}
+	
+	public void notifyRotateRight() {
+		carcassonneModel.getTileManager().rotateRight();
+	}
+	
+	
 }

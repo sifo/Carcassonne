@@ -2,6 +2,8 @@ package org.gla.carcassonne.managers;
 
 import java.util.EnumMap;
 import java.util.Map;
+
+import org.gla.carcassonne.CarcassonneModel;
 import org.gla.carcassonne.entities.Board;
 import org.gla.carcassonne.entities.Tile;
 import org.gla.carcassonne.entities.TileType;
@@ -12,7 +14,9 @@ public class TileManager {
 	private Map<TileType, Integer> tiles;
 	private int numberOfTileRemaining;
 	private final static int MAX_TILE_NUMBER = 72;
-	
+	private Tile currentTile;
+	private CarcassonneModel model;
+
 	private static final int[] tilesCount = new int[] {
 			//f, m, n o, q, s sont des tuiles d'extensions 
 			// inutiles pour l'instant
@@ -37,10 +41,12 @@ public class TileManager {
 			1 // Tuile X
 	};
 
-	public TileManager() {
+	public TileManager(CarcassonneModel model) {
 		int i = 0;
 		numberOfTileRemaining = MAX_TILE_NUMBER;
-		board = new Board();
+		currentTile = null;
+		board = new Board(model);
+		this.model = model;
 		tiles = new EnumMap<TileType, Integer>(TileType.class);
 
 		for (TileType t : TileType.values()) {
@@ -50,25 +56,32 @@ public class TileManager {
 
 	public void putFirstTileOnBoard() {
 		Tile tile = selectTileRandomly();
-		board.add(0, 0, tile);
 		remove(tile);
+		board.add(2, 2, tile);
+		model.fireNextTile();
 	}
 
 	public Tile selectTileRandomly() {
-		RandomGenerator<EnumMap<TileType, Integer>> generator = new RandomGenerator<EnumMap<TileType, Integer>>(
+		RandomGenerator<EnumMap<TileType, Integer>> generator = 
+			new RandomGenerator<EnumMap<TileType, Integer>>(
 				TileType.class);
 		TileType t = generator.random();
-		return new Tile(t);
+		currentTile = new Tile(t);
+		return currentTile;
 	}
 	
 	public void remove(Tile tile) {
 		numberOfTileRemaining--;
-		int count = tiles.containsKey(tile.getType()) ? tiles.get(tile.getType()) : 0;
+		model.fireRemainingTile();
+		int count = 
+			tiles.containsKey(tile.getType()) ? tiles.get(tile.getType()) : 0;
 		tiles.put(tile.getType(), count - 1);
 	}
 
 	public Tile getNextTile() {
-		return selectTileRandomly(); 
+		Tile tile = selectTileRandomly();
+		remove(tile);
+		return tile;
 	}
 
 	public Board getBoard() {
@@ -81,5 +94,19 @@ public class TileManager {
 	
 	public int getNumberOfTileRemaining() {
 		return numberOfTileRemaining;
+	}	
+	
+	public Tile getCurrentTile() {
+		return currentTile;
+	}
+	
+	public void rotateLeft() {
+		currentTile.rotateLeft();
+		model.fireRotateLeft();
+	}
+	
+	public void rotateRight() {
+		currentTile.rotateRight();
+		model.fireRotateRight();
 	}
 }

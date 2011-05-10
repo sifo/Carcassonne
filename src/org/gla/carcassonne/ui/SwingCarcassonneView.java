@@ -1,27 +1,36 @@
 package org.gla.carcassonne.ui;
 
-import java.awt.event.ActionListener;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JFrame;
-import org.gla.carcassonne.CarcassonneView;
+
 import org.gla.carcassonne.CarcassonneController;
-import org.gla.carcassonne.events.FirstCardPickedEvent;
+import org.gla.carcassonne.CarcassonneView;
+import org.gla.carcassonne.events.AddTileEvent;
+import org.gla.carcassonne.events.BoardEvent;
+import org.gla.carcassonne.events.CantAddTileEvent;
+import org.gla.carcassonne.events.ConfigDialogEvent;
 import org.gla.carcassonne.events.NextTileEvent;
 import org.gla.carcassonne.events.RemainingTileEvent;
+import org.gla.carcassonne.events.RotateLeftEvent;
+import org.gla.carcassonne.events.RotateRightEvent;
 
-public class SwingCarcassonneView extends CarcassonneView
-	implements ActionListener {
+public class SwingCarcassonneView extends CarcassonneView implements
+		ActionListener {
 
 	private JFrameCarcassonne jframe;
 	private final static String TITLE = "Carcassonne";
-	private final static int WIDTH = 800;
-	private final static int HEIGHT = 700;
+	private final static int WIDTH = 1000;
+	private final static int HEIGHT = 750;
 
 	public SwingCarcassonneView(CarcassonneController controller) {
 		super(controller);
-		jframe = new JFrameCarcassonne(TITLE);
+		jframe = new JFrameCarcassonne(TITLE, this);
 		jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		jframe.setSize(WIDTH, HEIGHT);
+		// jframe.setSize(WIDTH, HEIGHT);
+		jframe.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 	}
 
 	public void close() {
@@ -35,17 +44,46 @@ public class SwingCarcassonneView extends CarcassonneView
 	public JFrame getJFrame() {
 		return jframe;
 	}
-
-	public void firstCardPicked(FirstCardPickedEvent event) {
-		jframe.getJPanelBoard().addTileOnBoard(event.getNewTile());
-	}
-
+	
 	public void remainingTile(RemainingTileEvent event) {
-		jframe.getRemainingTileNumber().setText(event.getNewText());
+		jframe.remainingTileNumber(event);
 	}
 
 	public void nextTile(NextTileEvent event) {
-		jframe.getJPanelTile().setTile(event.getNewTile());
+		// jframe.getJPanelTile().setTile(event.getNewTile());
+		jframe.pick(event);
+	}
+
+	public void configDialog(ConfigDialogEvent event) {
+		jframe.showNbPlayer();
+	}
+
+	public void addTile(AddTileEvent event) {
+		jframe.addTile(event);
+	}
+
+	public void newGame() {
+		// interfaceGui.newGame();
+		jframe.setVisible(false);
+		jframe = new JFrameCarcassonne(TITLE, this);
+		jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		jframe.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+	}
+
+	public void board(BoardEvent event) {
+		jframe.board(event);
+	}
+
+	public void cantAddTile(CantAddTileEvent event) {
+		jframe.cantAddTile(event);
+	}
+
+	public void rotateLeft(RotateLeftEvent event) {
+		jframe.rotateLeft(event);
+	}
+
+	public void rotateRight(RotateRightEvent event) {
+		jframe.rotateRight(event);
 	}
 
 	public void actionPerformed(ActionEvent arg) {

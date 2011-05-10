@@ -1,19 +1,28 @@
 package org.gla.carcassonne;
 
-import org.gla.carcassonne.CarcassonneListener;
-import org.gla.carcassonne.entities.Carcassonne;
-import org.gla.carcassonne.events.FirstCardPickedEvent;
-import org.gla.carcassonne.events.NextTileEvent;
-import org.gla.carcassonne.events.RemainingTileEvent;
-
 import javax.swing.event.EventListenerList;
 
-public class CarcassonneModel extends Carcassonne {
-	private EventListenerList listeners;
+import org.gla.carcassonne.entities.Game;
+import org.gla.carcassonne.events.AddTileEvent;
+import org.gla.carcassonne.events.BoardEvent;
+import org.gla.carcassonne.events.CantAddTileEvent;
+import org.gla.carcassonne.events.ConfigDialogEvent;
+import org.gla.carcassonne.events.NextTileEvent;
+import org.gla.carcassonne.events.RemainingTileEvent;
+import org.gla.carcassonne.events.RotateLeftEvent;
+import org.gla.carcassonne.events.RotateRightEvent;
+import org.gla.carcassonne.managers.PlayerManager;
+import org.gla.carcassonne.managers.TileManager;
 
+public class CarcassonneModel implements Game {
+	private EventListenerList listeners;
+	private TileManager tileManager;
+	private PlayerManager playerManager;
+	
 	public CarcassonneModel() {
+		tileManager = new TileManager(this);
+		playerManager = new PlayerManager();
 		listeners = new EventListenerList();
-		getTileManager().putFirstTileOnBoard();
 	}
 	
 	public void addCarcassonneListener(CarcassonneListener listener){
@@ -24,22 +33,22 @@ public class CarcassonneModel extends Carcassonne {
 		listeners.remove(CarcassonneListener.class, listener);
 	}
 
-	public void fireFirstCardPicked() {
-		CarcassonneListener[] listenerList = (CarcassonneListener[])listeners
-					.getListeners(CarcassonneListener.class);
-		for(CarcassonneListener listener : listenerList){
-			listener.firstCardPicked(new FirstCardPickedEvent(this, 
-				getTileManager().getBoard().getBoard()[1][1]));
-		}
-	}
-
 	public void fireRemainingTile() {
 		CarcassonneListener[] listenerList = (CarcassonneListener[])listeners
 					.getListeners(CarcassonneListener.class);
 		for(CarcassonneListener listener : listenerList){
 			listener.remainingTile(new RemainingTileEvent(this, 
-				getTileManager().getNumberOfTileRemaining() + " remaining"));
+				getTileManager().getNumberOfTileRemaining()));
 		}
+	}
+	
+	public void fireAddTile() {
+		CarcassonneListener[] listenerList = (CarcassonneListener[])listeners
+					.getListeners(CarcassonneListener.class);
+		for(CarcassonneListener listener : listenerList){
+			listener.addTile(new AddTileEvent(this, tileManager.getCurrentTile()));
+		}
+		fireNextTile();
 	}
 
 	public void fireNextTile() {
@@ -87,7 +96,8 @@ public class CarcassonneModel extends Carcassonne {
 		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
 				.getListeners(CarcassonneListener.class);
 		for (CarcassonneListener listener : listenerList) {
-			//listener.RotateLeft(new RotateLeftEvent(this));
+			listener.rotateLeft(new RotateLeftEvent(this, 
+					tileManager.getCurrentTile().getRotationCount()));
 		}
 	}
 	
@@ -95,7 +105,8 @@ public class CarcassonneModel extends Carcassonne {
 		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
 				.getListeners(CarcassonneListener.class);
 		for (CarcassonneListener listener : listenerList) {
-			//listener.RotateRight(new RotateRightEvent(this));
+			listener.rotateRight(new RotateRightEvent(this, 
+					tileManager.getCurrentTile().getRotationCount()));
 		}
 	}
 	
@@ -116,5 +127,55 @@ public class CarcassonneModel extends Carcassonne {
 	}
 	public EventListenerList getListeners() {
 		return listeners;
+	}
+
+	public void fireConfigDialog() {
+		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
+				.getListeners(CarcassonneListener.class);
+		for (CarcassonneListener listener : listenerList) {
+			 listener.configDialog(new ConfigDialogEvent(this));
+		}
+	}
+	
+	public void fireBoard() {
+		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
+				.getListeners(CarcassonneListener.class);
+		for (CarcassonneListener listener : listenerList) {
+			 listener.board(new BoardEvent(this, getTileManager().getBoard().getBoard()));
+		}
+	}
+	
+	public void quit() {
+
+	}
+
+	public void save() {
+
+	}
+
+	public void start() {
+		//model.fireConfigDialog();
+		fireBoard();
+		getTileManager().putFirstTileOnBoard();
+	}
+
+	public void play() {
+
+	}
+
+	public PlayerManager getPlayerManager() {
+		return playerManager;
+	}
+
+	public TileManager getTileManager() {
+		return tileManager;
+	}
+
+	public void fireCantAddTile() {
+		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
+				.getListeners(CarcassonneListener.class);
+		for (CarcassonneListener listener : listenerList) {
+			listener.cantAddTile(new CantAddTileEvent(this));
+		}
 	}
 }
