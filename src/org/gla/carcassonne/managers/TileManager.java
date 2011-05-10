@@ -55,10 +55,9 @@ public class TileManager {
 	}
 
 	public void putFirstTileOnBoard() {
-		Tile tile = selectTileRandomly();
-		remove(tile);
-		board.add(2, 2, tile);
-		model.fireNextTile();
+		currentTile = selectTileRandomly();
+		remove(currentTile);
+		board.add(2, 2, currentTile);
 	}
 
 	public Tile selectTileRandomly() {
@@ -66,8 +65,7 @@ public class TileManager {
 			new RandomGenerator<EnumMap<TileType, Integer>>(
 				TileType.class);
 		TileType t = generator.random();
-		currentTile = new Tile(t);
-		return currentTile;
+		return new Tile(t);
 	}
 	
 	public void remove(Tile tile) {
@@ -78,10 +76,12 @@ public class TileManager {
 		tiles.put(tile.getType(), count - 1);
 	}
 
-	public Tile getNextTile() {
-		Tile tile = selectTileRandomly();
-		remove(tile);
-		return tile;
+	public void getNextTile() {
+		if(numberOfTileRemaining > 0){
+			currentTile = selectTileRandomly();
+			remove(currentTile);
+			model.fireNextTile();
+		}
 	}
 
 	public Board getBoard() {

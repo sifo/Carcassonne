@@ -140,6 +140,7 @@ public class JFrameCarcassonne extends JFrame {
 		rotateButton.add(turnRightButton);
 
 		Box leftPanelContent = Box.createVerticalBox();
+		leftPanelContent.add(Box.createVerticalStrut(10));
 		leftPanelContent.add(remainingTileNumberBox);
 		leftPanelContent.add(Box.createVerticalStrut(10));
 		leftPanelContent.add(boxImagePanel);

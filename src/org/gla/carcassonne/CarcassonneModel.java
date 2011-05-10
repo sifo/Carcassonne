@@ -46,9 +46,10 @@ public class CarcassonneModel implements Game {
 		CarcassonneListener[] listenerList = (CarcassonneListener[])listeners
 					.getListeners(CarcassonneListener.class);
 		for(CarcassonneListener listener : listenerList){
-			listener.addTile(new AddTileEvent(this, tileManager.getCurrentTile()));
+			listener.addTile(new AddTileEvent(this, 
+					tileManager.getCurrentTile()));
 		}
-		fireNextTile();
+		tileManager.getNextTile();
 	}
 
 	public void fireNextTile() {
@@ -56,7 +57,7 @@ public class CarcassonneModel implements Game {
 					.getListeners(CarcassonneListener.class);
 		for(CarcassonneListener listener : listenerList){
 			listener.nextTile(new NextTileEvent(this, 
-				getTileManager().getNextTile()));
+				tileManager.getCurrentTile()));
 		}
 	}
 	
