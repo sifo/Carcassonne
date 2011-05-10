@@ -108,16 +108,16 @@ public class JFrameCarcassonne extends JFrame {
 
 		Box hLabel = Box.createHorizontalBox();
 
-		labelPlayer = new JLabel("<html><h2 style = 'margin-left:60px;color:"
-				+ "black" + "'>Joueur " + "tom" + "</h2>"
-				+ "<h3 style = 'margin-left:40px'>(Pions restants : " + "7"
-				+ ")</h3></html>");
+		labelPlayer = new JLabel("<html><h3 style = 'margin-right:25px;margin-left:30px;color:"
+				+ "black" + "'>Joueur " + "tom" + "</h3>"
+				+ "<h4 style = 'margin-left:10px'>(Pions restants : " + "7"
+				+ ")</h4></html>");
 
 		hLabel.add(labelPlayer);
 
 		Box boxImagePanel = Box.createHorizontalBox();
 		imagePanel = new ImagePanel();
-		boxImagePanel.add(Box.createHorizontalStrut(95));
+		boxImagePanel.add(Box.createHorizontalStrut(35));
 		boxImagePanel.add(imagePanel);
 
 		Box peonBox = Box.createHorizontalBox();
@@ -130,12 +130,12 @@ public class JFrameCarcassonne extends JFrame {
 		Box rotateButton = Box.createHorizontalBox();
 
 		JButton turnLeftButton = new JButton();
-		turnLeftButton.setIcon(new ImageIcon("res/drawable/rotateLeft.jpg"));
+		turnLeftButton.setIcon(new ImageIcon("res/drawable/1305046746_arrow_rotate_anticlockwise.png"));
 		turnLeftButton.addActionListener(new RotateLeft(view));
 		rotateButton.add(turnLeftButton);
 
 		JButton turnRightButton = new JButton();
-		turnRightButton.setIcon(new ImageIcon("res/drawable/rotateRight.jpg"));
+		turnRightButton.setIcon(new ImageIcon("res/drawable/1305046774_arrow_rotate_clockwise.png"));
 		turnRightButton.addActionListener(new RotateRight(view));
 		rotateButton.add(turnRightButton);
 
@@ -145,11 +145,11 @@ public class JFrameCarcassonne extends JFrame {
 		leftPanelContent.add(Box.createVerticalStrut(10));
 		leftPanelContent.add(boxImagePanel);
 		leftPanelContent.add(Box.createVerticalStrut(10));
-		leftPanelContent.add(peonBox);
-		leftPanelContent.add(Box.createVerticalStrut(10));
 		leftPanelContent.add(rotateButton);
+		leftPanelContent.add(Box.createVerticalStrut(20));
+		//leftPanelContent.add(peonBox);
 		leftPanelContent.add(hLabel);
-		leftPanelContent.add(Box.createVerticalStrut(340));
+		leftPanelContent.add(Box.createVerticalStrut(443));
 
 		// leftPanelContent.add(hBox);
 		// leftPanelContent.add(Box.createVerticalStrut(50));
