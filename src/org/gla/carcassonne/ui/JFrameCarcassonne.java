@@ -287,7 +287,6 @@ public class JFrameCarcassonne extends JFrame {
 					+ "</p><p>&nbsp;&nbsp;&nbsp;&nbsp;"
 					+ players.get(i).getPoints() + " | "
 					+ players.get(i).getPieceCount() + "</p><html>";
-			System.out.println("couleur : " + players.get(i).getColor());
 			if (addLabel) {
 				jlabelPlayers.add(new JLabel(text));
 			} else {

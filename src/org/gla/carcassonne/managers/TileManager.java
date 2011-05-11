@@ -78,8 +78,12 @@ public class TileManager {
 	public void getNextTile() {
 		if(numberOfTileRemaining > 0){
 			currentTile = selectTileRandomly();
-			remove(currentTile);
-			model.fireNextTile();
+			if(board.canPlaceSomeWhere(currentTile)){
+				remove(currentTile);
+				model.fireNextTile();
+				return;
+			}
+			else getNextTile();
 		}
 	}
 
