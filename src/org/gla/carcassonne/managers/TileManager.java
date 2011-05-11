@@ -1,5 +1,6 @@
 package org.gla.carcassonne.managers;
 
+import java.awt.event.MouseEvent;
 import java.util.EnumMap;
 import java.util.Map;
 import org.gla.carcassonne.CarcassonneModel;
@@ -15,9 +16,10 @@ public class TileManager {
 	private final static int MAX_TILE_NUMBER = 72;
 	private Tile currentTile;
 	private CarcassonneModel model;
+	private boolean currentPlayerhasPlacedTile;
 
 	private static final int[] tilesCount = new int[] {
-			//f, m, n o, q, s sont des tuiles d'extensions 
+			// f, m, n o, q, s sont des tuiles d'extensions
 			// inutiles pour l'instant
 			2, // Tuile A
 			4, // Tuile B
@@ -42,6 +44,7 @@ public class TileManager {
 
 	public TileManager(CarcassonneModel model) {
 		int i = 0;
+		currentPlayerhasPlacedTile = false;
 		numberOfTileRemaining = MAX_TILE_NUMBER;
 		currentTile = null;
 		board = new Board(model);
@@ -57,59 +60,75 @@ public class TileManager {
 		currentTile = selectTileRandomly();
 		remove(currentTile);
 		board.add(2, 2, currentTile);
+		getNextTile();
 	}
 
 	public Tile selectTileRandomly() {
-		RandomGenerator<EnumMap<TileType, Integer>> generator = 
-			new RandomGenerator<EnumMap<TileType, Integer>>(
+		RandomGenerator<EnumMap<TileType, Integer>> generator = new RandomGenerator<EnumMap<TileType, Integer>>(
 				TileType.class);
 		TileType t = generator.random();
 		return new Tile(t);
 	}
-	
+
 	public void remove(Tile tile) {
 		numberOfTileRemaining--;
 		model.fireRemainingTile();
-		int count = 
-			tiles.containsKey(tile.getType()) ? tiles.get(tile.getType()) : 0;
+		int count = tiles.containsKey(tile.getType()) ? tiles.get(tile
+				.getType()) : 0;
 		tiles.put(tile.getType(), count - 1);
 	}
 
 	public void getNextTile() {
-		if(numberOfTileRemaining > 0){
+		if (numberOfTileRemaining > 0) {
 			currentTile = selectTileRandomly();
-			if(board.canPlaceSomeWhere(currentTile)){
+			if (board.canPlaceSomeWhere(currentTile)) {
 				remove(currentTile);
+				currentPlayerhasPlacedTile = false;
+				model.fireLockConfirmButton();
 				model.fireNextTile();
 				return;
-			}
-			else getNextTile();
+			} else
+				getNextTile();
 		}
 	}
 
 	public Board getBoard() {
 		return board;
 	}
-	
+
 	public Map<TileType, Integer> getTiles() {
 		return tiles;
 	}
-	
+
 	public int getNumberOfTileRemaining() {
 		return numberOfTileRemaining;
-	}	
-	
+	}
+
 	public Tile getCurrentTile() {
 		return currentTile;
 	}
-	
+
 	public void rotateLeft() {
 		currentTile.rotateLeft();
 		model.fireRotateLeft();
 	}
-	
+
 	public void rotateRight() {
 		currentTile.rotateRight();
 		model.fireRotateRight();
+	}
+
+	public void placePieceOnTile(int x, int y, MouseEvent arg0) {
+		System.out.println("button (" + x + ", " + y + ") | click ("
+				+ arg0.getX() + ", " + arg0.getY() + ")");
+		
+	}
+
+	public boolean getCurrentPlayerHasPlacedTile() {
+		return currentPlayerhasPlacedTile;
+	}
+	
+	public void setCurrentPlayerhasPlacedTile(boolean currentPlayerhasPlacedTile) {
+		this.currentPlayerhasPlacedTile = currentPlayerhasPlacedTile;
 	}
 }

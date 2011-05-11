@@ -6,12 +6,15 @@ import org.gla.carcassonne.entities.Game;
 import org.gla.carcassonne.events.AddTileEvent;
 import org.gla.carcassonne.events.BoardEvent;
 import org.gla.carcassonne.events.CantAddTileEvent;
+import org.gla.carcassonne.events.CardBackEvent;
 import org.gla.carcassonne.events.ConfigDialogEvent;
+import org.gla.carcassonne.events.LockConfirmButtonEvent;
 import org.gla.carcassonne.events.NextTileEvent;
 import org.gla.carcassonne.events.PlayersEvent;
 import org.gla.carcassonne.events.RemainingTileEvent;
 import org.gla.carcassonne.events.RotateLeftEvent;
 import org.gla.carcassonne.events.RotateRightEvent;
+import org.gla.carcassonne.events.UnlockConfirmButtonEvent;
 import org.gla.carcassonne.managers.PlayerManager;
 import org.gla.carcassonne.managers.TileManager;
 
@@ -50,7 +53,6 @@ public class CarcassonneModel implements Game {
 			listener.addTile(new AddTileEvent(this, tileManager
 					.getCurrentTile()));
 		}
-		tileManager.getNextTile();
 	}
 
 	public void fireNextTile() {
@@ -190,5 +192,30 @@ public class CarcassonneModel implements Game {
 			listener.players(new PlayersEvent(this, playerManager.getPlayers(),
 					playerManager.getCurrentPlayer()));
 		}
+	}
+
+	public void fireUnlockConfirmButton() {
+		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
+				.getListeners(CarcassonneListener.class);
+		for (CarcassonneListener listener : listenerList) {
+			listener.unlockConfirmButton(new UnlockConfirmButtonEvent(this));
+		}
+	}
+
+	public void fireLockConfirmButton() {
+		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
+				.getListeners(CarcassonneListener.class);
+		for (CarcassonneListener listener : listenerList) {
+			listener.lockConfirmButton(new LockConfirmButtonEvent(this));
+		}
+	}
+
+	public void fireCardBack() {
+		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
+				.getListeners(CarcassonneListener.class);
+		for (CarcassonneListener listener : listenerList) {
+			listener.cardBack(new CardBackEvent(this));
+		}
+		
 	}
 }

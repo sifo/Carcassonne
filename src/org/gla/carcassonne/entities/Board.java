@@ -23,7 +23,8 @@ public class Board {
 	}
 
 	public void add(int x, int y, Tile tile) {
-		if (!canPlace(x, y, tile)) {
+		if (!canPlace(x, y, tile) 
+				|| model.getTileManager().getCurrentPlayerHasPlacedTile()) {
 			model.fireCantAddTile();
 		} else {
 			board[x][y] = tile;
@@ -31,9 +32,11 @@ public class Board {
 			tile.setyOnBoard(y);
 			resize(x, y);
 			tileCount++;
-			if(tileCount > 1){
+			if(tileCount > 1) {
+				model.getTileManager().setCurrentPlayerhasPlacedTile(true);
 				tile.setPlayer(model.getPlayerManager().getCurrentPlayer());
-				model.getPlayerManager().setNextPlayer();
+				model.fireUnlockConfirmButton();
+				model.fireCardBack();
 			}
 			model.fireAddTile();
 		}

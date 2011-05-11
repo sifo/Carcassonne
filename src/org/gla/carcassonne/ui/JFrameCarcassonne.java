@@ -29,12 +29,15 @@ import org.gla.carcassonne.entities.Tile;
 import org.gla.carcassonne.events.AddTileEvent;
 import org.gla.carcassonne.events.BoardEvent;
 import org.gla.carcassonne.events.CantAddTileEvent;
+import org.gla.carcassonne.events.CardBackEvent;
 import org.gla.carcassonne.events.NextTileEvent;
 import org.gla.carcassonne.events.PlayersEvent;
 import org.gla.carcassonne.events.RemainingTileEvent;
 import org.gla.carcassonne.events.RotateLeftEvent;
 import org.gla.carcassonne.events.RotateRightEvent;
 import org.gla.carcassonne.ui.events.ButtonListener;
+import org.gla.carcassonne.ui.events.ConfirmAction;
+import org.gla.carcassonne.ui.events.MouseListener;
 import org.gla.carcassonne.ui.events.RotateLeft;
 import org.gla.carcassonne.ui.events.RotateRight;
 
@@ -52,16 +55,19 @@ public class JFrameCarcassonne extends JFrame {
 	List<JLabel> jlabelPlayers;
 	private SwingCarcassonneView view;
 	private JLabel remainingTileNumber;
-
+	private JButton confirmButton;
 	private static final int HEIGHT_MIN = 600;
 	private static final int WIDTH_MIN = 485;
 
 	public JFrameCarcassonne(String title, SwingCarcassonneView view) {
 		super(title);
 		this.view = view;
+		confirmButton = new JButton();
+		confirmButton.setEnabled(false);
 		getContentPane().setLayout(new GridBagLayout());
 		menuBar = new JPanelMenu();
 		remainingTileNumber = new JLabel("");
+		imagePanel = new JPanelImage();
 		jlabelPlayers = new ArrayList<JLabel>();
 		setJMenuBar(menuBar);
 		setPreferredSize(new Dimension(1350, 750));
@@ -90,7 +96,7 @@ public class JFrameCarcassonne extends JFrame {
 				tabTile[i][j].setVisible(true);
 
 				tabTile[i][j].addActionListener(new ButtonListener(i, j, view));
-				// tabTile[i][j].addMouseListener(new MyMouseListener(i, j));
+				tabTile[i][j].addMouseListener(new MouseListener(i, j, view));
 				tabTile[i][j].setMargin(new Insets(-6, -6, -6, -6));
 			}
 		}
@@ -130,7 +136,6 @@ public class JFrameCarcassonne extends JFrame {
 
 		Box boxImagePanel = Box.createHorizontalBox();
 		boxImagePanel.setMinimumSize(new Dimension(80, 80));
-		imagePanel = new JPanelImage();
 		boxImagePanel.add(Box.createHorizontalStrut(30));
 		boxImagePanel.add(imagePanel);
 
@@ -154,6 +159,12 @@ public class JFrameCarcassonne extends JFrame {
 				"res/drawable/1305046774_arrow_rotate_clockwise.png"));
 		turnRightButton.addActionListener(new RotateRight(view));
 		rotateButton.add(turnRightButton);
+		
+		confirmButton.setIcon(new ImageIcon(
+				"res/drawable/1305148192_accept.png"));
+		confirmButton.addActionListener(new ConfirmAction(view));
+		Box confirmBox = Box.createHorizontalBox();
+		confirmBox.add(confirmButton);
 
 		JPanel leftPanelContent = new JPanel();
 		leftPanelContent.setLayout(new BoxLayout(leftPanelContent,
@@ -164,6 +175,9 @@ public class JFrameCarcassonne extends JFrame {
 		leftPanelContent.add(boxImagePanel, Box.CENTER_ALIGNMENT);
 		leftPanelContent.add(Box.createVerticalStrut(10));
 		leftPanelContent.add(rotateButton, Box.CENTER_ALIGNMENT);
+		leftPanelContent.add(Box.createVerticalStrut(10));
+		leftPanelContent.add(confirmBox, Box.CENTER_ALIGNMENT);
+		
 		// leftPanelContent.add(peonBox);
 		vLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		leftPanelContent.add(vLabel);
@@ -293,5 +307,17 @@ public class JFrameCarcassonne extends JFrame {
 				jlabelPlayers.get(i).setText(text);
 			}
 		}
+	}
+
+	public void unlockConfirmButton() {
+		confirmButton.setEnabled(true);
+	}
+
+	public void lockConfirmButton() {
+		confirmButton.setEnabled(false);
+	}
+
+	public void cardBack(CardBackEvent event) {
+		imagePanel.setImage("res/drawable/card-back.png");
 	}
 }

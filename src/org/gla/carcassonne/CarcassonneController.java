@@ -1,5 +1,6 @@
 package org.gla.carcassonne;
 
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 import org.gla.carcassonne.entities.Tile;
@@ -53,6 +54,17 @@ public class CarcassonneController {
 		carcassonneModel.getPlayerManager().setPlayersFromNames(names);
 		
 	}
-	
+
+	public void notifyPlacePiece(int x, int y, MouseEvent arg0) {
+		carcassonneModel.getTileManager().placePieceOnTile(x, y, arg0);
+	}
+
+	public void notifyConfirmAction() {
+		if(carcassonneModel.getTileManager().getCurrentPlayerHasPlacedTile()) {
+			carcassonneModel.getPlayerManager().setNextPlayer();
+			carcassonneModel.getTileManager().getNextTile();
+		}
+	}
+
 	
 }
