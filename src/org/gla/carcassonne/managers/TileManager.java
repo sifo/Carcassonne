@@ -2,7 +2,6 @@ package org.gla.carcassonne.managers;
 
 import java.util.EnumMap;
 import java.util.Map;
-
 import org.gla.carcassonne.CarcassonneModel;
 import org.gla.carcassonne.entities.Board;
 import org.gla.carcassonne.entities.Tile;
@@ -79,8 +78,12 @@ public class TileManager {
 	public void getNextTile() {
 		if(numberOfTileRemaining > 0){
 			currentTile = selectTileRandomly();
-			remove(currentTile);
-			model.fireNextTile();
+			if(board.canPlaceSomeWhere(currentTile)){
+				remove(currentTile);
+				model.fireNextTile();
+				return;
+			}
+			else getNextTile();
 		}
 	}
 

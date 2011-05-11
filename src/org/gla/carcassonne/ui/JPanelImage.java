@@ -12,7 +12,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-public class ImagePanel extends JPanel {
+public class JPanelImage extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
 	public BufferedImage bufferedImage;
@@ -20,19 +20,19 @@ public class ImagePanel extends JPanel {
 	private int height;
 	public String fileString;
 
-	public ImagePanel() {
+	public JPanelImage() {
 		width = 80;
 		height = 80;
 		bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 	}
 
-	public ImagePanel(int width, int height) {
+	public JPanelImage(int width, int height) {
 		this.width = width;
 		this.height = height;
 		bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 	}
 
-	public ImagePanel(String filePath) {
+	public JPanelImage(String filePath) {
 		this.fileString = filePath;
 		File fileImg = new File(filePath);
 		try {
@@ -85,7 +85,7 @@ public class ImagePanel extends JPanel {
 	      this.height = bufferedImage.getHeight();
 	   }
 	 
-	 public ImagePanel getClone(){
-		 return new ImagePanel(fileString);
+	 public JPanelImage getClone(){
+		 return new JPanelImage(fileString);
 	 }
 }

@@ -8,7 +8,7 @@ public class PlayerTest extends TestCase {
 	private Player player;
 
 	protected void setUp() {
-		player = new Player("Blue");
+		player = new Player("tom", "Blue");
 	}
 
 	public void testPlayer() {

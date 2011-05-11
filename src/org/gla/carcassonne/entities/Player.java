@@ -7,10 +7,14 @@ public class Player {
 	private String name;
 	private int points;
 	private ArrayList<Tile> tilesList;
+	private int pieceCount;
+	private String color;
 
-	public Player(String name) {
+	public Player(String name, String color) {
 		this.name = name;
 		points = 0;
+		pieceCount = 7;
+		this.color = color;
 		setTilesList(new ArrayList<Tile>());
 	}
 
@@ -36,6 +40,22 @@ public class Player {
 
 	public ArrayList<Tile> getTilesList() {
 		return tilesList;
+	}
+
+	public void setPieceCount(int pieceCount) {
+		this.pieceCount = pieceCount;
+	}
+
+	public int getPieceCount() {
+		return pieceCount;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+
+	public String getColor() {
+		return color;
 	}
 
 }

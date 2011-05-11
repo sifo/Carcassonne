@@ -1,8 +1,6 @@
 package org.gla.carcassonne.ui;
 
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 
@@ -13,12 +11,12 @@ import org.gla.carcassonne.events.BoardEvent;
 import org.gla.carcassonne.events.CantAddTileEvent;
 import org.gla.carcassonne.events.ConfigDialogEvent;
 import org.gla.carcassonne.events.NextTileEvent;
+import org.gla.carcassonne.events.PlayersEvent;
 import org.gla.carcassonne.events.RemainingTileEvent;
 import org.gla.carcassonne.events.RotateLeftEvent;
 import org.gla.carcassonne.events.RotateRightEvent;
 
-public class SwingCarcassonneView extends CarcassonneView implements
-		ActionListener {
+public class SwingCarcassonneView extends CarcassonneView {
 
 	private JFrameCarcassonne jframe;
 	private final static String TITLE = "Carcassonne";
@@ -85,8 +83,10 @@ public class SwingCarcassonneView extends CarcassonneView implements
 	public void rotateRight(RotateRightEvent event) {
 		jframe.rotateRight(event);
 	}
+	
 
-	public void actionPerformed(ActionEvent arg) {
-
+	public void players(PlayersEvent event){
+		jframe.players(event);
 	}
+
 }

@@ -31,6 +31,10 @@ public class Board {
 			tile.setyOnBoard(y);
 			resize(x, y);
 			tileCount++;
+			if(tileCount > 1){
+				tile.setPlayer(model.getPlayerManager().getCurrentPlayer());
+				model.getPlayerManager().setNextPlayer();
+			}
 			model.fireAddTile();
 		}
 	}
@@ -157,6 +161,23 @@ public class Board {
 		}
 		if(numberOfLink > 0 && numberOfBreakLink == 0)
 			return true;
+		return false;
+	}
+
+	public boolean canPlaceSomeWhere(Tile tile) {
+		int initialRotationCount = 0;
+		int maxRotationCount = 3;
+		for(int i = 0; i < board.length; i++){
+			for(int j = 0; j < board[i].length; j++){
+				for(int k = initialRotationCount; k <= maxRotationCount; k++){
+					tile.setRotationCount(k);
+					if(canPlace(i, j, tile)){
+						tile.setRotationCount(initialRotationCount);
+						return true;
+					}
+				}
+			}
+		}
 		return false;
 	}
 }
