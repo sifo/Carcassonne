@@ -167,7 +167,8 @@ public class JFrameCarcassonne extends JFrame {
 		// leftPanelContent.add(peonBox);
 		vLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		leftPanelContent.add(vLabel);
-		leftPanelContent.add(Box.createVerticalStrut(463));
+
+		leftPanelContent.add(Box.createVerticalStrut(10000));
 
 		panel.add(jspPlateau, BorderLayout.CENTER);
 
