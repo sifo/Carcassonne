@@ -1,4 +1,4 @@
-﻿PROTOCOLE 1.6 :
+﻿PROTOCOLE 1.61 :
 
 Utilitaire externe :
 - Basé sur le code modifié de : Parseur et formateur de messages
@@ -16,27 +16,32 @@ Le protocole de communication employé est TCP/IP.
 
 Il existe différents messages :
 
+N.B.
+ n (entier) est le numéro du joueur envoyant le message. Ce numéro est affecté par le serveur lorsqu'il transmet le message aux autres clients.
+Le n envoyé par le client n'a donc pas d'importance.
+
 ===========================
 ======   Connexion   ======
 ===========================
 
-HELLO
-HELLOACK
+HELLO n
+HELLOACK n
 HELLONACK
 
-Lorsqu'un joueur se connecte au serveur de jeu, il envoit un HELLO.
+Lorsqu'un joueur se connecte au serveur de jeu, il envoit un HELLO n.
 Si aucun autre joueur n'est connecté, le serveur répond par HELLONACK. Le joueur peut alors soit attendre, soit quitter et envoyer CLOSE (voir plus bas).
-Si d'autres joueurs sont en attente, le message est transmis aux autres clients par le serveur. Ceux-là répondent par HELLOACK.
-Côté client, chacun HELLOACK se solde par la "création" d'un joueur adverse.
+Si d'autres joueurs sont en attente, le message HELLO n est transmis aux autres clients par le serveur, où n est le numéro du nouveau joueur généré par le serveur.
+Ceux-là répondent par HELLOACK n, où n est le numéro du joueur répondant.
+Côté client, chaque HELLOACK n se solde par la "création" d'un joueur adverse.
 
 
 =============================
 ======   Déconnexion   ======
 =============================
 
-CLOSE nonce
+CLOSE n
 
-Lorsqu'un joueur se déconnecte du serveur de jeu, il envoit un CLOSE.
+Lorsqu'un joueur se déconnecte du serveur de jeu, il envoit un CLOSE n, où n est le numéro du joueur.
 S'il était seul, il quitte et le serveur ferme la connexion.
 S'il était en présence d'autres joueurs, le message est envoyé aux autres clients. Ces derniers agissent en conséquence en supprimant le joueur adverse et l'emetteur quitte.
 Si un client constate qu'il est le dernier joueur, il termine la partie en conséquence et peut envoyer un CLOSE pour quitter.
@@ -45,7 +50,7 @@ Si un client constate qu'il est le dernier joueur, il termine la partie en cons�
 ======   Démarrage de partie   ======
 =====================================
 
-START
+READY
 
 Lorsqu'un joueur est prêt, il envoi au serveur le message START.
 Lorsque tous les joueurs sont prêts, la partie peut démarrer, autrement, le serveur est en attente jusqu'à la déconnexion d'un client.
@@ -69,12 +74,14 @@ Si les clients acceptent la tuile et les coordonnées placées, ils envoient un 
 ======   Fin de partie   ======
 ===============================
 
-TODO :
+FINISH n
 
-Représentation du score ?
+Lorsqu'un joueur n'a plus de pièces (tuiles), la partie se termine et un message FINISH est envoyé au serveur.
+FINISH n est transmis aux autres clients qui se doivent alors de terminer la partie.
 
-===============================
-
+==================================
+======   Caractéristiques   ======
+==================================
 
 ROLES :
 Le client fait office d'interface entre le moteur de jeu et le serveur (et par conséquent, les autres clients).
@@ -83,8 +90,7 @@ Si une entrave aux règles du jeu ou un conflit quelconque intervient, la partie
 
 Si un joueur tente de tricher en détournant le protocole, le comportement est encore indéfini.
 
-
-Le serveur s'assure de gérer les connexions et déconnexions des clients. Il démarre la partie et donne la main au joueur qui doit effectuer son tour. Globalement, il se contente de transmettre les informations entre clients.
+Le serveur s'assure de gérer les connexions et déconnexions des clients. Il démarre la partie et donne la main au joueur qui doit effectuer son tour. Globalement, il se contente de transmettre les informations entre clients en leur fournissant les numéros des clients émetteurs.
 
 
 
