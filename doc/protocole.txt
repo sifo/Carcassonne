@@ -1,4 +1,4 @@
-﻿PROTOCOLE 1.61 :
+﻿PROTOCOLE 1.62 :
 
 Utilitaire externe :
 - Basé sur le code modifié de : Parseur et formateur de messages
@@ -78,6 +78,18 @@ FINISH n
 
 Lorsqu'un joueur n'a plus de pièces (tuiles), la partie se termine et un message FINISH est envoyé au serveur.
 FINISH n est transmis aux autres clients qui se doivent alors de terminer la partie.
+
+========================
+======   Erreur   ======
+========================
+
+NOOP
+
+Ce message est envoyé dans les cas où :
+- un message est mal formaté
+- un messsage contient un type inconnu
+- une erreur de nature non spécifiée s'est produite
+
 
 ==================================
 ======   Caractéristiques   ======

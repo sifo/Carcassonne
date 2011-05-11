@@ -46,6 +46,10 @@ public abstract class MassageUnit {
     public int getLength() throws ProtocolError {
         throw new ProtocolError("Ceci n'est pas une liste : " + this);
     }
+    
+    public void setIntValue(int value) throws ProtocolError {
+        throw new ProtocolError("Ceci n'est pas un entier : " + this);
+    }
 
     public static MassageUnit parse(PushbackInputStream s)
         throws ProtocolParseError, IOException {

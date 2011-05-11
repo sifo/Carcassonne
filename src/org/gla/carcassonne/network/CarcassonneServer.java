@@ -7,6 +7,9 @@ import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.gla.carcassonne.utils.Message;
+import org.gla.carcassonne.utils.ProtocolError;
+
 /**
  * Le serveur écoute pendant 500ms, s'arrête pendant 500ms et réécoute
  * à nouveau. Le but est de régulièrement donner la main aux autres threads.
@@ -17,6 +20,8 @@ public class CarcassonneServer {
 	private ServerSocket serverSocket;
 	private boolean isListening;
 	private List<CarcassonneThreadServer> clients;
+	
+	private int token;		// nombre généré aléatoire pour désigner quel client a la main
 
 	private final static String CONNECTION_ACCEPTED = "Connexion acceptée : ";
 	private final static int NUMBER_MAX_OF_CLIENTS = 5;
@@ -42,7 +47,8 @@ public class CarcassonneServer {
 					System.out.println(CONNECTION_ACCEPTED
 							+ clientSocket.getInetAddress().getHostName()+ ":"
 							+ clientSocket.getPort());
-				} catch (SocketTimeoutException e) {
+				}
+				catch (SocketTimeoutException e) {
 				}
 				Thread.sleep(500);
 			}
@@ -72,5 +78,62 @@ public class CarcassonneServer {
 
 	public void setClients(List<CarcassonneThreadServer> clients) {
 		this.clients = clients;
+	}
+	
+	public void setToken(int token) {
+		this.token = token;
+	}
+
+	public int getToken() {
+		return token;
+	}
+	
+	/*
+	 * Renvoi vrai si le client est retiré de la liste, faux sinon (échec ou non existance)
+	 */
+	public boolean removeClient(CarcassonneThreadServer client) {
+		return clients.remove(client);
+	}
+	
+	/*
+	 * Section critique, l'exclusion mutuelle doit être assurée en cas de READY concurrents
+	 * La boucle ne doit être regardée que par un Thread à la fois
+	 */
+	synchronized boolean isAllPlayersReady() {
+		for(CarcassonneThreadServer client : clients)
+			if (!client.isReady())
+				return false;
+		return true;
+	}
+	
+	/*
+	 * Envoi un message reçu d'un client vers tous les autres clients connectés
+	 * Si le message est READY, on vérifie de manière atomique si les autres joueurs sont prêts
+	 */
+	void sendMessageToClients(Message m, CarcassonneThreadServer from) {
+		try {
+			String type = m.getNthValue(0).toString();
+			
+			if (type.equals("READY")) {
+				if (isAllPlayersReady())
+					isListening = false;
+			}
+			
+			// On transmet le numero du client émetteur dans le message
+			if (type.equals("HELLO") || type.equals("HELLOACK") || 
+					type.equals("CLOSE") || type.equals("FINISH"))
+				m.getNthValue(1).setIntValue(clients.indexOf(from));
+			
+			for(CarcassonneThreadServer client : clients) {
+				if (client.equals(from))	// On exclu l'émetteur de la liste
+					continue;
+				
+				client.sendMessageFromServer(m);
+			}
+		} catch (ProtocolError e) {
+			Message noop = new Message("NOOP");
+			from.sendMessageFromServer(noop);
+			e.printStackTrace();
+		}
 	}
 }

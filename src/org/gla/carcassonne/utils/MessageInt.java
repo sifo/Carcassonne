@@ -18,6 +18,10 @@ public class MessageInt extends MassageUnit {
     }
 
     public int getIntValue() { return value; }
+    
+    public void setIntValue(int value) {
+    	this.value = value;
+    }
 
     public void format(OutputStream s) throws IOException {
         s.write(("" + value).getBytes("UTF-8"));
