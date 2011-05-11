@@ -20,7 +20,7 @@ import org.gla.carcassonne.ui.events.SendPlayerListListener;
 public class NumberPlayerDialog extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
-	private static final int MAX_LENGTH_NAME = 9;
+	private static final int MAX_LENGTH_NAME = 12;
 	JComboBox numberPlayer;
 	int nbPlayer = 1;
 	JTextField[] playerNameField;
@@ -115,12 +115,14 @@ public class NumberPlayerDialog extends JDialog implements ActionListener {
 
 	public List<String> getPlayersNames() {
 		names = new ArrayList<String>();
+		String name = "";
 		for (int i = 0; i < playerNameField.length; i++) {
-			if (playerNameField[i].getText().trim().isEmpty())
+			name = playerNameField[i].getText().trim();
+			if (name.isEmpty())
 				names.add("Joueur" + (i + 1));
-			else
-				names.add(playerNameField[i].getText().trim()
-						.substring(0, MAX_LENGTH_NAME));
+			else if (name.length() > MAX_LENGTH_NAME)
+				names.add(name.substring(0, MAX_LENGTH_NAME));
+			else names.add(name);
 		}
 		return names;
 	}

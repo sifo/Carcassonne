@@ -54,7 +54,7 @@ public class JFrameCarcassonne extends JFrame {
 	private JLabel remainingTileNumber;
 
 	private static final int HEIGHT_MIN = 600;
-	private static final int WIDTH_MIN = 400;
+	private static final int WIDTH_MIN = 485;
 
 	public JFrameCarcassonne(String title, SwingCarcassonneView view) {
 		super(title);
@@ -164,7 +164,6 @@ public class JFrameCarcassonne extends JFrame {
 		leftPanelContent.add(boxImagePanel, Box.CENTER_ALIGNMENT);
 		leftPanelContent.add(Box.createVerticalStrut(10));
 		leftPanelContent.add(rotateButton, Box.CENTER_ALIGNMENT);
-		leftPanelContent.add(Box.createVerticalStrut(20));
 		// leftPanelContent.add(peonBox);
 		vLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		leftPanelContent.add(vLabel);
@@ -274,12 +273,20 @@ public class JFrameCarcassonne extends JFrame {
 			addLabel = true;
 		for (int i = 0; i < players.size(); i++) {
 			if (event.getCurrentPlayer() == players.get(i))
-				turn = "$  ";
+				turn = "$&nbsp;&nbsp;";
 			else
-				turn = "    ";
-			text = turn + players.get(i).getName() + " | "
+				turn = "&nbsp;&nbsp;&nbsp;&nbsp;";
+			String firstLetterName = "" + players.get(i).getName().charAt(0);
+			String nameWithoutFirstLetter = players.get(i).getName()
+					.substring(1);
+			text = "<html><p>" + turn
+					+ "<span style='font-size:1.375em;font-weight:bold;color:"
+					+ players.get(i).getColor() + "'>" + firstLetterName
+					+ "</span>" + nameWithoutFirstLetter
+					+ "</p><p>&nbsp;&nbsp;&nbsp;&nbsp;"
 					+ players.get(i).getPoints() + " | "
-					+ players.get(i).getPieceCount();
+					+ players.get(i).getPieceCount() + "</p><html>";
+			System.out.println("couleur : " + players.get(i).getColor());
 			if (addLabel) {
 				jlabelPlayers.add(new JLabel(text));
 			} else {

@@ -13,8 +13,6 @@ public class PlayerManager {
 	private int indexInOrder;
 
 	private CarcassonneModel model;
-	private String[] colors = { "Bleu", "Rouge", "Jaune", "Vert", "Orange",
-			"Violet" };
 
 	private final static int MAX_PLAYER_NUMBER = 6;
 
@@ -22,7 +20,6 @@ public class PlayerManager {
 		players = new ArrayList<Player>();
 		order = players;
 		indexInOrder = 0;
-		setColors(new String[MAX_PLAYER_NUMBER]);
 		this.model = model;
 	}
 
@@ -33,22 +30,16 @@ public class PlayerManager {
 		players.add(p);
 	}
 
-	public void setColors(String[] colors) {
-		this.colors = colors;
-	}
-
-	public String[] getColors() {
-		return colors;
-	}
-
 	public List<Player> getPlayers() {
 		return players;
 	}
 
 	public void setPlayersFromNames(List<String> names) {
+		String[] colors = { "blue", "red", "#DAA520", "green", "black",
+				"purple" };
 		List<Player> p = new ArrayList<Player>();
-		for (String name : names)
-			p.add(new Player(name));
+		for (int i = 0; i < names.size(); i++)
+			p.add(new Player(names.get(i), colors[i]));
 		this.players = p;
 		/*
 		 * players.add(new Player("tom")); players.add(new Player("pierre"));
