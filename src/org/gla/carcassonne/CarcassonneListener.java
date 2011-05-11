@@ -7,6 +7,7 @@ import org.gla.carcassonne.events.BoardEvent;
 import org.gla.carcassonne.events.CantAddTileEvent;
 import org.gla.carcassonne.events.ConfigDialogEvent;
 import org.gla.carcassonne.events.NextTileEvent;
+import org.gla.carcassonne.events.PlayersEvent;
 import org.gla.carcassonne.events.RemainingTileEvent;
 import org.gla.carcassonne.events.RotateLeftEvent;
 import org.gla.carcassonne.events.RotateRightEvent;
@@ -20,4 +21,5 @@ public interface CarcassonneListener extends EventListener {
 	public void cantAddTile(CantAddTileEvent event);
 	public void rotateLeft(RotateLeftEvent event);
 	public void rotateRight(RotateRightEvent event);
+	public void players(PlayersEvent event);
 }

@@ -2,7 +2,6 @@ package org.gla.carcassonne.managers;
 
 import java.util.EnumMap;
 import java.util.Map;
-
 import org.gla.carcassonne.CarcassonneModel;
 import org.gla.carcassonne.entities.Board;
 import org.gla.carcassonne.entities.Tile;

@@ -2,14 +2,19 @@ package org.gla.carcassonne.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -18,11 +23,14 @@ import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+
+import org.gla.carcassonne.entities.Player;
 import org.gla.carcassonne.entities.Tile;
 import org.gla.carcassonne.events.AddTileEvent;
 import org.gla.carcassonne.events.BoardEvent;
 import org.gla.carcassonne.events.CantAddTileEvent;
 import org.gla.carcassonne.events.NextTileEvent;
+import org.gla.carcassonne.events.PlayersEvent;
 import org.gla.carcassonne.events.RemainingTileEvent;
 import org.gla.carcassonne.events.RotateLeftEvent;
 import org.gla.carcassonne.events.RotateRightEvent;
@@ -31,16 +39,22 @@ import org.gla.carcassonne.ui.events.RotateLeft;
 import org.gla.carcassonne.ui.events.RotateRight;
 
 public class JFrameCarcassonne extends JFrame {
-
+	// TODO Donner une autre tuile s'il est impossible de poser tuile
+	// TODO limiter la taille du text des noms des joueurs
+	// TODO Un clic droit pour rotate
+	// TODO sur le numberplayerdialog, le cancel ne quitte pas le jeu
 	private static final long serialVersionUID = 2913853546299057427L;
 	private JMenuBar menuBar;
 	private JScrollPane jspPlateau;
 	private JButton[][] tabTile;
-	private ImagePanel imagePanel;
+	private JPanelImage imagePanel;
 	private JPanel plateau;
-	private JLabel labelPlayer;
+	List<JLabel> jlabelPlayers;
 	private SwingCarcassonneView view;
 	private JLabel remainingTileNumber;
+
+	private static final int HEIGHT_MIN = 600;
+	private static final int WIDTH_MIN = 400;
 
 	public JFrameCarcassonne(String title, SwingCarcassonneView view) {
 		super(title);
@@ -48,8 +62,10 @@ public class JFrameCarcassonne extends JFrame {
 		getContentPane().setLayout(new GridBagLayout());
 		menuBar = new JPanelMenu();
 		remainingTileNumber = new JLabel("");
+		jlabelPlayers = new ArrayList<JLabel>();
 		setJMenuBar(menuBar);
 		setPreferredSize(new Dimension(1350, 750));
+		setMinimumSize(new Dimension(HEIGHT_MIN, WIDTH_MIN));
 		pack();
 	}
 
@@ -62,7 +78,7 @@ public class JFrameCarcassonne extends JFrame {
 		for (int i = 0; i < tabTile.length; i++) {
 			for (int j = 0; j < tabTile[0].length; j++) {
 				if (tiles[i][j] != null) {
-					ImagePanel buffImgPanel = new ImagePanel(tiles[i][j]
+					JPanelImage buffImgPanel = new JPanelImage(tiles[i][j]
 							.getType().getPath());
 					buffImgPanel.rotate(tiles[i][j].getRotationCount()
 							* (Math.PI / 2));
@@ -84,7 +100,6 @@ public class JFrameCarcassonne extends JFrame {
 
 	private JPanel builContendPane(int width, int height) {
 		JPanel panel = new JPanel(new BorderLayout());
-
 		JPanel plateauTemp = new JPanel(new GridBagLayout());
 		plateauTemp.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		plateau = new JPanel(new GridLayout(width, height));
@@ -106,18 +121,17 @@ public class JFrameCarcassonne extends JFrame {
 		Box remainingTileNumberBox = Box.createHorizontalBox();
 		remainingTileNumberBox.add(remainingTileNumber);
 
-		Box hLabel = Box.createHorizontalBox();
+		Box vLabel = Box.createVerticalBox();
 
-		labelPlayer = new JLabel("<html><h3 style = 'margin-right:25px;margin-left:30px;color:"
-				+ "black" + "'>Joueur " + "tom" + "</h3>"
-				+ "<h4 style = 'margin-left:10px'>(Pions restants : " + "7"
-				+ ")</h4></html>");
-
-		hLabel.add(labelPlayer);
+		for (JLabel labelPlayer : jlabelPlayers) {
+			vLabel.add(Box.createVerticalStrut(10));
+			vLabel.add(labelPlayer);
+		}
 
 		Box boxImagePanel = Box.createHorizontalBox();
-		imagePanel = new ImagePanel();
-		boxImagePanel.add(Box.createHorizontalStrut(35));
+		boxImagePanel.setMinimumSize(new Dimension(80, 80));
+		imagePanel = new JPanelImage();
+		boxImagePanel.add(Box.createHorizontalStrut(30));
 		boxImagePanel.add(imagePanel);
 
 		Box peonBox = Box.createHorizontalBox();
@@ -130,31 +144,34 @@ public class JFrameCarcassonne extends JFrame {
 		Box rotateButton = Box.createHorizontalBox();
 
 		JButton turnLeftButton = new JButton();
-		turnLeftButton.setIcon(new ImageIcon("res/drawable/1305046746_arrow_rotate_anticlockwise.png"));
+		turnLeftButton.setIcon(new ImageIcon(
+				"res/drawable/1305046746_arrow_rotate_anticlockwise.png"));
 		turnLeftButton.addActionListener(new RotateLeft(view));
 		rotateButton.add(turnLeftButton);
 
 		JButton turnRightButton = new JButton();
-		turnRightButton.setIcon(new ImageIcon("res/drawable/1305046774_arrow_rotate_clockwise.png"));
+		turnRightButton.setIcon(new ImageIcon(
+				"res/drawable/1305046774_arrow_rotate_clockwise.png"));
 		turnRightButton.addActionListener(new RotateRight(view));
 		rotateButton.add(turnRightButton);
 
-		Box leftPanelContent = Box.createVerticalBox();
+		JPanel leftPanelContent = new JPanel();
+		leftPanelContent.setLayout(new BoxLayout(leftPanelContent,
+				BoxLayout.Y_AXIS));
 		leftPanelContent.add(Box.createVerticalStrut(10));
-		leftPanelContent.add(remainingTileNumberBox);
+		leftPanelContent.add(remainingTileNumberBox, Box.CENTER_ALIGNMENT);
 		leftPanelContent.add(Box.createVerticalStrut(10));
-		leftPanelContent.add(boxImagePanel);
+		leftPanelContent.add(boxImagePanel, Box.CENTER_ALIGNMENT);
 		leftPanelContent.add(Box.createVerticalStrut(10));
-		leftPanelContent.add(rotateButton);
+		leftPanelContent.add(rotateButton, Box.CENTER_ALIGNMENT);
 		leftPanelContent.add(Box.createVerticalStrut(20));
-		//leftPanelContent.add(peonBox);
-		leftPanelContent.add(hLabel);
-		leftPanelContent.add(Box.createVerticalStrut(443));
-
-		// leftPanelContent.add(hBox);
-		// leftPanelContent.add(Box.createVerticalStrut(50));
+		// leftPanelContent.add(peonBox);
+		vLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		leftPanelContent.add(vLabel);
+		leftPanelContent.add(Box.createVerticalStrut(463));
 
 		panel.add(jspPlateau, BorderLayout.CENTER);
+
 		panel.add(leftPanelContent, BorderLayout.EAST);
 
 		return panel;
@@ -211,18 +228,14 @@ public class JFrameCarcassonne extends JFrame {
 	}
 
 	public void showNbPlayer() {
-		NumberPlayerDialog dialog = new NumberPlayerDialog();
-		if (!dialog.clickedOnOk)
-			System.exit(0);
-		// interfaceGui.initPlayer(dialog.getNbPlayer(), dialog.getPlayerName(),
-		// dialog.getPlayerStatus());
+		new NumberPlayerDialog(view);
 	}
 
 	public void addTile(AddTileEvent event) {
 		Tile tile = event.getTile();
 		int x = tile.getxOnBoard();
 		int y = tile.getyOnBoard();
-		ImagePanel buffImgPanel = new ImagePanel(tile.getType().getPath());
+		JPanelImage buffImgPanel = new JPanelImage(tile.getType().getPath());
 		buffImgPanel.rotate(tile.getRotationCount() * (Math.PI / 2));
 		tabTile[x][y].setIcon(new ImageIcon(buffImgPanel.bufferedImage));
 	}
@@ -249,5 +262,29 @@ public class JFrameCarcassonne extends JFrame {
 
 	public void remainingTileNumber(RemainingTileEvent event) {
 		remainingTileNumber.setText(event.getNumber() + " Restants");
+	}
+
+	public void players(PlayersEvent event) {
+		String turn;
+		String text;
+		boolean addLabel = false;
+		List<Player> players = event.getPlayers();
+
+		if (jlabelPlayers.isEmpty())
+			addLabel = true;
+		for (int i = 0; i < players.size(); i++) {
+			if (event.getCurrentPlayer() == players.get(i))
+				turn = "$  ";
+			else
+				turn = "    ";
+			text = turn + players.get(i).getName() + " | "
+					+ players.get(i).getPoints() + " | "
+					+ players.get(i).getPieceCount();
+			if (addLabel) {
+				jlabelPlayers.add(new JLabel(text));
+			} else {
+				jlabelPlayers.get(i).setText(text);
+			}
+		}
 	}
 }

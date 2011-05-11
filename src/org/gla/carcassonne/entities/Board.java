@@ -31,6 +31,10 @@ public class Board {
 			tile.setyOnBoard(y);
 			resize(x, y);
 			tileCount++;
+			if(tileCount > 1){
+				tile.setPlayer(model.getPlayerManager().getCurrentPlayer());
+				model.getPlayerManager().setNextPlayer();
+			}
 			model.fireAddTile();
 		}
 	}

@@ -7,10 +7,12 @@ public class Player {
 	private String name;
 	private int points;
 	private ArrayList<Tile> tilesList;
+	private int pieceCount;
 
 	public Player(String name) {
 		this.name = name;
 		points = 0;
+		pieceCount = 7;
 		setTilesList(new ArrayList<Tile>());
 	}
 
@@ -36,6 +38,14 @@ public class Player {
 
 	public ArrayList<Tile> getTilesList() {
 		return tilesList;
+	}
+
+	public void setPieceCount(int pieceCount) {
+		this.pieceCount = pieceCount;
+	}
+
+	public int getPieceCount() {
+		return pieceCount;
 	}
 
 }

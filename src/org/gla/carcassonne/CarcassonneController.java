@@ -1,5 +1,7 @@
 package org.gla.carcassonne;
 
+import java.util.List;
+
 import org.gla.carcassonne.entities.Tile;
 import org.gla.carcassonne.ui.SwingCarcassonneView;
 
@@ -45,6 +47,11 @@ public class CarcassonneController {
 	
 	public void notifyRotateRight() {
 		carcassonneModel.getTileManager().rotateRight();
+	}
+
+	public void notifyPlayerList(List<String> names) {
+		carcassonneModel.getPlayerManager().setPlayersFromNames(names);
+		
 	}
 	
 	
