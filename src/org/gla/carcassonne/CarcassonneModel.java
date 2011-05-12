@@ -180,11 +180,11 @@ public class CarcassonneModel implements Game {
 		return tileManager;
 	}
 
-	public void fireCantAddTile() {
+	public void fireCantAddTile(int x, int y) {
 		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
 				.getListeners(CarcassonneListener.class);
 		for (CarcassonneListener listener : listenerList) {
-			listener.cantAddTile(new CantAddTileEvent(this));
+			listener.cantAddTile(new CantAddTileEvent(this, x, y));
 		}
 	}
 

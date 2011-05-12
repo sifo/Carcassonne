@@ -3,8 +3,11 @@ package org.gla.carcassonne.managers;
 import java.awt.event.MouseEvent;
 import java.util.EnumMap;
 import java.util.Map;
+
 import org.gla.carcassonne.CarcassonneModel;
 import org.gla.carcassonne.entities.Board;
+import org.gla.carcassonne.entities.Player;
+import org.gla.carcassonne.entities.Status;
 import org.gla.carcassonne.entities.Tile;
 import org.gla.carcassonne.entities.TileType;
 import org.gla.carcassonne.utils.RandomGenerator;
@@ -130,6 +133,10 @@ public class TileManager {
 			int yOnTile = arg0.getX() * Tile.CELL_WIDTH / BUTTON_WIDTH;
 			int xOnTile = arg0.getY() * Tile.CELL_WIDTH / BUTTON_WIDTH;
 			//yOnTile = (Tile.CELL_WIDTH - 1) - yOnTile;
+			Player player = model.getPlayerManager().getCurrentPlayer();
+			if(currentTile.getZoneValue(xOnTile, yOnTile) == Status.NONE
+				|| player.getPieceCount() == 0)
+				return;
 			currentTile.setxOnTile(xOnTile);
 			currentTile.setyOnTile(yOnTile);
 			currentTile.setStatus();
@@ -138,7 +145,11 @@ public class TileManager {
 			System.out.println("on tile (" + currentTile.getxOnTile() + ", "
 					+ currentTile.getyOnTile() + ")");
 			System.out.println("zone(" + currentTile.getZones()[xOnTile][yOnTile] + ")"); 
-			currentTile.setPlayer(model.getPlayerManager().getCurrentPlayer());
+			if(!model.getPlayerManager().getCurrentPlayerhasPlacedPiece()){
+				player.setPieceCount(player.getPieceCount() - 1);
+				model.getPlayerManager().setCurrentPlayerhasPlacedPiece(true);
+			}
+			currentTile.setPlayer(player);
 			model.firePlacePieceOnTile();
 		}
 	}

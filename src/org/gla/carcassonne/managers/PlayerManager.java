@@ -12,7 +12,7 @@ public class PlayerManager {
 	private List<Player> players;
 	private List<Player> order;
 	private int indexInOrder;
-
+	private boolean currentPlayerhasPlacedPiece;
 	private CarcassonneModel model;
 
 	private final static int MAX_PLAYER_NUMBER = 6;
@@ -22,6 +22,7 @@ public class PlayerManager {
 		order = players;
 		indexInOrder = 0;
 		this.model = model;
+		currentPlayerhasPlacedPiece = false;
 	}
 
 	public void add(Player p) {
@@ -72,5 +73,13 @@ public class PlayerManager {
 
 	public void setIndexInOrder(int indexInOrder) {
 		this.indexInOrder = indexInOrder;
+	}
+
+	public boolean getCurrentPlayerhasPlacedPiece() {
+		return currentPlayerhasPlacedPiece;
+	}
+
+	public void setCurrentPlayerhasPlacedPiece(boolean currentPlayerhasPlacedPiece) {
+		this.currentPlayerhasPlacedPiece = currentPlayerhasPlacedPiece;
 	}
 }

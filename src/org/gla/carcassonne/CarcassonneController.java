@@ -63,6 +63,7 @@ public class CarcassonneController {
 		if(carcassonneModel.getTileManager().getCurrentPlayerHasPlacedTile()) {
 			carcassonneModel.getPlayerManager().setNextPlayer();
 			carcassonneModel.getTileManager().getNextTile();
+			carcassonneModel.getPlayerManager().setCurrentPlayerhasPlacedPiece(false);
 		}
 	}
 
