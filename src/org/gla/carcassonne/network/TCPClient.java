@@ -1,13 +1,13 @@
-package client;
+package org.gla.carcassonne.network;
 
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PushbackInputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
+
+import org.gla.carcassonne.utils.*;
 
 public class TCPClient extends Thread{
 	
@@ -27,7 +27,7 @@ public class TCPClient extends Thread{
 			read = new PushbackInputStream(this.s.getInputStream());
 			out = new BufferedOutputStream(this.s.getOutputStream());
 			
-			// Création du HELLO 0
+			// CrÃ©ation du HELLO 0
 			Message m = new Message("HELLO");
 			m.getNthValue(1).setIntValue(0);
 			
@@ -35,7 +35,7 @@ public class TCPClient extends Thread{
 			m.format(out);
 			out.flush();
 			
-			// reception de la réponse
+			// reception de la rÃ©ponse
 			m = Message.parse(read);
 			String receive = m.getNthValue(0).toString();
 			
@@ -83,7 +83,7 @@ public class TCPClient extends Thread{
 		catch (ProtocolError e) {e.printStackTrace();}
 	}
 	
-	// si le client a envoyé du texte
+	// si le client a envoyï¿½ du texte
 	public void setTuile(String tuile, int positionx, int positiony, int positionpion){
 		Message m = new Message(tuile);
 		
@@ -119,7 +119,7 @@ public class TCPClient extends Thread{
 	
 	public void deconnect(){
 		try {
-			// Déconnection : envoi de CLOSE et le numéro du client
+			// Dï¿½connection : envoi de CLOSE et le numï¿½ro du client
 			Message m = new Message("CLOSE");
 			m.getNthValue(1).setIntValue(num_client);
 			m.format(out);
@@ -146,7 +146,7 @@ public class TCPClient extends Thread{
 				// le serveur donne la main au client
 				if (receive.equals("GIVEHAND")){
 					
-					// on attend que le client ait envoyé le texte
+					// on attend que le client ait envoyï¿½ le texte
 					while(this.locked){}
 					
 					// on envoie le texte et on bloque
