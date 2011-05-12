@@ -4,6 +4,7 @@ public enum Status {
 	KNIGHT,
 	MONK,
 	FARMER,
-	THIEF
+	THIEF,
+	NONE
 }
 

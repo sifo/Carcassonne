@@ -25,7 +25,7 @@ public class Board {
 	public void add(int x, int y, Tile tile) {
 		if (!canPlace(x, y, tile) 
 				|| model.getTileManager().getCurrentPlayerHasPlacedTile()) {
-			model.fireCantAddTile();
+			model.fireCantAddTile(x, y);
 		} else {
 			board[x][y] = tile;
 			tile.setxOnBoard(x);

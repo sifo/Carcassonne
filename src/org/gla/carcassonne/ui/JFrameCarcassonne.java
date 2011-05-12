@@ -204,7 +204,7 @@ public class JFrameCarcassonne extends JFrame {
 	}
 
 	public void cantAddTile(CantAddTileEvent event) {
-		JOptionPane.showMessageDialog(null, "Mauvais placement de tuile.");
+		
 	}
 
 	public void rotateLeft(RotateLeftEvent event) {

@@ -120,6 +120,7 @@ public class Tile {
 					{Status.KNIGHT,Status.KNIGHT,Status.FARMER,Status.FARMER,Status.FARMER,Status.KNIGHT,Status.KNIGHT},
 					{Status.KNIGHT,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.KNIGHT}
 			});
+			break;
 		case TILE_I:
 			setZones(new Status[][] {
 					{Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.KNIGHT},
@@ -158,7 +159,7 @@ public class Tile {
 					{Status.FARMER,Status.FARMER,Status.THIEF,Status.THIEF,Status.FARMER,Status.FARMER,Status.KNIGHT},
 					{Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.FARMER,Status.KNIGHT,Status.KNIGHT},
 					{Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.FARMER,Status.KNIGHT,Status.KNIGHT},
-					{Status.THIEF,Status.THIEF,Status.THIEF,Status.FARMER,Status.FARMER,Status.KNIGHT,Status.KNIGHT},
+					{Status.THIEF,Status.THIEF,Status.NONE,Status.FARMER,Status.FARMER,Status.KNIGHT,Status.KNIGHT},
 					{Status.FARMER,Status.FARMER,Status.THIEF,Status.THIEF,Status.FARMER,Status.KNIGHT,Status.KNIGHT},
 					{Status.FARMER,Status.FARMER,Status.THIEF,Status.THIEF,Status.FARMER,Status.KNIGHT,Status.KNIGHT},
 					{Status.FARMER,Status.FARMER,Status.THIEF,Status.THIEF,Status.FARMER,Status.FARMER,Status.KNIGHT}
@@ -247,7 +248,7 @@ public class Tile {
 					{Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER},
 					{Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER},
 					{Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER},
-					{Status.THIEF,Status.THIEF,Status.THIEF,Status.FARMER,Status.THIEF,Status.THIEF,Status.THIEF},
+					{Status.THIEF,Status.THIEF,Status.THIEF,Status.NONE,Status.THIEF,Status.THIEF,Status.THIEF},
 					{Status.FARMER,Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.FARMER,Status.FARMER},
 					{Status.FARMER,Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.FARMER,Status.FARMER},
 					{Status.FARMER,Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.FARMER,Status.FARMER}
@@ -258,7 +259,7 @@ public class Tile {
 					{Status.FARMER,Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.FARMER,Status.FARMER},
 					{Status.FARMER,Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.FARMER,Status.FARMER},
 					{Status.FARMER,Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.FARMER,Status.FARMER},
-					{Status.THIEF,Status.THIEF,Status.THIEF,Status.FARMER,Status.THIEF,Status.THIEF,Status.THIEF},
+					{Status.THIEF,Status.THIEF,Status.THIEF,Status.NONE,Status.THIEF,Status.THIEF,Status.THIEF},
 					{Status.FARMER,Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.FARMER,Status.FARMER},
 					{Status.FARMER,Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.FARMER,Status.FARMER},
 					{Status.FARMER,Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.FARMER,Status.FARMER}
@@ -446,6 +447,10 @@ public class Tile {
 
 	public TileSideValue getSideValue(int side) {
 		return sideValues[side % 4];
+	}
+	
+	public Status getZoneValue(int x, int y) {
+		return zones[x][y];
 	}
 
 	public TileSideValue[] getSideValues() {
