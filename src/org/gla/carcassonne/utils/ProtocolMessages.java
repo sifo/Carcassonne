@@ -18,9 +18,12 @@ public class ProtocolMessages {
 		set.add("HELLONACK");
 		set.add("CLOSE");
 		set.add("READY");
+		set.add("FINISH");
 		set.add("MOVE");
 		set.add("MOVEACK");
 		set.add("MOVENACK");
+		set.add("TOKEN");
+		set.add("NOOP");
 		TYPES_SET = Collections.unmodifiableSet(set);
 	}
 	

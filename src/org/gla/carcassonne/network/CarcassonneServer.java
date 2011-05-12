@@ -6,9 +6,9 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-import org.gla.carcassonne.utils.Message;
-import org.gla.carcassonne.utils.ProtocolError;
+import org.gla.carcassonne.utils.*;
 
 /**
  * Le serveur écoute pendant 500ms, s'arrête pendant 500ms et réécoute
@@ -21,7 +21,8 @@ public class CarcassonneServer {
 	private boolean isListening;
 	private List<CarcassonneThreadServer> clients;
 	
-	private int token;		// nombre généré aléatoire pour désigner quel client a la main
+	private int token;			// nombre généré aléatoire pour désigner quel client a la main
+	private int nbAckMessages;	// nombre de messages ack reçu pour un MOVE
 
 	private final static String CONNECTION_ACCEPTED = "Connexion acceptée : ";
 	private final static int NUMBER_MAX_OF_CLIENTS = 5;
@@ -37,6 +38,8 @@ public class CarcassonneServer {
 
 	public void startServer() throws IOException, InterruptedException {
 		isListening = true;
+		
+		// En attente de connexions : la partie n'a pas encore démarrée
 		while (isListening) {
 			if (clients.size() < NUMBER_MAX_OF_CLIENTS) {
 				try {
@@ -52,8 +55,39 @@ public class CarcassonneServer {
 				}
 				Thread.sleep(500);
 			}
+			else
+				isListening = false;
 		}
+		
+		// La partie a démarré et le serveur donne la main aux clients à tour de rôle
+		runGame();
+		
+		// La partie a terminé et le serveur s'arrête
 		serverSocket.close();
+	}
+	
+	public int generateRandomInt() {
+		Random generator = new Random();
+		return generator.nextInt(511)+1;	// entre 1 et 512
+	}
+	
+	public void runGame() {
+		while (true) {
+			token = generateRandomInt();
+			nbAckMessages = 0;
+			
+			for(CarcassonneThreadServer client : clients) {
+				Message m = new Message("TOKEN", new MessageInt(token));
+				client.sendMessageFromServer(m);
+				client.setHasToken(true);
+				
+				try {
+					wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	public ServerSocket getServerSocket() {
@@ -117,6 +151,19 @@ public class CarcassonneServer {
 			if (type.equals("READY")) {
 				if (isAllPlayersReady())
 					isListening = false;
+			}
+			
+			if (type.equals("MOVEACK")) {
+				nbAckMessages++;
+				if (nbAckMessages == clients.size()-1)	// on exclu celui qui a MOVE
+					notify();
+			}
+			
+			// On réinitialise le token avant d'envoyer le message aux autres clients
+			if (type.equals("MOVE")) {
+				token = 0;
+				from.setHasToken(false);
+				m.getNthValue(1).setIntValue(clients.indexOf(from));
 			}
 			
 			// On transmet le numero du client émetteur dans le message
