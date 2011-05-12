@@ -1,5 +1,6 @@
 package org.gla.carcassonne.managers;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,11 +36,13 @@ public class PlayerManager {
 	}
 
 	public void setPlayersFromNames(List<String> names) {
-		String[] colors = { "blue", "red", "#DAA520", "green", "black",
+		String[] colorNames = { "blue", "red", "#DAA520", "green", "black",
 				"purple" };
+		Color[] colors = { Color.BLUE, Color.RED, new Color(218, 165, 32),
+				Color.GREEN, Color.BLACK, new Color(128, 0, 128) };
 		List<Player> p = new ArrayList<Player>();
 		for (int i = 0; i < names.size(); i++)
-			p.add(new Player(names.get(i), colors[i]));
+			p.add(new Player(names.get(i), colorNames[i], colors[i]));
 		this.players = p;
 		/*
 		 * players.add(new Player("tom")); players.add(new Player("pierre"));

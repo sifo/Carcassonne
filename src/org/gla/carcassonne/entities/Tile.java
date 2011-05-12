@@ -6,39 +6,39 @@ enum TileSideValue {
 	CITY
 }
 
-enum Status {
-	KNIGHT,
-	MONK,
-	FARMER,
-	THIEF
-}
-
 public class Tile {
 	private int xOnTile;
 	private int yOnTile;
 	private int xOnBoard;
 	private int yOnBoard;
+	private int xOnClick;
+	private int yOnClick;
 	private int rotationCount;
 	private TileType type;
 	private TileSideValue[] sideValues;
+	private Status status;
 	private Player player;
 	private Status[][] zones;
 
 	public final static int NORTH = 0;
 	public final static int EAST = 1;
 	public final static int SOUTH = 2;
-	public final static int WEST = 3;
-
+	public final static int WEST = 3; 
+	public final static int CELL_WIDTH = 7;
+	
 	public Tile(TileType type) {
 		this.xOnTile = -1;
 		this.yOnTile = -1;
 		this.xOnBoard = -1;
 		this.yOnBoard = -1;
+		this.xOnClick = -1;
+		this.yOnClick = -1;
 		this.rotationCount = 0;
 		this.setType(type);
 		this.setSideValues(type);
 		this.setZoneValues(type);
 		this.player = null;
+		this.status = null;
 	}
 
 	public void setZoneValues(TileType type) {
@@ -146,8 +146,8 @@ public class Tile {
 			setZones(new Status[][] {
 					{Status.FARMER,Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.FARMER,Status.KNIGHT},
 					{Status.FARMER,Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.KNIGHT,Status.KNIGHT},
-					{Status.FARMER,Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.KNIGHT,Status.KNIGHT},
-					{Status.THIEF,Status.THIEF,Status.THIEF,Status.THIEF,Status.FARMER,Status.KNIGHT,Status.KNIGHT},
+					{Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.FARMER,Status.KNIGHT,Status.KNIGHT},
+					{Status.THIEF,Status.THIEF,Status.THIEF,Status.FARMER,Status.FARMER,Status.KNIGHT,Status.KNIGHT},
 					{Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.KNIGHT,Status.KNIGHT},
 					{Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.KNIGHT,Status.KNIGHT},
 					{Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.KNIGHT}
@@ -155,13 +155,13 @@ public class Tile {
 			break;
 		case TILE_L:			
 			setZones(new Status[][] {
-					{Status.FARMER,Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.FARMER,Status.KNIGHT},
-					{Status.FARMER,Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.KNIGHT,Status.KNIGHT},
-					{Status.FARMER,Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.KNIGHT,Status.KNIGHT},
+					{Status.FARMER,Status.FARMER,Status.THIEF,Status.THIEF,Status.FARMER,Status.FARMER,Status.KNIGHT},
+					{Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.FARMER,Status.KNIGHT,Status.KNIGHT},
+					{Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.FARMER,Status.KNIGHT,Status.KNIGHT},
 					{Status.THIEF,Status.THIEF,Status.THIEF,Status.FARMER,Status.FARMER,Status.KNIGHT,Status.KNIGHT},
-					{Status.FARMER,Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.KNIGHT,Status.KNIGHT},
-					{Status.FARMER,Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.KNIGHT,Status.KNIGHT},
-					{Status.FARMER,Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.FARMER,Status.KNIGHT}
+					{Status.FARMER,Status.FARMER,Status.THIEF,Status.THIEF,Status.FARMER,Status.KNIGHT,Status.KNIGHT},
+					{Status.FARMER,Status.FARMER,Status.THIEF,Status.THIEF,Status.FARMER,Status.KNIGHT,Status.KNIGHT},
+					{Status.FARMER,Status.FARMER,Status.THIEF,Status.THIEF,Status.FARMER,Status.FARMER,Status.KNIGHT}
 			});
 			break;
 			/*case TILE_M:
@@ -186,9 +186,9 @@ public class Tile {
 					{Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT},
 					{Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.FARMER},
 					{Status.KNIGHT,Status.KNIGHT,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER},
-					{Status.KNIGHT,Status.KNIGHT,Status.FARMER,Status.FARMER,Status.THIEF,Status.THIEF,Status.THIEF},
-					{Status.KNIGHT,Status.KNIGHT,Status.FARMER,Status.THIEF,Status.FARMER,Status.FARMER,Status.FARMER},
-					{Status.KNIGHT,Status.KNIGHT,Status.FARMER,Status.THIEF,Status.FARMER,Status.FARMER,Status.FARMER},
+					{Status.KNIGHT,Status.KNIGHT,Status.FARMER,Status.FARMER,Status.FARMER,Status.THIEF,Status.THIEF},
+					{Status.KNIGHT,Status.KNIGHT,Status.FARMER,Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER},
+					{Status.KNIGHT,Status.KNIGHT,Status.FARMER,Status.THIEF,Status.THIEF,Status.FARMER,Status.FARMER},
 					{Status.KNIGHT,Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.FARMER,Status.FARMER}
 			});
 			break;
@@ -468,22 +468,6 @@ public class Tile {
 		this.player = player;
 	}
 
-	public int getX() {
-		return xOnTile;
-	}
-
-	public void setX(int x) {
-		this.xOnTile = x;
-	}
-
-	public int getY() {
-		return yOnTile;
-	}
-
-	public void setY(int y) {
-		this.yOnTile = y;
-	}
-
 	public void setRotationCount(int rotationCount) {
 		this.rotationCount = rotationCount;
 	}
@@ -522,6 +506,7 @@ public class Tile {
 		else 
 			rotationCount--;
 		rotateSides(-1);
+		rotateZones(-1);
 	}
 
 	public void rotateRight() {
@@ -530,9 +515,34 @@ public class Tile {
 		else
 			rotationCount++;
 		rotateSides(1);
+		rotateZones(1);
 	}
 	
-    public  void rotateSides(int rot) {
+    private void rotateZones(int i) {
+		if(i >= 0)
+			for(int j = 0; j < i; j++)
+				rotateZonesRight();
+		else 
+			for(int j = 0; j < Math.abs(i); j++)
+				rotateZonesLeft();
+	}
+
+	private void rotateZonesRight() {
+		Status[][] res = new Status[zones.length][zones[0].length];
+	    for (int i = 0; i < res.length; ++i) {
+	        for (int j = 0; j < res[0].length; ++j) {
+	            res[i][j] = zones[res.length - j - 1][i];
+	        }
+	    }
+	    zones = res;
+	}
+	
+	private void rotateZonesLeft() {
+		for(int i = 0; i < 3; i ++)
+			rotateZonesRight();
+	}
+
+	public  void rotateSides(int rot) {
     	TileSideValue repVal;
         int repIdx = 0;
         int cpIdx = 0;
@@ -561,4 +571,46 @@ public class Tile {
         
         sideValues = sides;
     }
+
+	public int getxOnTile() {
+		return xOnTile;
+	}
+
+	public void setxOnTile(int xOnTile) {
+		this.xOnTile = xOnTile;
+	}
+
+	public int getyOnTile() {
+		return yOnTile;
+	}
+
+	public void setyOnTile(int yOnTile) {
+		this.yOnTile = yOnTile;
+	}
+
+	public void setxOnClick(int xOnClick) {
+		this.xOnClick = xOnClick;
+	}
+
+	public int getxOnClick() {
+		return xOnClick;
+	}
+
+	public void setyOnClick(int yOnClick) {
+		this.yOnClick = yOnClick;
+	}
+
+	public int getyOnClick() {
+		return yOnClick;
+	}
+
+	public void setStatus() {
+		if(xOnTile != -1 && yOnTile != -1){
+			status = zones[xOnTile][yOnTile];
+		}
+	}
+
+	public Status getStatus() {
+		return status;
+	}
 }

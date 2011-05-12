@@ -15,8 +15,8 @@ public class TileTest extends TestCase {
 		assertNotNull(tile.getType());
 		assertNotNull(tile.getSideValues());
 		assertNull(tile.getPlayer());
-		assertEquals(-1, tile.getX());
-		assertEquals(-1, tile.getY());
+		assertEquals(-1, tile.getxOnTile());
+		assertEquals(-1, tile.getyOnTile());
 		assertNotNull(tile.getZones());
 		assertEquals(tile.getType().getClass(), TileType.class);
 	}

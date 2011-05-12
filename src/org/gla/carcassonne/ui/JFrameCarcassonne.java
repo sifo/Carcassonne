@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -25,12 +26,15 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.gla.carcassonne.entities.Player;
+import org.gla.carcassonne.entities.Status;
 import org.gla.carcassonne.entities.Tile;
 import org.gla.carcassonne.events.AddTileEvent;
 import org.gla.carcassonne.events.BoardEvent;
 import org.gla.carcassonne.events.CantAddTileEvent;
 import org.gla.carcassonne.events.CardBackEvent;
+import org.gla.carcassonne.events.ListenerOnCurrentTileEvent;
 import org.gla.carcassonne.events.NextTileEvent;
+import org.gla.carcassonne.events.PlacePieceOnTileEvent;
 import org.gla.carcassonne.events.PlayersEvent;
 import org.gla.carcassonne.events.RemainingTileEvent;
 import org.gla.carcassonne.events.RotateLeftEvent;
@@ -83,20 +87,14 @@ public class JFrameCarcassonne extends JFrame {
 
 		for (int i = 0; i < tabTile.length; i++) {
 			for (int j = 0; j < tabTile[0].length; j++) {
+				tabTile[i][j] = new JButton();
 				if (tiles[i][j] != null) {
-					JPanelImage buffImgPanel = new JPanelImage(tiles[i][j]
-							.getType().getPath());
-					buffImgPanel.rotate(tiles[i][j].getRotationCount()
-							* (Math.PI / 2));
-					tabTile[i][j] = new JButton(new ImageIcon(
-							buffImgPanel.bufferedImage));
-				} else
-					tabTile[i][j] = new JButton();
+					drawTileOnButton(tiles[i][j]);
+				}
 				tabTile[i][j].setBackground(Color.LIGHT_GRAY);
 				tabTile[i][j].setVisible(true);
-
 				tabTile[i][j].addActionListener(new ButtonListener(i, j, view));
-				tabTile[i][j].addMouseListener(new MouseListener(i, j, view));
+				//tabTile[i][j].addMouseListener(new MouseListener(i, j, view));
 				tabTile[i][j].setMargin(new Insets(-6, -6, -6, -6));
 			}
 		}
@@ -191,56 +189,6 @@ public class JFrameCarcassonne extends JFrame {
 		return panel;
 	}
 
-	public static Position getPositionFromTuile(int x, int y, int width,
-			int height) {
-
-		double coeffDiagonalTopLeftToBottomRight = height / width;
-
-		if ((y <= (height / 3)) && (x <= (width / 3))
-				&& (x * coeffDiagonalTopLeftToBottomRight <= y))
-			return Position.verticalTopLeft;
-		if ((y <= (height / 3)) && (x <= (width / 3))
-				&& (x * coeffDiagonalTopLeftToBottomRight > y))
-			return Position.horizontalTopLeft;
-
-		if ((y <= height / 3) && (x <= 2 * width / 3))
-			return Position.topMiddle;
-
-		if ((y <= (height / 3)) && (x <= width)
-				&& ((-x * coeffDiagonalTopLeftToBottomRight + height) <= y))
-			return Position.verticalTopRight;
-
-		if ((y <= (height / 3)) && (x <= width)
-				&& ((-x * coeffDiagonalTopLeftToBottomRight + height) > y))
-			return Position.horizontalTopRight;
-
-		if (y <= 2 * height / 3 && x <= width / 3)
-			return Position.centerLeft;
-
-		if (y <= 2 * height / 3 && x <= 2 * width / 3)
-			return Position.centerMiddle;
-
-		if (y <= 2 * height / 3 && x <= width)
-			return Position.centerRight;
-
-		if ((y <= height) && (x <= (width / 3))
-				&& (-x * coeffDiagonalTopLeftToBottomRight + height <= y))
-			return Position.horizontalBottomLeft;
-
-		if ((y <= height) && (x <= (width / 3))
-				&& (-x * coeffDiagonalTopLeftToBottomRight + height > y))
-			return Position.verticalBottomLeft;
-
-		if ((y <= height) && (x <= 2 * width / 3))
-			return Position.bottomMiddle;
-
-		if ((y <= height) && (x <= width)
-				&& (x * coeffDiagonalTopLeftToBottomRight <= y))
-			return Position.horizontalBottomRight;
-
-		return Position.verticalBottomRight;
-	}
-
 	public void showNbPlayer() {
 		new NumberPlayerDialog(view);
 	}
@@ -252,6 +200,7 @@ public class JFrameCarcassonne extends JFrame {
 		JPanelImage buffImgPanel = new JPanelImage(tile.getType().getPath());
 		buffImgPanel.rotate(tile.getRotationCount() * (Math.PI / 2));
 		tabTile[x][y].setIcon(new ImageIcon(buffImgPanel.bufferedImage));
+		//tabTile[x][y].addMouseListener(new MouseListener(x, y, view));
 	}
 
 	public void cantAddTile(CantAddTileEvent event) {
@@ -296,7 +245,7 @@ public class JFrameCarcassonne extends JFrame {
 					.substring(1);
 			text = "<html><p>" + turn
 					+ "<span style='font-size:1.375em;font-weight:bold;color:"
-					+ players.get(i).getColor() + "'>" + firstLetterName
+					+ players.get(i).getColorName() + "'>" + firstLetterName
 					+ "</span>" + nameWithoutFirstLetter
 					+ "</p><p>&nbsp;&nbsp;&nbsp;&nbsp;"
 					+ players.get(i).getPoints() + " | "
@@ -320,4 +269,41 @@ public class JFrameCarcassonne extends JFrame {
 	public void cardBack(CardBackEvent event) {
 		imagePanel.setImage("res/drawable/card-back.png");
 	}
+
+	public void listenerOnCurrentTile(
+			ListenerOnCurrentTileEvent listenerOnCurrentTileEvent) {
+		int x = listenerOnCurrentTileEvent.getX();
+		int y = listenerOnCurrentTileEvent.getY();
+		tabTile[x][y].addMouseListener(new MouseListener(x, y, view));
+	}
+
+	public void placePieceOnTile(PlacePieceOnTileEvent event) {
+		drawTileOnButton(event.getTile());
+	}
+	
+	public void drawTileOnButton(Tile tile) {
+		JPanelImage imgPanel = new JPanelImage(tile.getType().getPath());
+		imgPanel.rotate(tile.getRotationCount() * Math.PI / 2);
+		if(tile.getxOnClick() != -1){
+			Graphics2D g = imgPanel.bufferedImage.createGraphics();
+			g.setColor(tile.getPlayer().getColor());
+			g.fillOval(tile.getxOnClick() - 5, tile.getyOnClick() - 5, 16, 17);
+			g.setColor(Color.WHITE);
+			String letter = "";
+			if(tile.getStatus() == Status.THIEF) letter = "T";
+			if(tile.getStatus() == Status.KNIGHT) letter = "K";
+			if(tile.getStatus() == Status.FARMER) letter = "F";
+			if(tile.getStatus() == Status.MONK) {
+				letter = "M";
+				//La lettre M est plus épaisse que les autres, on le décale un peu
+				g.drawString(letter, tile.getxOnClick() - 1, tile.getyOnClick() + 9);
+			}
+			else {
+				g.drawString(letter, tile.getxOnClick(), tile.getyOnClick() + 9);
+			}
+		}
+		tabTile[tile.getxOnBoard()][tile.getyOnBoard()].setIcon(
+				new ImageIcon(imgPanel.bufferedImage));
+	}
+
 }

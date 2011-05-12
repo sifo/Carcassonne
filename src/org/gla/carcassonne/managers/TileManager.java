@@ -17,6 +17,7 @@ public class TileManager {
 	private Tile currentTile;
 	private CarcassonneModel model;
 	private boolean currentPlayerhasPlacedTile;
+	public static final int BUTTON_WIDTH = 72;
 
 	private static final int[] tilesCount = new int[] {
 			// f, m, n o, q, s sont des tuiles d'extensions
@@ -119,15 +120,29 @@ public class TileManager {
 	}
 
 	public void placePieceOnTile(int x, int y, MouseEvent arg0) {
-		System.out.println("button (" + x + ", " + y + ") | click ("
-				+ arg0.getX() + ", " + arg0.getY() + ")");
-		
+		if (currentTile.getxOnBoard() != x || currentTile.getyOnBoard() != y)
+			return;
+		else {
+			int yOnTile = arg0.getX() * Tile.CELL_WIDTH / BUTTON_WIDTH;
+			int xOnTile = arg0.getY() * Tile.CELL_WIDTH / BUTTON_WIDTH;
+			//yOnTile = (Tile.CELL_WIDTH - 1) - yOnTile;
+			currentTile.setxOnTile(xOnTile);
+			currentTile.setyOnTile(yOnTile);
+			currentTile.setStatus();
+			currentTile.setxOnClick(arg0.getX());
+			currentTile.setyOnClick(arg0.getY());
+			System.out.println("on tile (" + currentTile.getxOnTile() + ", "
+					+ currentTile.getyOnTile() + ")");
+			System.out.println("zone(" + currentTile.getZones()[xOnTile][yOnTile] + ")"); 
+			currentTile.setPlayer(model.getPlayerManager().getCurrentPlayer());
+			model.firePlacePieceOnTile();
+		}
 	}
 
 	public boolean getCurrentPlayerHasPlacedTile() {
 		return currentPlayerhasPlacedTile;
 	}
-	
+
 	public void setCurrentPlayerhasPlacedTile(boolean currentPlayerhasPlacedTile) {
 		this.currentPlayerhasPlacedTile = currentPlayerhasPlacedTile;
 	}

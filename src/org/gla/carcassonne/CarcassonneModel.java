@@ -8,8 +8,10 @@ import org.gla.carcassonne.events.BoardEvent;
 import org.gla.carcassonne.events.CantAddTileEvent;
 import org.gla.carcassonne.events.CardBackEvent;
 import org.gla.carcassonne.events.ConfigDialogEvent;
+import org.gla.carcassonne.events.ListenerOnCurrentTileEvent;
 import org.gla.carcassonne.events.LockConfirmButtonEvent;
 import org.gla.carcassonne.events.NextTileEvent;
+import org.gla.carcassonne.events.PlacePieceOnTileEvent;
 import org.gla.carcassonne.events.PlayersEvent;
 import org.gla.carcassonne.events.RemainingTileEvent;
 import org.gla.carcassonne.events.RotateLeftEvent;
@@ -92,7 +94,8 @@ public class CarcassonneModel implements Game {
 		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
 				.getListeners(CarcassonneListener.class);
 		for (CarcassonneListener listener : listenerList) {
-			// listener.PlacePieceOnTile(new PlacePieceOnTileEvent(this));
+			listener.placePieceOnTile(new PlacePieceOnTileEvent(this, 
+					tileManager.getCurrentTile()));
 		}
 	}
 
@@ -216,6 +219,16 @@ public class CarcassonneModel implements Game {
 		for (CarcassonneListener listener : listenerList) {
 			listener.cardBack(new CardBackEvent(this));
 		}
-		
+
+	}
+
+	public void fireListenerOnCurrentTile() {
+		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
+				.getListeners(CarcassonneListener.class);
+		for (CarcassonneListener listener : listenerList) {
+			listener.listenerOnCurrentTile(new ListenerOnCurrentTileEvent(this,
+					tileManager.getCurrentTile().getxOnBoard(),
+					tileManager.getCurrentTile().getyOnBoard()));
+		}
 	}
 }

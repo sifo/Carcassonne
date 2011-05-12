@@ -17,7 +17,6 @@ public class MouseListener implements java.awt.event.MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		view.getController().notifyPlacePiece(x, y, arg0);
 	}
 
 	@Override
@@ -32,7 +31,7 @@ public class MouseListener implements java.awt.event.MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-
+		view.getController().notifyPlacePiece(x, y, arg0);
 	}
 
 	@Override

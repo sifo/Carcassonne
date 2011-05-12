@@ -1,5 +1,6 @@
 package org.gla.carcassonne.entities;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 public class Player {
@@ -8,12 +9,14 @@ public class Player {
 	private int points;
 	private ArrayList<Tile> tilesList;
 	private int pieceCount;
-	private String color;
+	private String colorName;
+	private Color color;
 
-	public Player(String name, String color) {
+	public Player(String name, String colorName, Color color) {
 		this.name = name;
 		points = 0;
 		pieceCount = 7;
+		this.colorName = colorName;
 		this.color = color;
 		setTilesList(new ArrayList<Tile>());
 	}
@@ -50,11 +53,19 @@ public class Player {
 		return pieceCount;
 	}
 
-	public void setColor(String color) {
+	public void setColorName(String color) {
+		this.colorName = color;
+	}
+
+	public String getColorName() {
+		return colorName;
+	}
+
+	public void setColor(Color color) {
 		this.color = color;
 	}
 
-	public String getColor() {
+	public Color getColor() {
 		return color;
 	}
 

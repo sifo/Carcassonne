@@ -7,8 +7,10 @@ import org.gla.carcassonne.events.BoardEvent;
 import org.gla.carcassonne.events.CantAddTileEvent;
 import org.gla.carcassonne.events.CardBackEvent;
 import org.gla.carcassonne.events.ConfigDialogEvent;
+import org.gla.carcassonne.events.ListenerOnCurrentTileEvent;
 import org.gla.carcassonne.events.LockConfirmButtonEvent;
 import org.gla.carcassonne.events.NextTileEvent;
+import org.gla.carcassonne.events.PlacePieceOnTileEvent;
 import org.gla.carcassonne.events.PlayersEvent;
 import org.gla.carcassonne.events.RemainingTileEvent;
 import org.gla.carcassonne.events.RotateLeftEvent;
@@ -28,4 +30,7 @@ public interface CarcassonneListener extends EventListener {
 	public void unlockConfirmButton(UnlockConfirmButtonEvent event);
 	public void lockConfirmButton(LockConfirmButtonEvent lockConfirmButtonEvent);
 	public void cardBack(CardBackEvent cardBackEvent);
+	public void listenerOnCurrentTile(
+			ListenerOnCurrentTileEvent listenerOnCurrentTileEvent);
+	public void placePieceOnTile(PlacePieceOnTileEvent placePieceOnTileEvent);
 }
