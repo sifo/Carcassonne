@@ -1,4 +1,4 @@
-﻿PROTOCOLE 1.62 :
+﻿PROTOCOLE 1.63 :
 
 Utilitaire externe :
 - Basé sur le code modifié de : Parseur et formateur de messages
@@ -19,6 +19,7 @@ Il existe différents messages :
 N.B.
  n (entier) est le numéro du joueur envoyant le message. Ce numéro est affecté par le serveur lorsqu'il transmet le message aux autres clients.
 Le n envoyé par le client n'a donc pas d'importance.
+Le client n'a pas besoin de connaître son numéro. Seuls ceux des autres sont importants pour savoir qui effectue une action.
 
 ===========================
 ======   Connexion   ======
@@ -56,17 +57,22 @@ Lorsqu'un joueur est prêt, il envoi au serveur le message START.
 Lorsque tous les joueurs sont prêts, la partie peut démarrer, autrement, le serveur est en attente jusqu'à la déconnexion d'un client.
 
 
+TOKEN t
+
+Durant une partie, le serveur donne la main aux clients à tour de rôle.
+TOKEN t est envoyé au client qui doit jouer, avec t un nombre généré aléatoirement. t doit être ensuite envoyé avec le message MOVE.
+
 ======================================
 ======   Placements de tuiles   ======
 ======================================
 
-MOVE (tile) (x) (y) (piece) token
+MOVE n (tile) (x) (y) (piece) token
 MOVEACK
 MOVENACK
 
 Lorsqu'un joueur décide de placer une tuile, une condition est requise :
 - le joueur doit posséder un token désignant que c'est son tour de jouer.
-Lors d'un placement de tuile, le client envoi le nom de la tuile (type), les coordonnées selon la représentation définie par le protocole, éventuellement une pièce placée sur la tuile et son token.
+Lors d'un placement de tuile, le client envoi MOVE avec le nom de la tuile (type), les coordonnées selon la représentation définie par le protocole, éventuellement une pièce placée sur la tuile et son token.
 Si les clients acceptent la tuile et les coordonnées placées, ils envoient un MOVEACK. Sinon, un MOVENACK est envoyé. Si au moins un MOVENACK est envoyé, la partie s'arrête (cas d'un bug d'implementation ou d'une tricherie ?).
 
 

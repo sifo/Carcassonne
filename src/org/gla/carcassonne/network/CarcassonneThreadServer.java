@@ -18,6 +18,7 @@ public class CarcassonneThreadServer extends Thread {
 	
 	private boolean isClosed;	// indique si la connexion en cours doit se fermer (quitter une partie)
 	private boolean isReady;	// indique si le joueur est prêt ou non à démarrer une partie
+	private boolean hasToken;	// indique si le joueur possède actuellement le token
 
 	private final static String CONNECTION_RESET = "connection reset";
 
@@ -29,7 +30,8 @@ public class CarcassonneThreadServer extends Thread {
 		out = new BufferedOutputStream(socket.getOutputStream());
 		port = socket.getPort();
 		isClosed = false;
-		setReady(false);
+		isReady = false;
+		hasToken = false;
 	}
 	
 	public void run() {
@@ -59,6 +61,11 @@ public class CarcassonneThreadServer extends Thread {
 				
 			if (type.equals("CLOSE")) {
 				server.sendMessageToClients(receive, this);
+				
+				// Si c'est à son tour de jouer, alors passer son tour
+				if (hasToken)
+					notify();
+				
 				server.removeClient(this);
 				in.close();
 				out.close();
@@ -71,6 +78,12 @@ public class CarcassonneThreadServer extends Thread {
 					sendMessageFromServer(m);
 					return;
 				}
+			}
+			else if (type.equals("READY")) {
+				if (!isReady())
+					setReady(true);
+				else
+					throw new ProtocolError("Joueur déjà prêt");
 			}
 			else if (type.equals("MOVE")) {
 				int token = server.getToken();
@@ -114,6 +127,14 @@ public class CarcassonneThreadServer extends Thread {
 	public void setPort(int port) {
 		this.port = port;
 	}
+	
+	public void setClosed(boolean isClosed) {
+		this.isReady = isClosed;
+	}
+
+	public boolean isClosed() {
+		return isClosed;
+	}
 
 	public void setReady(boolean isReady) {
 		this.isReady = isReady;
@@ -121,5 +142,13 @@ public class CarcassonneThreadServer extends Thread {
 
 	public boolean isReady() {
 		return isReady;
+	}
+
+	public void setHasToken(boolean hasToken) {
+		this.hasToken = hasToken;
+	}
+
+	public boolean isHasToken() {
+		return hasToken;
 	}
 }

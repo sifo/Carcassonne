@@ -67,8 +67,7 @@ public class TileManager {
 	}
 
 	public Tile selectTileRandomly() {
-		RandomGenerator<EnumMap<TileType, Integer>> generator = new RandomGenerator<EnumMap<TileType, Integer>>(
-				TileType.class);
+		RandomGenerator<EnumMap<TileType, Integer>> generator = new RandomGenerator<EnumMap<TileType, Integer>>(tiles);
 		TileType t = generator.random();
 		return new Tile(t);
 	}
