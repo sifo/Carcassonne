@@ -6,6 +6,7 @@ import java.net.UnknownHostException;
 
 public class CarcassonneClient extends Socket {
 
+	
 	public CarcassonneClient(String host, int port)
 			throws UnknownHostException, IOException {
 		super(host, port);
