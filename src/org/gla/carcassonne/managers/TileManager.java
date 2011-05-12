@@ -73,9 +73,14 @@ public class TileManager {
 	public void remove(Tile tile) {
 		numberOfTileRemaining--;
 		model.fireRemainingTile();
-		int count = tiles.containsKey(tile.getType()) ? tiles.get(tile
-				.getType()) : 0;
-		tiles.put(tile.getType(), count - 1);
+		int count = tiles.containsKey(tile.getType()) ? tiles.get(tile.getType()) : 0;
+		
+		// S'il ne reste plus qu'une carte, on va l'enlever de notre Map car il n'existera
+		// plus de carte de ce type au prochain tour (et donc l'exclure du random au prochain tour)
+		if (count > 1)
+			tiles.put(tile.getType(), count - 1);
+		else
+			tiles.remove(tile.getType());
 	}
 
 	public void getNextTile() {
