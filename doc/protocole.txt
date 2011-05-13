@@ -1,4 +1,4 @@
-﻿PROTOCOLE 1.63 :
+﻿PROTOCOLE 1.64 :
 
 Utilitaire externe :
 - Basé sur le code modifié de : Parseur et formateur de messages
@@ -51,10 +51,16 @@ Si un client constate qu'il est le dernier joueur, il termine la partie en cons�
 ======   Démarrage de partie   ======
 =====================================
 
-READY
+READY n
 
-Lorsqu'un joueur est prêt, il envoi au serveur le message START.
+Lorsqu'un joueur est prêt, il envoi au serveur le message READY.
 Lorsque tous les joueurs sont prêts, la partie peut démarrer, autrement, le serveur est en attente jusqu'à la déconnexion d'un client.
+
+
+START
+
+Lorsque tous les joueurs sont prêts, le serveur envoi START et peut commencer à lire les messages de mouvement et envoyer le 1er token.
+Les joueurs peuvent de même commencer à envoyer les messages de mouvement.
 
 
 TOKEN t
@@ -66,7 +72,7 @@ TOKEN t est envoyé au client qui doit jouer, avec t un nombre généré aléato
 ======   Placements de tuiles   ======
 ======================================
 
-MOVE n (tile) (x) (y) (piece) token
+MOVE n (tile) x y (piece) token
 MOVEACK
 MOVENACK
 
