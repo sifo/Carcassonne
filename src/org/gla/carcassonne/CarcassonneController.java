@@ -3,6 +3,7 @@ package org.gla.carcassonne;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
+import org.gla.carcassonne.entities.Player;
 import org.gla.carcassonne.entities.Tile;
 import org.gla.carcassonne.ui.SwingCarcassonneView;
 
@@ -60,6 +61,9 @@ public class CarcassonneController {
 	}
 
 	public void notifyConfirmAction() {
+		Player player = carcassonneModel.getPlayerManager().getCurrentPlayer();
+		if(carcassonneModel.getPlayerManager().getCurrentPlayerhasPlacedPiece())
+			player.setPieceCount(player.getPieceCount() - 1);
 		if(carcassonneModel.getTileManager().getCurrentPlayerHasPlacedTile()) {
 			carcassonneModel.getPlayerManager().setNextPlayer();
 			carcassonneModel.getTileManager().getNextTile();

@@ -68,7 +68,8 @@ public class TileManager {
 	}
 
 	public Tile selectTileRandomly() {
-		RandomGenerator<EnumMap<TileType, Integer>> generator = new RandomGenerator<EnumMap<TileType, Integer>>(tiles);
+		RandomGenerator<EnumMap<TileType, Integer>> generator = new RandomGenerator<EnumMap<TileType, Integer>>(
+				tiles);
 		TileType t = generator.random();
 		return new Tile(t);
 	}
@@ -76,10 +77,13 @@ public class TileManager {
 	public void remove(Tile tile) {
 		numberOfTileRemaining--;
 		model.fireRemainingTile();
-		int count = tiles.containsKey(tile.getType()) ? tiles.get(tile.getType()) : 0;
-		
-		// S'il ne reste plus qu'une carte, on va l'enlever de notre Map car il n'existera
-		// plus de carte de ce type au prochain tour (et donc l'exclure du random au prochain tour)
+		int count = tiles.containsKey(tile.getType()) ? tiles.get(tile
+				.getType()) : 0;
+
+		// S'il ne reste plus qu'une carte, on va l'enlever de notre Map car il
+		// n'existera
+		// plus de carte de ce type au prochain tour (et donc l'exclure du
+		// random au prochain tour)
 		if (count > 1)
 			tiles.put(tile.getType(), count - 1);
 		else
@@ -126,32 +130,145 @@ public class TileManager {
 		model.fireRotateRight();
 	}
 
-	public void placePieceOnTile(int x, int y, MouseEvent arg0) {
-		if (currentTile.getxOnBoard() != x || currentTile.getyOnBoard() != y)
+	public void placePieceOnTile(int xOnBoard, int yOnBoard, MouseEvent arg0) {
+		if (currentTile.getxOnBoard() != xOnBoard
+				|| currentTile.getyOnBoard() != yOnBoard) {
 			return;
-		else {
+		} else {
 			int yOnTile = arg0.getX() * Tile.CELL_WIDTH / BUTTON_WIDTH;
 			int xOnTile = arg0.getY() * Tile.CELL_WIDTH / BUTTON_WIDTH;
-			//yOnTile = (Tile.CELL_WIDTH - 1) - yOnTile;
+			// yOnTile = (Tile.CELL_WIDTH - 1) - yOnTile;
 			Player player = model.getPlayerManager().getCurrentPlayer();
-			if(currentTile.getZoneValue(xOnTile, yOnTile) == Status.NONE
-				|| player.getPieceCount() == 0)
+			if (currentTile.getZoneValue(xOnTile, yOnTile) == Status.NONE
+					|| player.getPieceCount() == 0
+					|| !isPossibleToPlacePiece(xOnTile, yOnTile, xOnBoard,
+							yOnBoard)) {
 				return;
+			}
 			currentTile.setxOnTile(xOnTile);
 			currentTile.setyOnTile(yOnTile);
 			currentTile.setStatus();
 			currentTile.setxOnClick(arg0.getX());
 			currentTile.setyOnClick(arg0.getY());
-			System.out.println("on tile (" + currentTile.getxOnTile() + ", "
-					+ currentTile.getyOnTile() + ")");
-			System.out.println("zone(" + currentTile.getZones()[xOnTile][yOnTile] + ")"); 
-			if(!model.getPlayerManager().getCurrentPlayerhasPlacedPiece()){
-				player.setPieceCount(player.getPieceCount() - 1);
+//			System.out.println("on tile (" + currentTile.getxOnTile() + ", "
+//					+ currentTile.getyOnTile() + ")");
+//			System.out.println("zone("
+//					+ currentTile.getZones()[xOnTile][yOnTile] + ")");
+			if (!model.getPlayerManager().getCurrentPlayerhasPlacedPiece()) {
 				model.getPlayerManager().setCurrentPlayerhasPlacedPiece(true);
 			}
 			currentTile.setPlayer(player);
 			model.firePlacePieceOnTile();
 		}
+	}
+
+	private boolean isPossibleToPlacePiece(int xOnTile, int yOnTile,
+			int xOnBoard, int yOnBoard) {
+		boolean[][][][] boolMap = new boolean[board.getBoard().length][board
+				.getBoard()[0].length][7][7];
+		return !findTile(xOnTile, yOnTile, boolMap, currentTile, xOnBoard,
+				yOnBoard);
+	}
+
+	private boolean findTile(int xOnTile, int yOnTile, boolean[][][][] boolMap,
+			Tile tile, int xOnBoard, int yOnBoard) {
+		boolean res = false;
+		// System.out.println("lancerPropagationSurTuile(" + xOnTile + ", " +
+		// yOnTile + ", " + tile.getType().getPath() +")");
+		boolMap[xOnBoard][yOnBoard][xOnTile][yOnTile] = true;
+
+		if (tile != currentTile && tile.getxOnTile() == xOnTile
+				&& tile.getyOnTile() == yOnTile) {
+			// System.out.println("Pion Trouvé sur zone!");
+			res = true;
+		}
+
+		if ((xOnTile + 1) < 7
+				&& (tile.getZoneValue(xOnTile, yOnTile) == tile.getZoneValue(
+						xOnTile + 1, yOnTile))
+				&& (!boolMap[xOnBoard][yOnBoard][xOnTile + 1][yOnTile])) {
+			res = res
+					|| findTile(xOnTile + 1, yOnTile, boolMap, tile, xOnBoard,
+							yOnBoard);
+		} else if ((xOnTile + 1 == 7) && (yOnBoard - 1) >= 0) {
+			Tile nextTile = getBoard().getBoard()[xOnBoard][yOnBoard - 1];
+			if (nextTile != null
+					&& tile.getSideValue(Tile.SOUTH) == nextTile
+							.getSideValue(Tile.NORTH)
+					&& tile.getZoneValue(xOnTile, yOnTile) == nextTile
+							.getZoneValue(0, yOnTile)
+					&& !boolMap[xOnBoard][yOnBoard - 1][0][yOnTile]) {
+				res = res
+						|| findTile(0, yOnTile, boolMap, nextTile, xOnBoard,
+								yOnBoard - 1);
+			}
+		}
+
+		if ((xOnTile - 1) >= 0
+				&& tile.getZoneValue(xOnTile, yOnTile) == tile.getZoneValue(
+						xOnTile - 1, yOnTile)
+				&& !boolMap[xOnBoard][yOnBoard][xOnTile - 1][yOnTile]) {
+			res = res
+					|| findTile(xOnTile - 1, yOnTile, boolMap, tile, xOnBoard,
+							yOnBoard);
+		} else if ((xOnTile - 1) < 0
+				&& (yOnBoard + 1) < board.getBoard()[0].length) {
+			Tile nextTile = getBoard().getBoard()[xOnBoard][yOnBoard + 1];
+			if (nextTile != null
+					&& tile.getSideValue(Tile.NORTH) == nextTile
+							.getSideValue(Tile.SOUTH)
+					&& tile.getZoneValue(xOnTile, yOnTile) == nextTile
+							.getZoneValue(6, yOnTile)
+					&& !boolMap[xOnBoard][yOnBoard + 1][6][yOnTile]) {
+				res = res
+						|| findTile(6, yOnTile, boolMap, nextTile, xOnBoard,
+								yOnBoard + 1);
+			}
+		}
+
+		if ((yOnTile + 1) < 7
+				&& tile.getZoneValue(xOnTile, yOnTile) == tile.getZoneValue(
+						xOnTile, yOnTile + 1)
+				&& !boolMap[xOnBoard][yOnBoard][xOnTile][yOnTile + 1]) {
+			res = res
+					|| findTile(xOnTile, yOnTile + 1, boolMap, tile, xOnBoard,
+							yOnBoard);
+		} else if ((yOnTile + 1) == 7
+				&& (xOnBoard + 1) < board.getBoard().length) {
+			Tile nextTile = getBoard().getBoard()[xOnBoard + 1][yOnBoard];
+			if (nextTile != null
+					&& tile.getSideValue(Tile.EAST) == nextTile
+							.getSideValue(Tile.WEST)
+					&& tile.getZoneValue(xOnTile, yOnTile) == nextTile
+							.getZoneValue(xOnTile, 0)
+					&& !boolMap[xOnBoard + 1][yOnBoard][xOnTile][0]) {
+				res = res
+						|| findTile(xOnTile, 0, boolMap, nextTile,
+								xOnBoard + 1, yOnBoard);
+			}
+		}
+
+		if ((yOnTile - 1) >= 0
+				&& tile.getZoneValue(xOnTile, yOnTile) == tile.getZoneValue(
+						xOnTile, yOnTile - 1)
+				&& !boolMap[xOnBoard][yOnBoard][xOnTile][yOnTile - 1]) {
+			res = res
+					|| findTile(xOnTile, yOnTile - 1, boolMap, tile, xOnBoard,
+							yOnBoard);
+		} else if ((yOnTile - 1) < 0 && (xOnBoard - 1) >= 0) {
+			Tile nextTile = getBoard().getBoard()[xOnBoard - 1][yOnBoard];
+			if (nextTile != null
+					&& tile.getSideValue(Tile.WEST) == nextTile
+							.getSideValue(Tile.EAST)
+					&& tile.getZoneValue(xOnTile, yOnTile) == nextTile
+							.getZoneValue(xOnTile, 6)
+					&& !boolMap[xOnBoard - 1][yOnBoard][xOnTile][6]) {
+				res = res
+						|| findTile(xOnTile, 6, boolMap, nextTile,
+								xOnBoard - 1, yOnBoard);
+			}
+		}
+		return res;
 	}
 
 	public boolean getCurrentPlayerHasPlacedTile() {

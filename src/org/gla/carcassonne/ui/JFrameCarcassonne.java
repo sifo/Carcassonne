@@ -21,7 +21,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -148,18 +147,18 @@ public class JFrameCarcassonne extends JFrame {
 
 		JButton turnLeftButton = new JButton();
 		turnLeftButton.setIcon(new ImageIcon(
-				"res/drawable/1305046746_arrow_rotate_anticlockwise.png"));
+				"res/drawable/rotate_anticlockwise.png"));
 		turnLeftButton.addActionListener(new RotateLeft(view));
 		rotateButton.add(turnLeftButton);
 
 		JButton turnRightButton = new JButton();
 		turnRightButton.setIcon(new ImageIcon(
-				"res/drawable/1305046774_arrow_rotate_clockwise.png"));
+				"res/drawable/rotate_clockwise.png"));
 		turnRightButton.addActionListener(new RotateRight(view));
 		rotateButton.add(turnRightButton);
 		
 		confirmButton.setIcon(new ImageIcon(
-				"res/drawable/1305148192_accept.png"));
+				"res/drawable/accept.png"));
 		confirmButton.addActionListener(new ConfirmAction(view));
 		Box confirmBox = Box.createHorizontalBox();
 		confirmBox.add(confirmButton);
