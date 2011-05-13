@@ -60,6 +60,11 @@ public class CarcassonneServer {
 		}
 		
 		// La partie a démarré et le serveur donne la main aux clients à tour de rôle
+		for(CarcassonneThreadServer client : clients) {
+			Message m = new Message("START");
+			client.sendMessageFromServer(m);
+		}
+		
 		runGame();
 		
 		// La partie a terminé et le serveur s'arrête
@@ -71,7 +76,7 @@ public class CarcassonneServer {
 		return generator.nextInt(511)+1;	// entre 1 et 512
 	}
 	
-	public void runGame() {
+	private void runGame() {
 		while (true) {
 			token = generateRandomInt();
 			nbAckMessages = 0;
@@ -125,7 +130,7 @@ public class CarcassonneServer {
 	/*
 	 * Renvoi vrai si le client est retiré de la liste, faux sinon (échec ou non existance)
 	 */
-	public boolean removeClient(CarcassonneThreadServer client) {
+	protected boolean removeClient(CarcassonneThreadServer client) {
 		return clients.remove(client);
 	}
 	
@@ -144,7 +149,7 @@ public class CarcassonneServer {
 	 * Envoi un message reçu d'un client vers tous les autres clients connectés
 	 * Si le message est READY, on vérifie de manière atomique si les autres joueurs sont prêts
 	 */
-	void sendMessageToClients(Message m, CarcassonneThreadServer from) {
+	protected void sendMessageFromClient(Message m, CarcassonneThreadServer from) {
 		try {
 			String type = m.getNthValue(0).toString();
 			
@@ -168,7 +173,7 @@ public class CarcassonneServer {
 			
 			// On transmet le numero du client émetteur dans le message
 			if (type.equals("HELLO") || type.equals("HELLOACK") || 
-					type.equals("CLOSE") || type.equals("FINISH"))
+					type.equals("CLOSE") || type.equals("FINISH") || type.equals("READY"))
 				m.getNthValue(1).setIntValue(clients.indexOf(from));
 			
 			for(CarcassonneThreadServer client : clients) {

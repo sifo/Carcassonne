@@ -60,7 +60,7 @@ public class CarcassonneThreadServer extends Thread {
 				throw new ProtocolError(type);
 				
 			if (type.equals("CLOSE")) {
-				server.sendMessageToClients(receive, this);
+				server.sendMessageFromClient(receive, this);
 				
 				// Si c'est à son tour de jouer, alors passer son tour
 				if (hasToken)
@@ -91,7 +91,7 @@ public class CarcassonneThreadServer extends Thread {
 					throw new ProtocolError("Token invalide");
 			}
 
-			server.sendMessageToClients(receive, this);
+			server.sendMessageFromClient(receive, this);
 		} catch (ProtocolParseError e) {
 			e.printStackTrace();
 		} catch (IOException e) {

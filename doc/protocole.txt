@@ -1,12 +1,8 @@
-﻿PROTOCOLE 1.63 :
+﻿PROTOCOLE 1.7 :
 
 Utilitaire externe :
 - Basé sur le code modifié de : Parseur et formateur de messages
 Crédits : Juliusz Chroboczek
-
-REPRESENTATION DU JEU :
-Grille dont les coordonnées sont désignées par un couple (x,y) représentant respectivement les axes d'abscisse et d'ordonnée dans un repère orthonormé.
-Le point d'origine (0,0) est situé en haut à gauche de la grille.
 
 
 Le module multijoueur tourne autour d'un serveur indépendant lancé par un joueur auquel un maximum de 5 clients peuvent s'y connecter.
@@ -51,10 +47,16 @@ Si un client constate qu'il est le dernier joueur, il termine la partie en cons�
 ======   Démarrage de partie   ======
 =====================================
 
-READY
+READY n
 
-Lorsqu'un joueur est prêt, il envoi au serveur le message START.
+Lorsqu'un joueur est prêt, il envoi au serveur le message READY.
 Lorsque tous les joueurs sont prêts, la partie peut démarrer, autrement, le serveur est en attente jusqu'à la déconnexion d'un client.
+
+
+START
+
+Lorsque tous les joueurs sont prêts, le serveur envoi START et peut commencer à lire les messages de mouvement et envoyer le 1er token.
+Les joueurs peuvent de même commencer à envoyer les messages de mouvement.
 
 
 TOKEN t
@@ -66,13 +68,13 @@ TOKEN t est envoyé au client qui doit jouer, avec t un nombre généré aléato
 ======   Placements de tuiles   ======
 ======================================
 
-MOVE n (tile) (x) (y) (piece) token
+MOVE n (tile) x y (piece) token
 MOVEACK
 MOVENACK
 
 Lorsqu'un joueur décide de placer une tuile, une condition est requise :
 - le joueur doit posséder un token désignant que c'est son tour de jouer.
-Lors d'un placement de tuile, le client envoi MOVE avec le nom de la tuile (type), les coordonnées selon la représentation définie par le protocole, éventuellement une pièce placée sur la tuile et son token.
+Lors d'un placement de tuile, le client envoi MOVE avec le nom de la tuile (type), les coordonnées selon la représentation définie par le protocole, éventuellement une pièce placée sur la tuile (voir paragraphe "définition d'un pion") et son token.
 Si les clients acceptent la tuile et les coordonnées placées, ils envoient un MOVEACK. Sinon, un MOVENACK est envoyé. Si au moins un MOVENACK est envoyé, la partie s'arrête (cas d'un bug d'implementation ou d'une tricherie ?).
 
 
@@ -111,6 +113,58 @@ Si un joueur tente de tricher en détournant le protocole, le comportement est e
 Le serveur s'assure de gérer les connexions et déconnexions des clients. Il démarre la partie et donne la main au joueur qui doit effectuer son tour. Globalement, il se contente de transmettre les informations entre clients en leur fournissant les numéros des clients émetteurs.
 
 
+=======================================
+======   Définition des tuiles   ======
+=======================================
 
+Afin de standardiser la nomination des tuiles, on utilisera les tuiles proposées ici :
+http://upsilon.cc/~zack/teaching/1011/gla/carcassonne/tiles/
+
+Le nom d'une tuile correspond à celle donnée dans le lien, sans l'extension d'image.
+
+Exemple : tile-a, tile-b, tile-c ....
+
+
+============================================
+======   Définition des coordonnées   ======
+============================================
+
+Grille dont les coordonnées sont désignées par deux entiers x et y représentants respectivement les axes d'abscisse et d'ordonnée dans un repère orthonormé.
+Le point d'origine (0,0) est situé en haut à gauche de la grille.
+
+
+======================================
+======   Définition d'un pion   ======
+======================================
+
+TODO : Seul un type de pion est géré pour le moment.
+
+Chaine de caractère représentant le placement d'un pion.
+Le représentation utilisée consiste en un découpage virtuel d'une tuile en 13 zones.
+
+N : Nord
+E : Est
+W : Ouest
+S : Sud
+NL : Nord gauche
+NR : Nord droit
+EL : Est gauche
+ER : Est droit
+WL : Ouest gauche
+WR : Ouest droit
+SL : Sud gauche
+SR : Sud droit
+C : Centre
+
+C'est au client d'interpréter la position abstraite.
+
+==========================
+======   Exemples   ======
+==========================
+
+MOVE 1 (tile-x) 5 12 (SR) 1541
+
+Message envoyant un mouvement :
+Placement de la tuile représentée par tile-x aux coordonnées 5,12 d'une grille possèdant un pion dans la zone Sud-droit avec le token 1541.
 
 

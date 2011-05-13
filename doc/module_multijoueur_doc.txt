@@ -1,0 +1,135 @@
+﻿MODULE MULTIJOUEUR - Basé sur protocole 1.7
+
+
+Le module est découpé en 2 grandes parties :
+- Une partie utilitaire qui contient des classes pour créer, former et parser des Messages.
+- Une partie implémentant le serveur et le client.
+
+Les messages consistent en l'envoi d'un flux de bytes entre serveur et client.
+Le protocole utilisé par ces messages est défini dans protocole.txt
+
+
+UTILISATION :
+
+Pour créer un serveur, un objet CarcassonneServer doit être instancié.
+Son fonctionnement est totalement indépendant du reste des composantes de Carcassonne. Il peut donc être exécuté sur une autre machine.
+
+La méthode startServer() démarre le serveur.
+Le serveur écoute sur le port 54322.
+
+
+=========================================================================
+
+Implementation du client au moteur de jeu :
+
+Pour utiliser le client et interfacer votre moteur de jeu avec le module, vous devrez implémenter l'interface ClientFactory.
+Un objet Client devra être créé en prenant comme paramètres l'adresse du serveur (String), le port et votre implémentation.
+
+
+=========================================================================
+
+Méthodes de l'interface ClientFactory :
+
+	// Transformer le numéro du joueur vers une implémentation spécifique
+	Object getPlayers(Set<Integer> p);
+	
+	// Transformer les objets associés aux coordonnées de grille en entiers
+	int setX(Object o);
+	int setY(Object o);
+	
+	String setTile(Object o);
+	String setPiece(Object o);
+	
+	// Vérification du mouvement d'une pièce par le moteur
+	boolean checkMove(int player, String tile, int x, int y, String piece);
+
+
+Vous devez implémenter ces méthodes pour faire les associations entre les données de votre implémentation et celles définies par le protocole.
+
+
+=========================================================================
+
+Méthodes publiques de Client :
+
+	// notifie prêt
+	public void ready();
+
+	// notifie une déconnexion prévue
+	public void disconnect();
+
+	// notifie une partie terminée
+	public void finish();
+
+	// notifie au serveur qu'on est d'accord avec le dernier placement
+	public void validMove();
+
+	// notifie au serveur qu'on n'est pas d'accord avec le dernier placement
+	public void invalidMove();
+
+	// récupère la liste des joueurs de la partie
+	public Object getPlayers();
+
+	// notifie aux autres clients notre placement de tuile
+	public boolean move(Object ot, Object ox, Object oy, Object op);
+
+	// méthodes utilitaires
+	public ClientFactory getFactory();
+	public void setFactory(ClientFactory factory);
+	public Socket getSocket();
+	public void setSocket(Socket socket);
+
+
+=========================================================================
+
+
+Exemple d'implémentation d'un client :
+
+Dans mon moteur de jeu, ma position dans une grille est représentée par un objet Position qui contient des méthodes :
+int posX()
+int posY()
+
+public class MonImplementation implements ClientFactory {
+
+	public MonImplementation {
+
+		...
+	}
+
+	int setX(Object o) {
+		Position p = (Position) o;
+		return p.posX();
+	}
+
+	...
+
+}
+
+
+public class MaClasse {
+
+
+	public static void main(String[] args) {
+
+		Client c = new Client(adresse, port, new MonImplementation);
+		
+		if (...)
+			c.ready();
+
+		...
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

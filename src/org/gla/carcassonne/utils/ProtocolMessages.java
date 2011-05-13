@@ -18,6 +18,7 @@ public class ProtocolMessages {
 		set.add("HELLONACK");
 		set.add("CLOSE");
 		set.add("READY");
+		set.add("START");
 		set.add("FINISH");
 		set.add("MOVE");
 		set.add("MOVEACK");
