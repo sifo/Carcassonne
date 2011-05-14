@@ -87,7 +87,7 @@ public class CarcassonneThreadServer extends Thread {
 			}
 			else if (type.equals("MOVE")) {
 				int token = server.getToken();
-				if (receive.getNthValue(5).getIntValue() != token)
+				if (receive.getNthValue(7).getIntValue() != token)
 					throw new ProtocolError("Token invalide");
 			}
 

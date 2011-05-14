@@ -1,4 +1,4 @@
-﻿PROTOCOLE 1.7 :
+﻿PROTOCOLE 1.71 :
 
 Utilitaire externe :
 - Basé sur le code modifié de : Parseur et formateur de messages
@@ -68,13 +68,13 @@ TOKEN t est envoyé au client qui doit jouer, avec t un nombre généré aléato
 ======   Placements de tuiles   ======
 ======================================
 
-MOVE n (tile) x y (piece) token
+MOVE n (tile) x y (o) (piece) token
 MOVEACK
 MOVENACK
 
 Lorsqu'un joueur décide de placer une tuile, une condition est requise :
 - le joueur doit posséder un token désignant que c'est son tour de jouer.
-Lors d'un placement de tuile, le client envoi MOVE avec le nom de la tuile (type), les coordonnées selon la représentation définie par le protocole, éventuellement une pièce placée sur la tuile (voir paragraphe "définition d'un pion") et son token.
+Lors d'un placement de tuile, le client envoi MOVE avec le nom de la tuile (type), les coordonnées selon la représentation définie par le protocole, l'orientation et éventuellement une pièce placée sur la tuile (voir paragraphe "définition d'un pion") et son token.
 Si les clients acceptent la tuile et les coordonnées placées, ils envoient un MOVEACK. Sinon, un MOVENACK est envoyé. Si au moins un MOVENACK est envoyé, la partie s'arrête (cas d'un bug d'implementation ou d'une tricherie ?).
 
 
@@ -133,6 +133,39 @@ Grille dont les coordonnées sont désignées par deux entiers x et y représent
 Le point d'origine (0,0) est situé en haut à gauche de la grille.
 
 
+=============================================
+======   Définition de l'orientation   ======
+=============================================
+
+L'orientation est représentée par une chaine de caractères. On utilise les cardinalités par rapport à la position d'origine de la pièce.
+
+N : le Nord de la pièce d'origine est orienté vers le Nord
+E : l'Est de la pièce d'origine est orienté vers le Nord
+W : l'Ouest de la pièce d'origine est orienté vers le Nord
+S : le Sud de la pièce d'origine est orienté vers le Nord
+
+
+Pièce origine :
+
+-------------
+|     N     |
+|           |
+|W         E|
+|           |
+|     S     |
+-------------
+
+Si sa partie Ouest est orienté vers le Nord, alors on a :
+
+-------------
+|     W     |
+|           |
+|S         N|
+|           |
+|     E     |
+-------------
+
+
 ======================================
 ======   Définition d'un pion   ======
 ======================================
@@ -162,9 +195,9 @@ C'est au client d'interpréter la position abstraite.
 ======   Exemples   ======
 ==========================
 
-MOVE 1 (tile-x) 5 12 (SR) 1541
+MOVE 1 (tile-x) 5 12 (W) (SR) 1541
 
 Message envoyant un mouvement :
-Placement de la tuile représentée par tile-x aux coordonnées 5,12 d'une grille possèdant un pion dans la zone Sud-droit avec le token 1541.
+Placement de la tuile représentée par tile-x aux coordonnées 5,12 d'une grille dont son côté Ouest par rapport à la pièce d'origine est orienté vers le Nord et possèdant un pion dans la zone Sud-droit avec le token 1541.
 
 

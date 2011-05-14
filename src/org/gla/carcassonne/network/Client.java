@@ -131,15 +131,16 @@ public class Client extends Thread {
 	 * Object représentant une pièce (pion)
 	 * Renvoi vrai si un MOVEACK est reçu
 	 */
-	public boolean move(Object ot, Object ox, Object oy, Object op) {
+	public boolean move(Object ot, Object ox, Object oy, Object oo, Object op) {
 		MessageInt n = new MessageInt(0);
 		MessageString tile = new MessageString(factory.setTile(ot));
 		MessageInt x = new MessageInt(factory.setX(ox));
 		MessageInt y = new MessageInt(factory.setY(oy));
+		MessageString o = new MessageString(factory.setOrientation(oo));
 		MessageString piece = new MessageString((op == null) ? "null" : factory.setPiece(op));
 		MessageInt t = new MessageInt(token);
 		
-		Message m = new Message("MOVE", n, tile, x, y, piece, t);
+		Message m = new Message("MOVE", n, tile, x, y, o, piece, t);
 		
 		try {
 			m.format(out);
@@ -297,9 +298,10 @@ public class Client extends Thread {
 			String tile = m.getNthValue(2).getStringValue();
 			int x = m.getNthValue(3).getIntValue();
 			int y = m.getNthValue(4).getIntValue();
-			String piece = m.getNthValue(5).getStringValue();
+			String o = m.getNthValue(5).getStringValue();
+			String piece = m.getNthValue(6).getStringValue();
 			
-			if (factory.checkMove(playerId, tile, x, y, piece))
+			if (factory.checkMove(playerId, tile, x, y, o, piece))
 				sendMoveAck();
 			else
 				sendMoveNack();

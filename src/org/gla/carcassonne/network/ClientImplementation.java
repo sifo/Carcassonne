@@ -25,6 +25,12 @@ public class ClientImplementation implements ClientFactory {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	
+	@Override
+	public String setOrientation(Object o) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	@Override
 	public String setTile(Object o) {
@@ -39,9 +45,9 @@ public class ClientImplementation implements ClientFactory {
 	}
 
 	@Override
-	public boolean checkMove(int player, String tile, int x, int y, String piece) {
+	public boolean checkMove(int player, String tile, int x, int y, String o,
+			String piece) {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
 }
