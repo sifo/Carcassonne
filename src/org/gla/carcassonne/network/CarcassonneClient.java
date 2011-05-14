@@ -3,7 +3,6 @@ package org.gla.carcassonne.network;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Set;
 
 public class CarcassonneClient extends Socket {
 	

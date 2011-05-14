@@ -38,10 +38,11 @@ Méthodes de l'interface ClientFactory :
 	int setY(Object o);
 	
 	String setTile(Object o);
+	String setOrientation(Object o);
 	String setPiece(Object o);
 	
 	// Vérification du mouvement d'une pièce par le moteur
-	boolean checkMove(int player, String tile, int x, int y, String piece);
+	boolean checkMove(int player, String tile, int x, int y, String o, String piece);
 
 
 Vous devez implémenter ces méthodes pour faire les associations entre les données de votre implémentation et celles définies par le protocole.
@@ -70,7 +71,13 @@ Méthodes publiques de Client :
 	public Object getPlayers();
 
 	// notifie aux autres clients notre placement de tuile
-	public boolean move(Object ot, Object ox, Object oy, Object op);
+	// ot = tuile
+	// ox = coordonnée x
+	// oy = coordonnée y
+	// oo = orientation
+	// op = pion
+	// La paramètres appellent automatiquement les fonctions implémentées (setX, setY, setOrientation, etc.)
+	public boolean move(Object ot, Object ox, Object oy, Object oo, Object op);
 
 	// méthodes utilitaires
 	public ClientFactory getFactory();

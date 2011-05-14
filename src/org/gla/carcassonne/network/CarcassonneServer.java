@@ -160,8 +160,12 @@ public class CarcassonneServer {
 			
 			if (type.equals("MOVEACK")) {
 				nbAckMessages++;
-				if (nbAckMessages == clients.size()-1)	// on exclu celui qui a MOVE
+				if (nbAckMessages == clients.size()-1) {	// on exclu celui qui a MOVE
+					nbAckMessages = 0;
 					notify();
+				}
+				else
+					return;		// Tant que nous n'avons pas que des ACK, on ne fait rien
 			}
 			
 			if (type.equals("FINISH"))
