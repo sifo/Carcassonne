@@ -11,12 +11,15 @@ public class CarcassonneClient extends Socket implements ClientFactory {
 	
 	public Client client;
 	
-	public CarcassonneClient(String host, int port)
-	throws UnknownHostException, IOException {
-		super(host, port);
-		
-		client = new Client(host, port, this);
-		client.start();
+	public CarcassonneClient(String host, int port) {
+		try {
+			client = new Client(host, port, this);
+			client.start();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public Object getPlayers(Set<Integer> p) {

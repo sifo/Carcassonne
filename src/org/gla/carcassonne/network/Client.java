@@ -23,24 +23,17 @@ public class Client extends Thread {
 	private boolean hasHello;				// Le client s'est présenté au serveur (et veut une bière...)
 	private Map<Integer, Boolean> players;	// Liste des autres joueurs
 	
-	public Client(String address, int port, ClientFactory f) {
-		try {
-			setSocket(new Socket(address, port));
-			setFactory(f);
-			
-			in = new PushbackInputStream(socket.getInputStream());
-			out = new BufferedOutputStream(socket.getOutputStream());
-			players = new HashMap<Integer, Boolean>();
-			token = 0;
-			isAccepted = false;
-			hasStarted = false;
-			hasHello = false;
-		} catch (UnknownHostException e) {
-			System.out.println("Connection impossible à "+address+":"+port);
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public Client(String address, int port, ClientFactory f) throws UnknownHostException, IOException {
+		setSocket(new Socket(address, port));
+		setFactory(f);
+
+		in = new PushbackInputStream(socket.getInputStream());
+		out = new BufferedOutputStream(socket.getOutputStream());
+		players = new HashMap<Integer, Boolean>();
+		token = 0;
+		isAccepted = false;
+		hasStarted = false;
+		hasHello = false;
 	}
 	
 	/*
