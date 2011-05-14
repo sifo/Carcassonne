@@ -7,6 +7,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
+import org.gla.carcassonne.ui.events.QuitGame;
+import org.gla.carcassonne.ui.events.StartMultiplayer;
+
 public class JPanelMenu extends JMenuBar {
 
 	private JMenu help;
@@ -23,6 +26,8 @@ public class JPanelMenu extends JMenuBar {
 	private JMenuItem preferences;
 	private JMenuItem fullScreen;
 	private JMenuItem quitFullScreen;
+	
+	SwingCarcassonneView view;
 
 	private static final long serialVersionUID = 2293390759298741025L;
 	
@@ -41,7 +46,7 @@ public class JPanelMenu extends JMenuBar {
 	private final static String FULL_SCREEN = "Plein écran";
 	private final static String QUIT_FULL_SCREEN = "Quitter le plein écran";
 
-	public JPanelMenu() {
+	public JPanelMenu(SwingCarcassonneView view) {
 		super();
 		help = new JMenu(HELP);
 		game = new JMenu(GAME);
@@ -59,9 +64,12 @@ public class JPanelMenu extends JMenuBar {
 		fullScreen = new JMenuItem(FULL_SCREEN);
 		quitFullScreen = new JMenuItem(QUIT_FULL_SCREEN);
 		quitFullScreen.setEnabled(false);
+		this.view = view;
+		
 		addComponents();
 		setAccelerators();
 		setMnemonics();
+		setActionListeners();
 	}
 
 	private void addComponents() {
@@ -117,4 +125,8 @@ public class JPanelMenu extends JMenuBar {
 		helpContents.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
 	}
 
+	private void setActionListeners() {
+		online.addActionListener(new StartMultiplayer(view));
+		quit.addActionListener(new QuitGame(view));
+	}
 }

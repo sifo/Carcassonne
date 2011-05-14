@@ -67,7 +67,7 @@ public class JFrameCarcassonne extends JFrame {
 		confirmButton = new JButton();
 		confirmButton.setEnabled(false);
 		getContentPane().setLayout(new GridBagLayout());
-		menuBar = new JPanelMenu();
+		menuBar = new JPanelMenu(view);
 		remainingTileNumber = new JLabel("");
 		imagePanel = new JPanelImage();
 		jlabelPlayers = new ArrayList<JLabel>();
