@@ -614,6 +614,10 @@ public class Tile {
 			status = zones[xOnTile][yOnTile];
 		}
 	}
+	
+	public void setStatus(Status s){
+		status = s;
+	}
 
 	public Status getStatus() {
 		return status;

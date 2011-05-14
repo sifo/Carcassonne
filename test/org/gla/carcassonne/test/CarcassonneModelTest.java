@@ -51,7 +51,7 @@ public class CarcassonneModelTest extends TestCase {
 			.getListenerCount(CarcassonneListener.class);
 		assertEquals("count = " + count, 0, count);
 	}
-
+	
 	public void testFireCarcassonneChanged() {
 
 	}

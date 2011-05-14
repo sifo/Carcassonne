@@ -33,4 +33,5 @@ public class TileManagerTest extends TestCase {
 		assertEquals(numberOfTileRemaining - 1,
 				tileManager.getNumberOfTileRemaining());
 	}
+	
 }

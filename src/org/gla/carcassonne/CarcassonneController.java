@@ -65,6 +65,7 @@ public class CarcassonneController {
 			player.setPieceCount(player.getPieceCount() - 1);
 		if(carcassonneModel.getTileManager().getCurrentPlayerHasPlacedTile()) {
 			carcassonneModel.getPlayerManager().setNextPlayer();
+			carcassonneModel.getTileManager().resolveZoneClose();
 			carcassonneModel.getTileManager().getNextTile();
 			carcassonneModel.getPlayerManager().setCurrentPlayerhasPlacedPiece(false);
 		}

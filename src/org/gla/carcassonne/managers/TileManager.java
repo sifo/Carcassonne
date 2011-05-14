@@ -1,7 +1,9 @@
 package org.gla.carcassonne.managers;
 
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 
 import org.gla.carcassonne.CarcassonneModel;
@@ -21,6 +23,7 @@ public class TileManager {
 	private CarcassonneModel model;
 	private boolean currentPlayerhasPlacedTile;
 	public static final int BUTTON_WIDTH = 72;
+	private static final int MONK_POINT = 9;
 
 	private static final int[] tilesCount = new int[] {
 			// f, m, n o, q, s sont des tuiles d'extensions
@@ -270,4 +273,58 @@ public class TileManager {
 	public void setCurrentPlayerhasPlacedTile(boolean currentPlayerhasPlacedTile) {
 		this.currentPlayerhasPlacedTile = currentPlayerhasPlacedTile;
 	}
+
+	public void resolveZoneClose() {
+		List<Tile> nearTiles = new ArrayList<Tile>();
+		nearTiles.add(currentTile);
+		
+		nearTiles.add(board.getBoard()[currentTile.getxOnBoard()][currentTile.getyOnBoard() + 1]);
+		nearTiles.add(board.getBoard()[currentTile.getxOnBoard()][currentTile.getyOnBoard() - 1]);
+		nearTiles.add(board.getBoard()[currentTile.getxOnBoard() + 1][currentTile.getyOnBoard()]);
+		nearTiles.add(board.getBoard()[currentTile.getxOnBoard() - 1][currentTile.getyOnBoard()]);
+		
+		nearTiles.add(board.getBoard()[currentTile.getxOnBoard() + 1][currentTile.getyOnBoard() + 1]);
+		nearTiles.add(board.getBoard()[currentTile.getxOnBoard() + 1][currentTile.getyOnBoard() - 1]);
+		nearTiles.add(board.getBoard()[currentTile.getxOnBoard() - 1][currentTile.getyOnBoard() - 1]);
+		nearTiles.add(board.getBoard()[currentTile.getxOnBoard() - 1][currentTile.getyOnBoard() + 1]);
+		
+		for(Tile tile : nearTiles) {
+			if(tile != null) {
+				resolveMonk(tile);
+			}
+		}
+	}
+	
+	public void resolveMonk(Tile tile) {
+		if(tile.getStatus() == Status.MONK && surroundedByTiles(tile)){
+			tile.setxOnTile(-1);
+			tile.setxOnClick(-1);
+			tile.setyOnTile(-1);
+			tile.setyOnClick(-1);
+			tile.setStatus(null);		
+			Player player = tile.getPlayer();
+			player.setPoints(player.getPoints() + MONK_POINT);
+			player.setPieceCount(player.getPieceCount() + 1);
+			tile.setPlayer(null);
+			model.firePlayers();
+			model.fireBoard();
+		}
+	}
+	
+	public boolean surroundedByTiles(Tile tile) {
+		int x = tile.getxOnBoard();
+		int y = tile.getyOnBoard();
+		if(board.getBoard()[x + 1][y] == null
+			|| board.getBoard()[x - 1][y] == null
+			|| board.getBoard()[x][y + 1] == null
+			|| board.getBoard()[x][y - 1] == null
+			|| board.getBoard()[x + 1][y + 1] == null
+			|| board.getBoard()[x + 1][y - 1] == null
+			|| board.getBoard()[x - 1][y + 1] == null
+			|| board.getBoard()[x - 1][y - 1] == null) {
+			return false;
+		}
+		return  true;
+	}
+		
 }
