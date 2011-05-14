@@ -77,6 +77,8 @@ Méthodes publiques de Client :
 	public void setFactory(ClientFactory factory);
 	public Socket getSocket();
 	public void setSocket(Socket socket);
+	public boolean hasStarted();   // si la partie a démarré
+	public boolean isFinished();   // si la partie s'est terminée
 
 
 =========================================================================
