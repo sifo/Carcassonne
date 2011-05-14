@@ -8,7 +8,6 @@ import org.gla.carcassonne.entities.TileType;
 
 public class RandomGenerator {
 
-	private static final Random RND = new Random();
 	private TileType type;
 	
 	/*

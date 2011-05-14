@@ -73,7 +73,7 @@ public class JFrameCarcassonne extends JFrame {
 		imagePanel = new JPanelImage();
 		jlabelPlayers = new ArrayList<JLabel>();
 		setJMenuBar(menuBar);
-		setPreferredSize(new Dimension(1350, 750));
+		setPreferredSize(new Dimension(1000, 750));
 		setMinimumSize(new Dimension(HEIGHT_MIN, WIDTH_MIN));
 		pack();
 	}

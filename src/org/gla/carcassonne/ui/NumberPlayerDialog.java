@@ -1,6 +1,8 @@
 package org.gla.carcassonne.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Frame;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -14,7 +16,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.gla.carcassonne.CarcassonneView;
+import org.gla.carcassonne.ui.events.CloseWindow;
+import org.gla.carcassonne.ui.events.QuitGame;
 import org.gla.carcassonne.ui.events.SendPlayerListListener;
 
 public class NumberPlayerDialog extends JDialog implements ActionListener {
@@ -26,29 +29,34 @@ public class NumberPlayerDialog extends JDialog implements ActionListener {
 	JTextField[] playerNameField;
 	JComboBox[] aiComboxBox;
 	List<String> names;
-	CarcassonneView view;
+	SwingCarcassonneView view;
 
 	boolean clickedOnOk = false;
 
-	public NumberPlayerDialog(CarcassonneView view) {
+	public NumberPlayerDialog(SwingCarcassonneView view) {
 		numberPlayer = new JComboBox(new String[] { "1", "2", "3", "4", "5",
 				"6" });
 		numberPlayer.setSelectedIndex(1);
 		this.view = view;
 		numberPlayer.addActionListener(this);
-
+		addWindowListener(new CloseWindow(view));
+		this.setResizable(false);
 		this.setTitle("Nombre de joueur");
-		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
 		this.setModal(true);
-
-		this.setLocationRelativeTo(null);
 		this.setContentPane(buildComponent());
-		// this.setPreferredSize(new Dimension(450, 400));
 		this.pack();
+		this.setDialogLocation(view.getJFrame());
 		this.setVisible(true);
 
 	}
-
+	
+    private void setDialogLocation(Frame f) {
+        Rectangle r = f.getBounds();
+        int x = r.x + (r.width - getSize().width)/2;
+        int y = r.y + (r.height - getSize().height)/2;
+        setLocation(x, y);
+    }
+    
 	private JPanel buildComponent() {
 		if (numberPlayer.getSelectedIndex() != -1)
 			numberPlayer.setSelectedIndex(numberPlayer.getSelectedIndex());
@@ -89,13 +97,11 @@ public class NumberPlayerDialog extends JDialog implements ActionListener {
 			vbox.add(Box.createVerticalStrut(10));
 		}
 
-		JButton okButton = new JButton("OK");
-		okButton.setActionCommand("ok");
+		JButton okButton = new JButton("Jouer");
 		okButton.addActionListener(new SendPlayerListListener(view, this));
 
-		JButton cancelButton = new JButton("Annuler");
-		cancelButton.setActionCommand("cancel");
-		cancelButton.addActionListener(this);
+		JButton cancelButton = new JButton("Quitter");
+		cancelButton.addActionListener(new QuitGame(view));
 
 		hbox = Box.createHorizontalBox();
 		hbox.add(okButton);
@@ -138,6 +144,10 @@ public class NumberPlayerDialog extends JDialog implements ActionListener {
 		return tab;
 	}
 
+	public List<String> getNames() {
+		return names;
+	}
+	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() instanceof JComboBox) {
 			JComboBox combo = (JComboBox) e.getSource();
@@ -145,14 +155,10 @@ public class NumberPlayerDialog extends JDialog implements ActionListener {
 			this.setContentPane(buildComponent());
 			this.pack();
 			return;
-		}
-		if (e.getActionCommand().equals("ok")) {
+			}
+			if (e.getActionCommand().equals("ok")) {
 			clickedOnOk = true;
-		}
-		this.dispose();
-	}
-
-	public List<String> getNames() {
-		return names;
-	}
+			}
+			this.dispose();
+			}
 }

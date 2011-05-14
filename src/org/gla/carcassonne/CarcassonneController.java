@@ -15,7 +15,6 @@ public class CarcassonneController {
 		carcassonneModel = model;
 		carcassonneView = new SwingCarcassonneView(this);
 		addListenersToModel();
-		model.start();
 	}
 
 	public void addListenersToModel() {
@@ -71,5 +70,7 @@ public class CarcassonneController {
 		}
 	}
 
-	
+	public void notifyQuitGame() {
+		System.exit(0);
+	}
 }

@@ -136,7 +136,6 @@ public class TileManager {
 		} else {
 			int yOnTile = arg0.getX() * Tile.CELL_WIDTH / BUTTON_WIDTH;
 			int xOnTile = arg0.getY() * Tile.CELL_WIDTH / BUTTON_WIDTH;
-			// yOnTile = (Tile.CELL_WIDTH - 1) - yOnTile;
 			Player player = model.getPlayerManager().getCurrentPlayer();
 			if (currentTile.getZoneValue(xOnTile, yOnTile) == Status.NONE
 					|| player.getPieceCount() == 0
@@ -172,98 +171,92 @@ public class TileManager {
 	private boolean findTile(int xOnTile, int yOnTile, boolean[][][][] boolMap,
 			Tile tile, int xOnBoard, int yOnBoard) {
 		boolean res = false;
-		// System.out.println("lancerPropagationSurTuile(" + xOnTile + ", " +
-		// yOnTile + ", " + tile.getType().getPath() +")");
+//		 System.out.println("lancerPropagationSurTuile(" + xOnTile + ", " +
+//		 yOnTile + ", " + tile.getType().getPath() +")");
 		boolMap[xOnBoard][yOnBoard][xOnTile][yOnTile] = true;
 
-		if (tile != currentTile && tile.getxOnTile() == xOnTile
-				&& tile.getyOnTile() == yOnTile) {
-			// System.out.println("Pion Trouvé sur zone!");
+		if (tile != currentTile 
+			&& tile.getxOnTile() == xOnTile
+			&& tile.getyOnTile() == yOnTile) {
+//			 System.out.println("Pion Trouvé sur zone!");
 			res = true;
 		}
 
 		if ((xOnTile + 1) < 7
-				&& (tile.getZoneValue(xOnTile, yOnTile) == tile.getZoneValue(
-						xOnTile + 1, yOnTile))
-				&& (!boolMap[xOnBoard][yOnBoard][xOnTile + 1][yOnTile])) {
-			res = res
-					|| findTile(xOnTile + 1, yOnTile, boolMap, tile, xOnBoard,
+			&& (tile.getZoneValue(xOnTile, yOnTile) 
+				== tile.getZoneValue(xOnTile + 1, yOnTile))
+			&& (!boolMap[xOnBoard][yOnBoard][xOnTile + 1][yOnTile])) {
+			res = res || findTile(xOnTile + 1, yOnTile, boolMap, tile, xOnBoard,
 							yOnBoard);
-		} else if ((xOnTile + 1 == 7) && (yOnBoard - 1) >= 0) {
+		} else if ((xOnTile + 1 == 7) 
+					&& (yOnBoard - 1) >= 0) {
 			Tile nextTile = getBoard().getBoard()[xOnBoard][yOnBoard - 1];
 			if (nextTile != null
-					&& tile.getSideValue(Tile.SOUTH) == nextTile
-							.getSideValue(Tile.NORTH)
-					&& tile.getZoneValue(xOnTile, yOnTile) == nextTile
-							.getZoneValue(0, yOnTile)
-					&& !boolMap[xOnBoard][yOnBoard - 1][0][yOnTile]) {
-				res = res
-						|| findTile(0, yOnTile, boolMap, nextTile, xOnBoard,
+				&& tile.getSideValue(Tile.SOUTH) 
+					== nextTile.getSideValue(Tile.NORTH)
+				&& tile.getZoneValue(xOnTile, yOnTile) 
+					== nextTile.getZoneValue(0, yOnTile)
+				&& !boolMap[xOnBoard][yOnBoard - 1][0][yOnTile]) {
+				res = res || findTile(0, yOnTile, boolMap, nextTile, xOnBoard,
 								yOnBoard - 1);
 			}
 		}
 
 		if ((xOnTile - 1) >= 0
-				&& tile.getZoneValue(xOnTile, yOnTile) == tile.getZoneValue(
-						xOnTile - 1, yOnTile)
-				&& !boolMap[xOnBoard][yOnBoard][xOnTile - 1][yOnTile]) {
-			res = res
-					|| findTile(xOnTile - 1, yOnTile, boolMap, tile, xOnBoard,
+			&& tile.getZoneValue(xOnTile, yOnTile) 
+				== tile.getZoneValue(xOnTile - 1, yOnTile)
+			&& !boolMap[xOnBoard][yOnBoard][xOnTile - 1][yOnTile]) {
+			res = res || findTile(xOnTile - 1, yOnTile, boolMap, tile, xOnBoard,
 							yOnBoard);
 		} else if ((xOnTile - 1) < 0
 				&& (yOnBoard + 1) < board.getBoard()[0].length) {
 			Tile nextTile = getBoard().getBoard()[xOnBoard][yOnBoard + 1];
 			if (nextTile != null
-					&& tile.getSideValue(Tile.NORTH) == nextTile
-							.getSideValue(Tile.SOUTH)
-					&& tile.getZoneValue(xOnTile, yOnTile) == nextTile
-							.getZoneValue(6, yOnTile)
-					&& !boolMap[xOnBoard][yOnBoard + 1][6][yOnTile]) {
-				res = res
-						|| findTile(6, yOnTile, boolMap, nextTile, xOnBoard,
+				&& tile.getSideValue(Tile.NORTH) 
+					== nextTile.getSideValue(Tile.SOUTH)
+				&& tile.getZoneValue(xOnTile, yOnTile) 
+					== nextTile.getZoneValue(6, yOnTile)
+				&& !boolMap[xOnBoard][yOnBoard + 1][6][yOnTile]) {
+				res = res || findTile(6, yOnTile, boolMap, nextTile, xOnBoard,
 								yOnBoard + 1);
 			}
 		}
 
 		if ((yOnTile + 1) < 7
-				&& tile.getZoneValue(xOnTile, yOnTile) == tile.getZoneValue(
-						xOnTile, yOnTile + 1)
-				&& !boolMap[xOnBoard][yOnBoard][xOnTile][yOnTile + 1]) {
-			res = res
-					|| findTile(xOnTile, yOnTile + 1, boolMap, tile, xOnBoard,
+			&& tile.getZoneValue(xOnTile, yOnTile) 
+				== tile.getZoneValue(xOnTile, yOnTile + 1)
+			&& !boolMap[xOnBoard][yOnBoard][xOnTile][yOnTile + 1]) {
+			res = res || findTile(xOnTile, yOnTile + 1, boolMap, tile, xOnBoard,
 							yOnBoard);
 		} else if ((yOnTile + 1) == 7
 				&& (xOnBoard + 1) < board.getBoard().length) {
 			Tile nextTile = getBoard().getBoard()[xOnBoard + 1][yOnBoard];
 			if (nextTile != null
-					&& tile.getSideValue(Tile.EAST) == nextTile
-							.getSideValue(Tile.WEST)
-					&& tile.getZoneValue(xOnTile, yOnTile) == nextTile
-							.getZoneValue(xOnTile, 0)
-					&& !boolMap[xOnBoard + 1][yOnBoard][xOnTile][0]) {
-				res = res
-						|| findTile(xOnTile, 0, boolMap, nextTile,
+				&& tile.getSideValue(Tile.EAST) 
+					== nextTile.getSideValue(Tile.WEST)
+				&& tile.getZoneValue(xOnTile, yOnTile) 
+					== nextTile.getZoneValue(xOnTile, 0)
+				&& !boolMap[xOnBoard + 1][yOnBoard][xOnTile][0]) {
+				res = res || findTile(xOnTile, 0, boolMap, nextTile,
 								xOnBoard + 1, yOnBoard);
 			}
 		}
 
 		if ((yOnTile - 1) >= 0
-				&& tile.getZoneValue(xOnTile, yOnTile) == tile.getZoneValue(
-						xOnTile, yOnTile - 1)
-				&& !boolMap[xOnBoard][yOnBoard][xOnTile][yOnTile - 1]) {
-			res = res
-					|| findTile(xOnTile, yOnTile - 1, boolMap, tile, xOnBoard,
+			&& tile.getZoneValue(xOnTile, yOnTile) 
+				== tile.getZoneValue(xOnTile, yOnTile - 1)
+			&& !boolMap[xOnBoard][yOnBoard][xOnTile][yOnTile - 1]) {
+			res = res || findTile(xOnTile, yOnTile - 1, boolMap, tile, xOnBoard,
 							yOnBoard);
 		} else if ((yOnTile - 1) < 0 && (xOnBoard - 1) >= 0) {
 			Tile nextTile = getBoard().getBoard()[xOnBoard - 1][yOnBoard];
 			if (nextTile != null
-					&& tile.getSideValue(Tile.WEST) == nextTile
-							.getSideValue(Tile.EAST)
-					&& tile.getZoneValue(xOnTile, yOnTile) == nextTile
-							.getZoneValue(xOnTile, 6)
-					&& !boolMap[xOnBoard - 1][yOnBoard][xOnTile][6]) {
-				res = res
-						|| findTile(xOnTile, 6, boolMap, nextTile,
+				&& tile.getSideValue(Tile.WEST) 
+					== nextTile.getSideValue(Tile.EAST)
+				&& tile.getZoneValue(xOnTile, yOnTile) 
+					== nextTile.getZoneValue(xOnTile, 6)
+				&& !boolMap[xOnBoard - 1][yOnBoard][xOnTile][6]) {
+				res = res || findTile(xOnTile, 6, boolMap, nextTile,
 								xOnBoard - 1, yOnBoard);
 			}
 		}
