@@ -18,11 +18,13 @@ import org.gla.carcassonne.utils.*;
 public class CarcassonneServer {
 	
 	private ServerSocket serverSocket;
-	private boolean isListening;
 	private List<CarcassonneThreadServer> clients;
 	
-	private int token;			// nombre généré aléatoire pour désigner quel client a la main
-	private int nbAckMessages;	// nombre de messages ack reçu pour un MOVE
+	private boolean hasStarted;		// indique si la partie a commencé
+	private boolean isFinished;	// indique si la partie s'est terminée
+	
+	private int token;				// nombre généré aléatoire pour désigner quel client a la main
+	private int nbAckMessages;		// nombre de messages ack reçu pour un MOVE
 
 	private final static String CONNECTION_ACCEPTED = "Connexion acceptée : ";
 	private final static int NUMBER_MAX_OF_CLIENTS = 5;
@@ -30,17 +32,19 @@ public class CarcassonneServer {
 	private final static int SERVER_TIME_OUT = 500;
 
 	public CarcassonneServer() throws IOException, InterruptedException {
-		isListening = false;
+		hasStarted = false;
+		isFinished = false;
 		serverSocket = new ServerSocket(LISTENING_PORT);
 		clients = new ArrayList<CarcassonneThreadServer>();
 		serverSocket.setSoTimeout(SERVER_TIME_OUT);
 	}
 
 	public void startServer() throws IOException, InterruptedException {
-		isListening = true;
+		hasStarted = false;
+		isFinished = false;
 		
 		// En attente de connexions : la partie n'a pas encore démarrée
-		while (isListening) {
+		while (!hasStarted) {
 			if (clients.size() < NUMBER_MAX_OF_CLIENTS) {
 				try {
 					Socket clientSocket = serverSocket.accept();
@@ -56,7 +60,7 @@ public class CarcassonneServer {
 				Thread.sleep(500);
 			}
 			else
-				isListening = false;
+				wait();
 		}
 		
 		// La partie a démarré et le serveur donne la main aux clients à tour de rôle
@@ -77,7 +81,7 @@ public class CarcassonneServer {
 	}
 	
 	private void runGame() {
-		while (true) {
+		while (!isFinished) {
 			token = generateRandomInt();
 			nbAckMessages = 0;
 			
@@ -99,28 +103,22 @@ public class CarcassonneServer {
 		return serverSocket;
 	}
 
-	public void setServerSocket(ServerSocket serverSocket) {
-		this.serverSocket = serverSocket;
+	/*
+	 * Regarde si la partie a commencé
+	 */
+	public boolean hasStarted() {
+		return hasStarted;
 	}
-
-	public boolean isListening() {
-		return isListening;
-	}
-
-	public void setListening(boolean isListening) {
-		this.isListening = isListening;
+	
+	/*
+	 * Regarde si la partie s'est terminée
+	 */
+	public boolean isFinished() {
+		return isFinished;
 	}
 
 	public List<CarcassonneThreadServer> getClients() {
 		return clients;
-	}
-
-	public void setClients(List<CarcassonneThreadServer> clients) {
-		this.clients = clients;
-	}
-	
-	public void setToken(int token) {
-		this.token = token;
 	}
 
 	public int getToken() {
@@ -154,8 +152,10 @@ public class CarcassonneServer {
 			String type = m.getNthValue(0).toString();
 			
 			if (type.equals("READY")) {
-				if (isAllPlayersReady())
-					isListening = false;
+				if (isAllPlayersReady()) {
+					hasStarted = true;
+					notify();	// notification en cas de wait sur nombre max de joueurs atteint
+				}
 			}
 			
 			if (type.equals("MOVEACK")) {
@@ -163,6 +163,9 @@ public class CarcassonneServer {
 				if (nbAckMessages == clients.size()-1)	// on exclu celui qui a MOVE
 					notify();
 			}
+			
+			if (type.equals("FINISH"))
+				isFinished = true;
 			
 			// On réinitialise le token avant d'envoyer le message aux autres clients
 			if (type.equals("MOVE")) {
