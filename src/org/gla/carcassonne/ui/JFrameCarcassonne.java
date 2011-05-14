@@ -45,10 +45,9 @@ import org.gla.carcassonne.ui.events.RotateLeft;
 import org.gla.carcassonne.ui.events.RotateRight;
 
 public class JFrameCarcassonne extends JFrame {
-	// TODO Donner une autre tuile s'il est impossible de poser tuile
-	// TODO limiter la taille du text des noms des joueurs
 	// TODO Un clic droit pour rotate
 	// TODO sur le numberplayerdialog, le cancel ne quitte pas le jeu
+	// TODO S'assurer que faire 2 fois selectTileRandomly, ne supprime pas la carte
 	private static final long serialVersionUID = 2913853546299057427L;
 	private JMenuBar menuBar;
 	private JScrollPane jspPlateau;
@@ -77,6 +76,7 @@ public class JFrameCarcassonne extends JFrame {
 		setMinimumSize(new Dimension(HEIGHT_MIN, WIDTH_MIN));
 		pack();
 	}
+	
 
 	public void board(BoardEvent event) {
 		Tile[][] tiles = event.getTiles();
@@ -93,7 +93,7 @@ public class JFrameCarcassonne extends JFrame {
 				tabTile[i][j].setBackground(Color.LIGHT_GRAY);
 				tabTile[i][j].setVisible(true);
 				tabTile[i][j].addActionListener(new ButtonListener(i, j, view));
-				//tabTile[i][j].addMouseListener(new MouseListener(i, j, view));
+				//tabTile[i][j].addMouseListener(new RotateOnRightClick(view));
 				tabTile[i][j].setMargin(new Insets(-6, -6, -6, -6));
 			}
 		}

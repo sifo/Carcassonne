@@ -23,6 +23,12 @@
 
 	<target name="archive" depends="compile">
 		<jar basedir="build/classes" destfile="dist/carcassonne_project.jar"/>
+		<jar destfile="dist/multiplayer.jar">
+			<fileset dir="build/classes">
+					<include name="**/network/*"/>
+					<include name="**/utils/*"/>
+			</fileset>
+		</jar>
 	</target>
 
 	<target name="clean" depends="init">
