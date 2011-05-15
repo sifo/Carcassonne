@@ -167,6 +167,10 @@ public class CarcassonneModel implements Game {
 		fireBoard();
 		getTileManager().putFirstTileOnBoard();
 	}
+	
+	public void startMultiplayer() {
+		fireBoard();
+	}
 
 	public void play() {
 

@@ -74,4 +74,8 @@ public class CarcassonneController {
 	public void notifyQuitGame() {
 		System.exit(0);
 	}
+	
+	public void notifyStartMultiplayer() {
+		carcassonneModel.startMultiplayer();
+	}
 }
