@@ -1,22 +1,13 @@
 package org.gla.carcassonne.network;
 
-import java.io.IOException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.Set;
 
-import org.gla.carcassonne.CarcassonneModel;
 import org.gla.carcassonne.entities.Tile;
 
 public class CarcassonneClient extends Socket implements ClientFactory {
-	
-	private Client client;
-	private CarcassonneModel model;
-	
-	public CarcassonneClient(String host, int port, CarcassonneModel model) throws UnknownHostException, IOException {
-		this.model = model;
-		client = new Client(host, port, this);
-		client.start();
+
+	public CarcassonneClient() {
 	}
 
 	public Object getPlayers(Set<Integer> p) {

@@ -14,15 +14,17 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.gla.carcassonne.ui.events.CloseWindow;
+import org.gla.carcassonne.ui.events.ReadyListener;
 import org.gla.carcassonne.ui.events.SendConnexion;
 
 public class MultiplayerLobbyDialog extends JDialog implements ActionListener {
 
-	private static final long serialVersionUID = 1L;
-	private static final int MAX_PLAYER_NUMBER = 5;
-	private static final String CONNECT 	= "Connexion";
-	private static final String QUIT 		= "Quitter";
-	private static final String READY 		= "Prêt";
+	private static final long serialVersionUID 	= 1L;
+	private static final int MAX_PLAYER_NUMBER 	= 5;
+	private static final String DEFAULT_PORT	= "54322";
+	private static final String CONNECT 		= "Connexion";
+	private static final String QUIT 			= "Quitter";
+	private static final String READY 			= "Prêt";
 
 	JButton readyButton;
 	JButton connectButton;
@@ -56,6 +58,7 @@ public class MultiplayerLobbyDialog extends JDialog implements ActionListener {
 	private JPanel buildComponent() {
 		serverAddressField = new JTextField(20);
 		serverPortField = new JTextField(6);
+		serverPortField.setText(DEFAULT_PORT);
 		playersList = new JLabel[MAX_PLAYER_NUMBER];
 		console = new JLabel("En attente de connexion...");
 		
@@ -67,7 +70,7 @@ public class MultiplayerLobbyDialog extends JDialog implements ActionListener {
 		
 		readyButton = new JButton(READY);
 		readyButton.setEnabled(false);
-		//readyButton.addActionListener(new SendPlayerListListener(view, this));
+		readyButton.addActionListener(new ReadyListener(view, this));
 
 		JButton quitButton = new JButton(QUIT);
 		quitButton.setActionCommand("quit");

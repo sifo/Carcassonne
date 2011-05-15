@@ -77,6 +77,7 @@ Méthodes publiques de Client :
 	// oo = orientation
 	// op = pion
 	// La paramètres appellent automatiquement les fonctions implémentées (setX, setY, setOrientation, etc.)
+	// Il vous suffit donc de passer en paramètre ce que vos objets qui seront convertis via les méthodes implémentées
 	public boolean move(Object ot, Object ox, Object oy, Object oo, Object op);
 
 	// méthodes utilitaires
@@ -86,6 +87,10 @@ Méthodes publiques de Client :
 	public void setSocket(Socket socket);
 	public boolean hasStarted();   // si la partie a démarré
 	public boolean isFinished();   // si la partie s'est terminée
+	public boolean isAccepted();   // si la tuile placée a été acceptée
+	public int getToken();         // récupère le token. La valeur du token vaut 0 par défaut.
+	                               // si la valeur est différente de 0, la main est donné au joueur
+	                               // si un move est effectué ET accepté, token reprend la valeur 0
 
 
 =========================================================================
@@ -107,6 +112,25 @@ public class MonImplementation implements ClientFactory {
 	int setX(Object o) {
 		Position p = (Position) o;
 		return p.posX();
+	}
+	
+	/*
+	 * Quand le client reçoit un move d'un autre client, cette méthode est implicitement appellée
+	 * Si la tuile est acceptée, la tuile sera placé sur votre plateau (placer(...)) et vous renvoyez vrai
+	 * Sinon vous renvoyez faux et il n'y a aucun conséquence sur le jeu
+	 * C'est donc dans cette méthode que doit être effectué le placement des autres tuiles.
+	 */
+	boolean checkMove(int player, String tile, int x, int y, String o, String piece) {
+	   MaRepresentation joueur = getId(player);
+	   MareprésentationX posX = x;
+	   ...
+	   
+	   if (canPlace(tile, x, y))
+	       placer(tile, x, y);
+	   else
+	       return false;
+	
+	   return true;
 	}
 
 	...

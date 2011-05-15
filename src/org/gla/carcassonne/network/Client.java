@@ -12,6 +12,7 @@ import org.gla.carcassonne.utils.*;
 
 public class Client extends Thread {
 
+	private static final int DEFAULT_TOKEN = 0;
 	private ClientFactory factory;
 	private Socket socket;
 	private PushbackInputStream in;
@@ -20,6 +21,7 @@ public class Client extends Thread {
 	private int token;						// Entier à envoyer dans le message MOVE pour pouvoir jouer.
 	private boolean hasStarted;				// Indique si la partie à commencé (réponse du serveur)
 	private boolean isAccepted;				// Indique si le mouvement effectué a été accepté par les autres clients
+	private boolean isFinished;				// Indique si la partie est terminée
 	private boolean hasHello;				// Le client s'est présenté au serveur (et veut une bière...)
 	private Map<Integer, Boolean> players;	// Liste des autres joueurs
 	
@@ -30,19 +32,24 @@ public class Client extends Thread {
 		in = new PushbackInputStream(socket.getInputStream());
 		out = new BufferedOutputStream(socket.getOutputStream());
 		players = new HashMap<Integer, Boolean>();
-		token = 0;
+		token = DEFAULT_TOKEN;
 		isAccepted = false;
 		hasStarted = false;
 		hasHello = false;
+		isFinished = false;
 	}
 	
 	/*
 	 * Démarrage du client et traitement de tous les messages possibles
-	 * TODO : Meilleure factorisation ?
 	 */
 	public void run() {
 		try {
 			while(true) {
+				if (!hasHello) {
+					sendHello();
+					hasHello = true;
+				}
+				
 				Message receive = Message.parse(in);
 				String type = receive.getNthValue(0).toString();
 				
@@ -51,12 +58,7 @@ public class Client extends Thread {
 				
 				if (type.equals("CLOSE"))
 					removePlayer(receive);
-				
-				if (!hasHello) {
-					sendHello();
-					hasHello = true;
-				}
-				
+
 				if (!hasStarted) {
 					if (type.equals("HELLO")) {
 						addPlayer(receive);
@@ -67,7 +69,8 @@ public class Client extends Thread {
 						addPlayer(receive);
 					
 					if (type.equals("HELLONACK"))
-						continue;
+						//continue;
+						hasStarted = true;
 
 					if (type.equals("START"))
 						hasStarted = true;
@@ -82,6 +85,7 @@ public class Client extends Thread {
 					if (type.equals("MOVEACK")) {
 						notify();
 						isAccepted = true;
+						token = DEFAULT_TOKEN;
 					}
 					
 					if (type.equals("MOVENACK")) {
@@ -92,8 +96,10 @@ public class Client extends Thread {
 					if (type.equals("MOVE"))
 						checkMoveFromEngine(receive);
 					
-					if (type.equals("FINISH"))
+					if (type.equals("FINISH")) {
+						isFinished = true;
 						disconnect();
+					}
 				}
 			}
 		} catch (IOException e) {
@@ -169,6 +175,7 @@ public class Client extends Thread {
 		try {
 			m.format(out);
 			out.flush();
+			isFinished = true;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -320,9 +327,37 @@ public class Client extends Thread {
 	}
 	
 	/*
+	 * Regarde si la partie a commencé
+	 */
+	public boolean hasStarted() {
+		return hasStarted;
+	}
+	
+	/*
+	 * Regarde si la partie s'est terminée
+	 */
+	public boolean isFinished() {
+		return isFinished;
+	}
+	
+	/*
+	 * Regarde si la tuile posée a été acceptée
+	 */
+	public boolean isAccepted() {
+		return isAccepted;
+	}
+	
+	/*
 	 * Récupère la liste des joueurs courante. Sous-classé par la factory
 	 */
 	public Object getPlayers() {
 		return factory.getPlayers(players.keySet());
+	}
+	
+	/*
+	 * Récupère le token pour savoir si c'est à notre tour de jouer
+	 */
+	public int getToken() {
+		return token;
 	}
 }

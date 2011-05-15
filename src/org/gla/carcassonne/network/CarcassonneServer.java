@@ -15,13 +15,13 @@ import org.gla.carcassonne.utils.*;
  * à nouveau. Le but est de régulièrement donner la main aux autres threads.
  * Cela dit, ce comportement pourrait bien changer.
  */
-public class CarcassonneServer {
+public class CarcassonneServer extends Thread {
 	
 	private ServerSocket serverSocket;
 	private List<CarcassonneThreadServer> clients;
 	
 	private boolean hasStarted;		// indique si la partie a commencé
-	private boolean isFinished;	// indique si la partie s'est terminée
+	private boolean isFinished;		// indique si la partie s'est terminée
 	
 	private int token;				// nombre généré aléatoire pour désigner quel client a la main
 	private int nbAckMessages;		// nombre de messages ack reçu pour un MOVE
@@ -38,6 +38,16 @@ public class CarcassonneServer {
 		clients = new ArrayList<CarcassonneThreadServer>();
 		serverSocket.setSoTimeout(SERVER_TIME_OUT);
 	}
+	
+	public void run() {
+		try {
+			startServer();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void startServer() throws IOException, InterruptedException {
 		hasStarted = false;
@@ -51,6 +61,7 @@ public class CarcassonneServer {
 					CarcassonneThreadServer client = 
 						new CarcassonneThreadServer(clientSocket, this);
 					clients.add(client);
+					client.start();
 					System.out.println(CONNECTION_ACCEPTED
 							+ clientSocket.getInetAddress().getHostName()+ ":"
 							+ clientSocket.getPort());
@@ -67,6 +78,7 @@ public class CarcassonneServer {
 		for(CarcassonneThreadServer client : clients) {
 			Message m = new Message("START");
 			client.sendMessageFromServer(m);
+			System.out.println("Game started ! "+hasStarted);
 		}
 		
 		runGame();
@@ -90,11 +102,13 @@ public class CarcassonneServer {
 				client.sendMessageFromServer(m);
 				client.setHasToken(true);
 				
-				try {
+				/*try {
 					wait();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
-				}
+				} catch (IllegalMonitorStateException e) {
+					
+				}*/
 			}
 		}
 	}
@@ -154,7 +168,7 @@ public class CarcassonneServer {
 			if (type.equals("READY")) {
 				if (isAllPlayersReady()) {
 					hasStarted = true;
-					notify();	// notification en cas de wait sur nombre max de joueurs atteint
+					//notify();	// notification en cas de wait sur nombre max de joueurs atteint
 				}
 			}
 			
