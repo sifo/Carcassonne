@@ -25,19 +25,40 @@ public class CarcassonneClient extends Socket implements ClientFactory {
 	}
 
 	public String setOrientation(Object o) {
-		return null;
+		Tile t = (Tile) o;
+		String orientation = "";
+		switch(t.getRotationCount()) {
+			case 0:
+				orientation = "N";
+				break;
+			case 1:
+				orientation = "E";
+				break;
+			case 2:
+				orientation = "S";
+				break;
+			case 3:
+				orientation = "W";
+				break;
+		}
+		
+		return orientation;
 	}
 
 	public String setTile(Object o) {
-		return null;
+		Tile t = (Tile) o;
+		String[] path = t.getType().getPath().split("/");
+		String tileName = path[path.length-1];
+		String[] splited = tileName.split(".");
+		return splited[0];
 	}
 
 	public String setPiece(Object o) {
-		return null;
+		return "";
 	}
 
-	public boolean checkMove(int player, String tile, int x, int y, String o,
-			String piece) {
-		return false;
+	public boolean checkMove(int player, String tile, int x, int y, String o, String piece) {
+		
+		return true;
 	}
 }

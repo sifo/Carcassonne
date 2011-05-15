@@ -30,6 +30,7 @@ public class NetworkManager extends Thread {
 	public boolean setConnexion(String host, int port, MultiplayerLobbyDialog lobby) {
 		try {
 			this.lobby = lobby;
+			// IP distant : 78.232.249.59
 			client = new Client(host, port, new CarcassonneClient());
 			client.start();
 			this.start();
@@ -59,6 +60,13 @@ public class NetworkManager extends Thread {
 		}
 		
 		lobby.dispose();
+		
+		while(!client.isFinished()) {
+			if (client.getToken() > 0) {
+				System.out.println("TOKEN : "+client.getToken());
+				client.move(null, null, null, null, null);
+			}
+		}
 	}
 	
 	public Client getClient() {

@@ -83,14 +83,19 @@ public class Client extends Thread {
 						setPlayerReady(receive);
 					
 					if (type.equals("MOVEACK")) {
-						notify();
-						isAccepted = true;
-						token = DEFAULT_TOKEN;
+						synchronized(this) {
+							notifyAll();
+							isAccepted = true;
+							token = DEFAULT_TOKEN;
+						}
 					}
 					
 					if (type.equals("MOVENACK")) {
-						notify();
-						isAccepted = false;
+						synchronized(this) {
+							notifyAll();
+							isAccepted = false;
+							token = DEFAULT_TOKEN;
+						}
 					}
 					
 					if (type.equals("MOVE"))
@@ -144,7 +149,10 @@ public class Client extends Thread {
 		try {
 			m.format(out);
 			out.flush();
-			wait();			// En attente d'un MOVEACK ou MOVENACK
+			
+			synchronized(this) {
+				wait();		// En attente d'un MOVEACK ou MOVENACK
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {

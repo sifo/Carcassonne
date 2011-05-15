@@ -53,6 +53,7 @@ public class CarcassonneThreadServer extends Thread {
 	
 	public void waitingResponse(PushbackInputStream in) {
 		try {
+			System.out.println("SOCKET : "+socket.getInetAddress().toString());
 			Message receive = Message.parse(in);
 			String type = receive.getNthValue(0).toString();
 			
@@ -64,7 +65,9 @@ public class CarcassonneThreadServer extends Thread {
 				
 				// Si c'est à son tour de jouer, alors passer son tour
 				if (hasToken)
-					notify();
+					synchronized(this) {
+						notifyAll();
+					}
 				
 				server.removeClient(this);
 				in.close();
@@ -102,7 +105,6 @@ public class CarcassonneThreadServer extends Thread {
 			e.printStackTrace();
 		}
 	}
-	
 
 	/*
 	 * Envoi d'un message vers le client du thread depuis le serveur
