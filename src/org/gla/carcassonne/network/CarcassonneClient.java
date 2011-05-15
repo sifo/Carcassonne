@@ -1,26 +1,17 @@
 package org.gla.carcassonne.network;
 
-import java.io.IOException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.Set;
 
-import org.gla.carcassonne.CarcassonneModel;
 import org.gla.carcassonne.entities.Tile;
 
 public class CarcassonneClient extends Socket implements ClientFactory {
-	
-	private Client client;
-	private CarcassonneModel model;
-	
-	public CarcassonneClient(String host, int port, CarcassonneModel model) throws UnknownHostException, IOException {
-		this.model = model;
-		client = new Client(host, port, this);
-		client.start();
+
+	public CarcassonneClient() {
 	}
 
 	public Object getPlayers(Set<Integer> p) {
-		return null;
+		return (Set<Integer>)p;
 	}
 
 	public int setX(Object o) {
@@ -34,19 +25,40 @@ public class CarcassonneClient extends Socket implements ClientFactory {
 	}
 
 	public String setOrientation(Object o) {
-		return null;
+		Tile t = (Tile) o;
+		String orientation = "";
+		switch(t.getRotationCount()) {
+			case 0:
+				orientation = "N";
+				break;
+			case 1:
+				orientation = "E";
+				break;
+			case 2:
+				orientation = "S";
+				break;
+			case 3:
+				orientation = "W";
+				break;
+		}
+		
+		return orientation;
 	}
 
 	public String setTile(Object o) {
-		return null;
+		Tile t = (Tile) o;
+		String[] path = t.getType().getPath().split("/");
+		String tileName = path[path.length-1];
+		String[] splited = tileName.split(".");
+		return splited[0];
 	}
 
 	public String setPiece(Object o) {
-		return null;
+		return "";
 	}
 
-	public boolean checkMove(int player, String tile, int x, int y, String o,
-			String piece) {
-		return false;
+	public boolean checkMove(int player, String tile, int x, int y, String o, String piece) {
+		
+		return true;
 	}
 }

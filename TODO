@@ -10,10 +10,17 @@ projets :
 	 
 - cachier des charges
 [X] faire diagramme de paquets
-[ ] faire diagramme de classes
-[ ] définir protocole pour communication entre le serveur et le client
+[X] faire diagramme de classes
+[X] définir protocole pour communication entre le serveur et le client
+[X] extensibilité des tuiles
 
 - implémentation
+[X] Modèle MVC
+[X] règles du jeu (contraintes de zones et tuiles)
+[X] interface graphique
+[X] module multijoueur
+[X] abstraction suffisante pour extensibilité
+[/] Gestions des erreurs
 
 - A la fin du projet
-[ ] Regarder nos échanges d'emails pour voir si certaines informations doivent être ajouter au cahier des charges.  
+[X] Regarder nos échanges d'emails pour voir si certaines informations doivent être ajouter au cahier des charges.  

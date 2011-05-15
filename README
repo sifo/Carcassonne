@@ -1,0 +1,76 @@
+============================================
+=====   GENIE LOGICIEL AVANCE - 2011   =====
+============================================
+
+PROJET CARCASSONNE - Version beta-0.85
+
+
+-- Membres du projet :
+
+Vilver Jean
+Yu Florent
+
+
+-- Composition du projet :
+
+Moteur de jeu Carcassonne
+Interface graphique
+Système multijoueur
+Intégration lobby multijoueur dans l'interface graphique
+
+
+-- Module développé :
+
+Système multijoueur.
+Protocole de communication modifié basé sur le protocole pair-à-pair 5.0 de Juliusz Chroboczek.
+
+
+-- Module tiers :
+
+Interface graphique (Sources : Ling Fung, Dong Cécile).
+Version modifiée du client (Daniel Yves)
+Suspendu : définition de tuiles basés sur .xml et parseur (David Jean, Gouyou Ludovic)
+
+
+-- Distribution libre du module :
+
+Ling Fung, Dong Cécile
+Michau Hadrien, Petament Davy
+Daniel Yves
+Viain Jean, Le Broustier Quentin
+Mailing List du projet ? (il semble qu'il ne soit pas passé ?!)
+
+
+======================
+==== INSTRUCTIONS ====
+======================
+
+Outils requis :
+
+Java 6.0 (JDK de préférence)
+ANT
+JUnit
+
+-- Compilation :
+
+La compilation se fait à l'aide de l'outil ANT.
+Le fichier build.xml se trouve à la racine du projet.
+Aller à la racine du projet et exécuter la commande : ant
+
+Options :
+
+- init : crée des dossiers
+- compile : compile les sources
+- execute : exécute le programme
+- archive : crée un .jar des .class après la compilation
+- clean : efface tous les fichiers et dossiers qui ont été crés avec la commande '$ ant'
+- test-init : crée des dossiers
+- test-compile : compile les sources du test
+- test : lance les tests
+
+
+-- Exécution :
+
+L'exécution du Main démarre le programme.
+
+

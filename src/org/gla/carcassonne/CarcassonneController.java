@@ -91,7 +91,7 @@ public class CarcassonneController {
 		try {
 			String host = lobby.getServerAddress();
 			int port = lobby.getServerPort();
-			if (carcassonneModel.getNetworkManager().setConnexion(host, port)) {
+			if (carcassonneModel.getNetworkManager().setConnexion(host, port, lobby)) {
 				lobby.setEnableConnectButton(false);
 				lobby.setEnableReadyButton(true);
 				lobby.setConsoleMessage("Connexion réussie au serveur "+host+":"+port);
@@ -103,5 +103,10 @@ public class CarcassonneController {
 	}
 
 	public void notifyNewGame() {
+		
+	}
+	
+	public void notifyReady() {
+		carcassonneModel.getNetworkManager().getClient().ready();
 	}
 }

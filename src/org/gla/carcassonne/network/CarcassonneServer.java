@@ -15,13 +15,13 @@ import org.gla.carcassonne.utils.*;
  * à nouveau. Le but est de régulièrement donner la main aux autres threads.
  * Cela dit, ce comportement pourrait bien changer.
  */
-public class CarcassonneServer {
+public class CarcassonneServer extends Thread {
 	
 	private ServerSocket serverSocket;
 	private List<CarcassonneThreadServer> clients;
 	
 	private boolean hasStarted;		// indique si la partie a commencé
-	private boolean isFinished;	// indique si la partie s'est terminée
+	private boolean isFinished;		// indique si la partie s'est terminée
 	
 	private int token;				// nombre généré aléatoire pour désigner quel client a la main
 	private int nbAckMessages;		// nombre de messages ack reçu pour un MOVE
@@ -38,6 +38,16 @@ public class CarcassonneServer {
 		clients = new ArrayList<CarcassonneThreadServer>();
 		serverSocket.setSoTimeout(SERVER_TIME_OUT);
 	}
+	
+	public void run() {
+		try {
+			startServer();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void startServer() throws IOException, InterruptedException {
 		hasStarted = false;
@@ -51,6 +61,7 @@ public class CarcassonneServer {
 					CarcassonneThreadServer client = 
 						new CarcassonneThreadServer(clientSocket, this);
 					clients.add(client);
+					client.start();
 					System.out.println(CONNECTION_ACCEPTED
 							+ clientSocket.getInetAddress().getHostName()+ ":"
 							+ clientSocket.getPort());
@@ -59,14 +70,18 @@ public class CarcassonneServer {
 				}
 				Thread.sleep(500);
 			}
-			else
-				wait();
+			else {
+				synchronized(this) {
+					wait();
+				}
+			}
 		}
 		
 		// La partie a démarré et le serveur donne la main aux clients à tour de rôle
 		for(CarcassonneThreadServer client : clients) {
 			Message m = new Message("START");
 			client.sendMessageFromServer(m);
+			System.out.println("Game started with "+clients.size()+" players");
 		}
 		
 		runGame();
@@ -90,10 +105,14 @@ public class CarcassonneServer {
 				client.sendMessageFromServer(m);
 				client.setHasToken(true);
 				
-				try {
-					wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+				synchronized(this) {
+					try {
+						wait();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					} catch (IllegalMonitorStateException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}
@@ -149,12 +168,15 @@ public class CarcassonneServer {
 	 */
 	protected void sendMessageFromClient(Message m, CarcassonneThreadServer from) {
 		try {
+			System.out.println("Receive : "+m.toString());
 			String type = m.getNthValue(0).toString();
 			
 			if (type.equals("READY")) {
 				if (isAllPlayersReady()) {
 					hasStarted = true;
-					notify();	// notification en cas de wait sur nombre max de joueurs atteint
+					synchronized(this) {
+						notifyAll();	// notification en cas de wait sur nombre max de joueurs atteint
+					}
 				}
 			}
 			
@@ -162,7 +184,9 @@ public class CarcassonneServer {
 				nbAckMessages++;
 				if (nbAckMessages == clients.size()-1) {	// on exclu celui qui a MOVE
 					nbAckMessages = 0;
-					notify();
+					synchronized(this) {
+						notifyAll();
+					}
 				}
 				else
 					return;		// Tant que nous n'avons pas que des ACK, on ne fait rien
@@ -183,6 +207,8 @@ public class CarcassonneServer {
 					type.equals("CLOSE") || type.equals("FINISH") || type.equals("READY"))
 				m.getNthValue(1).setIntValue(clients.indexOf(from));
 			
+			System.out.println("Send : "+m.toString());
+
 			for(CarcassonneThreadServer client : clients) {
 				if (client.equals(from))	// On exclu l'émetteur de la liste
 					continue;
