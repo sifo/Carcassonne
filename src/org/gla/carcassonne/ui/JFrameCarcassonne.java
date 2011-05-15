@@ -191,6 +191,10 @@ public class JFrameCarcassonne extends JFrame {
 	public void showNbPlayer() {
 		new NumberPlayerDialog(view);
 	}
+	
+	public void startMultiplayer() {
+		new MultiplayerLobbyDialog(view);
+	}
 
 	public void addTile(AddTileEvent event) {
 		Tile tile = event.getTile();

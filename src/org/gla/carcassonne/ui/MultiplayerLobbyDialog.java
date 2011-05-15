@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.gla.carcassonne.ui.events.CloseWindow;
-import org.gla.carcassonne.ui.events.QuitGame;
+import org.gla.carcassonne.ui.events.SendConnexion;
 
 public class MultiplayerLobbyDialog extends JDialog implements ActionListener {
 
@@ -24,9 +24,12 @@ public class MultiplayerLobbyDialog extends JDialog implements ActionListener {
 	private static final String QUIT 		= "Quitter";
 	private static final String READY 		= "Prêt";
 
+	JButton readyButton;
+	JButton connectButton;
 	JTextField serverAddressField;
 	JTextField serverPortField;
 	JLabel[] playersList;
+	JLabel console;
 	SwingCarcassonneView view;
 
 	boolean clickedOnOk = false;
@@ -54,18 +57,21 @@ public class MultiplayerLobbyDialog extends JDialog implements ActionListener {
 		serverAddressField = new JTextField(20);
 		serverPortField = new JTextField(6);
 		playersList = new JLabel[MAX_PLAYER_NUMBER];
+		console = new JLabel("En attente de connexion...");
 		
 		for (int i = 0; i < MAX_PLAYER_NUMBER; i++)
 			playersList[i] = new JLabel("--");
 		
-		JButton connectButton = new JButton(CONNECT);
-		//connectButton.addActionListener(new SendPlayerListListener(view, this));
+		connectButton = new JButton(CONNECT);
+		connectButton.addActionListener(new SendConnexion(view, this));
 		
-		JButton playButton = new JButton(READY);
-		//playButton.addActionListener(new SendPlayerListListener(view, this));
+		readyButton = new JButton(READY);
+		readyButton.setEnabled(false);
+		//readyButton.addActionListener(new SendPlayerListListener(view, this));
 
 		JButton quitButton = new JButton(QUIT);
-		quitButton.addActionListener(new QuitGame(view));
+		quitButton.setActionCommand("quit");
+		quitButton.addActionListener(this);
 
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(new JLabel("<html><h2>Bienvenue dans le Lobby multijoueur</h2></html>",
@@ -98,6 +104,13 @@ public class MultiplayerLobbyDialog extends JDialog implements ActionListener {
 		vbox.add(hbox);
 		vbox.add(Box.createVerticalStrut(25));
 		
+		// Console pour afficher les messages liés au serveur
+		hbox = Box.createHorizontalBox();
+		hbox.add(console);
+		vbox.add(hbox);
+		vbox.add(Box.createVerticalStrut(25));
+		
+		// Zone d'affichage des joueurs connectés
 		hbox = Box.createHorizontalBox();
 		hbox.add(new JLabel("Liste des joueurs connectés :"));
 		vbox.add(hbox);
@@ -114,7 +127,7 @@ public class MultiplayerLobbyDialog extends JDialog implements ActionListener {
 
 		vbox.add(Box.createVerticalStrut(25));
 		hbox = Box.createHorizontalBox();
-		hbox.add(playButton);
+		hbox.add(readyButton);
 		hbox.add(Box.createHorizontalStrut(10));
 		hbox.add(quitButton);
 		vbox.add(hbox);
@@ -125,7 +138,29 @@ public class MultiplayerLobbyDialog extends JDialog implements ActionListener {
 		panel.add(panelInside, BorderLayout.CENTER);
 		return panel;
 	}
+	
+	public void setEnableReadyButton(boolean state) {
+		readyButton.setEnabled(state);
+	}
+	
+	public void setEnableConnectButton(boolean state) {
+		connectButton.setEnabled(state);
+	}
 
 	public void actionPerformed(ActionEvent e) {
+		if (e.getActionCommand() == "quit")
+			this.dispose();
+	}
+	
+	public String getServerAddress() {
+		return serverAddressField.getText();
+	}
+	
+	public int getServerPort() {
+		return Integer.parseInt(serverPortField.getText());
+	}
+	
+	public void setConsoleMessage(String message) {
+		console.setText(message);
 	}
 }

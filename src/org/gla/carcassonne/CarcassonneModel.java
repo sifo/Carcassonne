@@ -1,22 +1,12 @@
 package org.gla.carcassonne;
 
+import java.io.IOException;
+
 import javax.swing.event.EventListenerList;
 
 import org.gla.carcassonne.entities.Game;
-import org.gla.carcassonne.events.AddTileEvent;
-import org.gla.carcassonne.events.BoardEvent;
-import org.gla.carcassonne.events.CantAddTileEvent;
-import org.gla.carcassonne.events.CardBackEvent;
-import org.gla.carcassonne.events.ConfigDialogEvent;
-import org.gla.carcassonne.events.ListenerOnCurrentTileEvent;
-import org.gla.carcassonne.events.LockConfirmButtonEvent;
-import org.gla.carcassonne.events.NextTileEvent;
-import org.gla.carcassonne.events.PlacePieceOnTileEvent;
-import org.gla.carcassonne.events.PlayersEvent;
-import org.gla.carcassonne.events.RemainingTileEvent;
-import org.gla.carcassonne.events.RotateLeftEvent;
-import org.gla.carcassonne.events.RotateRightEvent;
-import org.gla.carcassonne.events.UnlockConfirmButtonEvent;
+import org.gla.carcassonne.events.*;
+import org.gla.carcassonne.managers.NetworkManager;
 import org.gla.carcassonne.managers.PlayerManager;
 import org.gla.carcassonne.managers.TileManager;
 
@@ -24,11 +14,13 @@ public class CarcassonneModel implements Game {
 	private EventListenerList listeners;
 	private TileManager tileManager;
 	private PlayerManager playerManager;
+	private NetworkManager networkManager;
 
 	public CarcassonneModel() {
 		tileManager = new TileManager(this);
 		playerManager = new PlayerManager(this);
 		listeners = new EventListenerList();
+		networkManager = null;
 	}
 
 	public void addCarcassonneListener(CarcassonneListener listener) {
@@ -144,6 +136,14 @@ public class CarcassonneModel implements Game {
 			listener.configDialog(new ConfigDialogEvent(this));
 		}
 	}
+	
+	public void fireLobbyDialog() {
+		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
+				.getListeners(CarcassonneListener.class);
+		for (CarcassonneListener listener : listenerList) {
+			listener.lobbyDialog(new LobbyDialogEvent(this));
+		}
+	}
 
 	public void fireBoard() {
 		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
@@ -169,11 +169,23 @@ public class CarcassonneModel implements Game {
 	}
 	
 	public void startMultiplayer() {
-		fireBoard();
+		try {
+			networkManager = new NetworkManager(this);
+			fireLobbyDialog();
+			fireBoard();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void play() {
 
+	}
+	
+	public NetworkManager getNetworkManager() {
+		return networkManager;
 	}
 
 	public PlayerManager getPlayerManager() {

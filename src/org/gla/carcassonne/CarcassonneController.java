@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.gla.carcassonne.entities.Player;
 import org.gla.carcassonne.entities.Tile;
+import org.gla.carcassonne.ui.MultiplayerLobbyDialog;
 import org.gla.carcassonne.ui.SwingCarcassonneView;
 
 public class CarcassonneController {
@@ -77,5 +78,20 @@ public class CarcassonneController {
 	
 	public void notifyStartMultiplayer() {
 		carcassonneModel.startMultiplayer();
+	}
+	
+	public void notifyConnexion(MultiplayerLobbyDialog lobby) {
+		try {
+			String host = lobby.getServerAddress();
+			int port = lobby.getServerPort();
+			if (carcassonneModel.getNetworkManager().setConnexion(host, port)) {
+				lobby.setEnableConnectButton(false);
+				lobby.setEnableReadyButton(true);
+				lobby.setConsoleMessage("Connexion réussie au serveur "+host+":"+port);
+			} else
+				lobby.setConsoleMessage("Connexion échouée : hôte inconnu");
+		} catch (NumberFormatException e) {
+			lobby.setConsoleMessage("== ERREUR == Mauvais format de données adresse serveur/port");
+		}
 	}
 }
