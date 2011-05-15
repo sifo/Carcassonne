@@ -3,11 +3,16 @@ package org.gla.carcassonne.network;
 import java.net.Socket;
 import java.util.Set;
 
+import org.gla.carcassonne.CarcassonneModel;
 import org.gla.carcassonne.entities.Tile;
+import org.gla.carcassonne.entities.TileType;
 
 public class CarcassonneClient extends Socket implements ClientFactory {
 
-	public CarcassonneClient() {
+	CarcassonneModel model;
+	
+	public CarcassonneClient(CarcassonneModel model) {
+		this.model = model;
 	}
 
 	public Object getPlayers(Set<Integer> p) {
@@ -49,16 +54,50 @@ public class CarcassonneClient extends Socket implements ClientFactory {
 		Tile t = (Tile) o;
 		String[] path = t.getType().getPath().split("/");
 		String tileName = path[path.length-1];
-		String[] splited = tileName.split(".");
-		return splited[0];
+		String tile = tileName.substring(0, tileName.length()-4);
+		return tile;
 	}
 
 	public String setPiece(Object o) {
 		return "";
 	}
+	
+	public TileType parseTileNameToType(String tile) throws IllegalArgumentException {
+		String path = "res/drawable/".concat(tile).concat(".png");
+		TileType type =  TileType.valueOf(path);
+		return type;
+	}
 
 	public boolean checkMove(int player, String tile, int x, int y, String o, String piece) {
+		TileType type;
+		int rotation;
+			
+		try {
+			type = parseTileNameToType(tile);
+		}
+		catch (IllegalArgumentException e) {
+			return false;
+		}
 		
-		return true;
+		if (o.equals("N"))
+			rotation = 0;
+		else if (o.equals("E"))
+			rotation = 1;
+		else if (o.equals("S"))
+			rotation = 2;
+		else if (o.equals("W"))
+			rotation = 3;
+		else
+			return false;
+		
+		Tile t = new Tile(type);
+		t.setRotationCount(rotation);
+		
+		if (model.getTileManager().getBoard().canPlace(x, y, t)) {
+			model.getTileManager().getBoard().add(x, y, t);
+			return true;
+		}
+		
+		return false;
 	}
 }

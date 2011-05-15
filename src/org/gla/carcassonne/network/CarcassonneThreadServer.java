@@ -47,13 +47,16 @@ public class CarcassonneThreadServer extends Thread {
 		} catch (SocketException e) {
 			System.out.println(CONNECTION_RESET);
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("Connexion perdu avec "+
+					socket.getInetAddress().toString()+":"+socket.getPort());
+			server.getClients().remove(this);
 		}
 	}
 	
 	public void waitingResponse(PushbackInputStream in) {
 		try {
-			System.out.println("SOCKET : "+socket.getInetAddress().toString());
+			Thread.sleep(5000);
+			System.out.println("SOCKET : "+socket.getInetAddress().toString()+":"+socket.getPort());
 			Message receive = Message.parse(in);
 			String type = receive.getNthValue(0).toString();
 			
@@ -98,10 +101,14 @@ public class CarcassonneThreadServer extends Thread {
 		} catch (ProtocolParseError e) {
 			e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("Connexion perdu avec "+
+					socket.getInetAddress().toString()+":"+socket.getPort());
 		} catch (ProtocolError e) {
 			Message m = new Message("NOOP");
 			sendMessageFromServer(m);
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -113,6 +120,7 @@ public class CarcassonneThreadServer extends Thread {
 		try {
 			m.format(out);
 			out.flush();
+			System.out.println("Message from server sent : "+m.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

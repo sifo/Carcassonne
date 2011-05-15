@@ -7,6 +7,8 @@ import java.util.Set;
 
 import org.gla.carcassonne.CarcassonneModel;
 import org.gla.carcassonne.entities.Player;
+import org.gla.carcassonne.entities.Tile;
+import org.gla.carcassonne.entities.TileType;
 import org.gla.carcassonne.network.CarcassonneClient;
 import org.gla.carcassonne.network.CarcassonneServer;
 import org.gla.carcassonne.network.Client;
@@ -31,7 +33,7 @@ public class NetworkManager extends Thread {
 		try {
 			this.lobby = lobby;
 			// IP distant : 78.232.249.59
-			client = new Client(host, port, new CarcassonneClient());
+			client = new Client(host, port, new CarcassonneClient(model));
 			client.start();
 			this.start();
 		} catch (UnknownHostException e) {
@@ -62,9 +64,15 @@ public class NetworkManager extends Thread {
 		lobby.dispose();
 		
 		while(!client.isFinished()) {
+			System.out.println("Game is running...");
 			if (client.getToken() > 0) {
-				System.out.println("TOKEN : "+client.getToken());
-				client.move(null, null, null, null, null);
+				synchronized(this) {
+					try {
+						wait();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 		}
 	}

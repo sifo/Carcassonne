@@ -45,13 +45,15 @@ public class CarcassonneServer extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			System.out.println("Déconnexion d'un client.");
 		}
 	}
 
 	public void startServer() throws IOException, InterruptedException {
 		hasStarted = false;
 		isFinished = false;
+		
+		System.out.println("DEMARRAGE SERVEUR : BIENVENUE");
 		
 		// En attente de connexions : la partie n'a pas encore démarrée
 		while (!hasStarted) {
@@ -68,7 +70,7 @@ public class CarcassonneServer extends Thread {
 				}
 				catch (SocketTimeoutException e) {
 				}
-				Thread.sleep(500);
+				//Thread.sleep(500);
 			}
 			else {
 				synchronized(this) {
@@ -104,12 +106,14 @@ public class CarcassonneServer extends Thread {
 				Message m = new Message("TOKEN", new MessageInt(token));
 				client.sendMessageFromServer(m);
 				client.setHasToken(true);
+				System.out.println("Token "+token+" has been generated to "+
+						client.getSocket().getInetAddress()+":"+client.getSocket().getPort());
 				
 				synchronized(this) {
 					try {
 						wait();
 					} catch (InterruptedException e) {
-						e.printStackTrace();
+						System.out.println("Un client s'est déconnecté");
 					} catch (IllegalMonitorStateException e) {
 						e.printStackTrace();
 					}
