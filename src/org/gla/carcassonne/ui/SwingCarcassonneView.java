@@ -31,7 +31,7 @@ public class SwingCarcassonneView extends CarcassonneView {
 		jframe.setVisible(true);
 	}
 
-	public JFrame getJFrame() {
+	public JFrameCarcassonne getJFrame() {
 		return jframe;
 	}
 	

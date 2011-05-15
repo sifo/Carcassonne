@@ -15,12 +15,14 @@ public class CarcassonneModel implements Game {
 	private TileManager tileManager;
 	private PlayerManager playerManager;
 	private NetworkManager networkManager;
+	private boolean showedResults;
 
 	public CarcassonneModel() {
 		tileManager = new TileManager(this);
 		playerManager = new PlayerManager(this);
 		listeners = new EventListenerList();
 		networkManager = null;
+		showedResults = false;
 	}
 
 	public void addCarcassonneListener(CarcassonneListener listener) {
@@ -246,5 +248,24 @@ public class CarcassonneModel implements Game {
 					tileManager.getCurrentTile().getxOnBoard(),
 					tileManager.getCurrentTile().getyOnBoard()));
 		}
+	}
+
+	public boolean isShowedResults() {
+		return showedResults;
+	}
+
+	public void setShowedResults(boolean showedResults) {
+		this.showedResults = showedResults;
+	}		
+	
+	public void newGame() {
+		tileManager = new TileManager(this);
+		playerManager = new PlayerManager(this);
+		listeners = new EventListenerList();
+		networkManager = null;
+		showedResults = false;
+		start();
+		fireBoard();
+		firePlayers();
 	}
 }

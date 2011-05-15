@@ -7,6 +7,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
+import org.gla.carcassonne.ui.events.FullScreen;
+import org.gla.carcassonne.ui.events.NewGame;
 import org.gla.carcassonne.ui.events.QuitGame;
 import org.gla.carcassonne.ui.events.StartMultiplayer;
 
@@ -72,21 +74,29 @@ public class JPanelMenu extends JMenuBar {
 		setActionListeners();
 	}
 
+	public JMenuItem getFullScreen() {
+		return fullScreen;
+	}
+
+	public JMenuItem getQuitFullScreen() {
+		return quitFullScreen;
+	}
+
 	private void addComponents() {
 		add(game);
 		add(parameters);
 		add(help);
 		game.add(newGame);
-		game.add(open);
-		game.add(save);
-		game.add(saveAs);
+//		game.add(open);
+//		game.add(save);
+//		game.add(saveAs);
 		game.addSeparator();
 		game.add(online);
 		game.addSeparator();
 		game.add(quit);
 		parameters.add(fullScreen);
 		parameters.add(quitFullScreen);
-		parameters.add(preferences);
+//		parameters.add(preferences);
 		help.add(helpContents);
 		help.add(about);
 	}
@@ -128,5 +138,8 @@ public class JPanelMenu extends JMenuBar {
 	private void setActionListeners() {
 		online.addActionListener(new StartMultiplayer(view));
 		quit.addActionListener(new QuitGame(view));
+		fullScreen.addActionListener(new FullScreen(view));
+		quitFullScreen.addActionListener(new FullScreen(view));
+		newGame.addActionListener(new NewGame(view));
 	}
 }

@@ -22,14 +22,15 @@ public class TileManager {
 	private Board board;
 	private Map<TileType, Integer> tiles;
 	private int numberOfTileRemaining;
-	private final static int MAX_TILE_NUMBER = 72;
 	private Tile currentTile;
 	private CarcassonneModel model;
 	private boolean currentPlayerhasPlacedTile;
 	private Set<Tile> tilesWherePieceFound;
+	private Set<Tile> tilesWherePieceFoundForEndGame;
 	private Set<Tile> tilesTraversed;
+	private Set<Set<Tile>> cities;
+	private boolean gameFinished;
 	public static final int BUTTON_WIDTH = 72;
-	private static final int MONK_POINT = 9;
 
 	private static final int[] tilesCount = new int[] {
 			2, // Tuile A
@@ -61,17 +62,27 @@ public class TileManager {
 	public TileManager(CarcassonneModel model) {
 		int i = 0;
 		currentPlayerhasPlacedTile = false;
-		numberOfTileRemaining = MAX_TILE_NUMBER;
+		numberOfTileRemaining = maxTileNumber();
 		currentTile = null;
 		board = new Board(model);
 		tilesWherePieceFound = new HashSet<Tile>();
+		tilesWherePieceFoundForEndGame = new HashSet<Tile>();
 		tilesTraversed = new HashSet<Tile>();
+		cities = new HashSet<Set<Tile>>();
 		this.model = model;
+		gameFinished = false;
 		tiles = new EnumMap<TileType, Integer>(TileType.class);
 
 		for (TileType t : TileType.values()) {
 			tiles.put(t, tilesCount[i++]);
 		}
+	}
+
+	private int maxTileNumber() {
+		int res = 0;
+		for(int i : tilesCount)
+			res += i;
+		return res;
 	}
 
 	public void putFirstTileOnBoard() {
@@ -108,12 +119,15 @@ public class TileManager {
 			currentTile = selectTileRandomly();
 			if (board.canPlaceSomeWhere(currentTile)) {
 				remove(currentTile);
+				if(numberOfTileRemaining == 0)
+					gameFinished = true;
 				currentPlayerhasPlacedTile = false;
 				model.fireLockConfirmButton();
 				model.fireNextTile();
 				return;
-			} else
+			} else {
 				getNextTile();
+			}
 		}
 	}
 
@@ -276,14 +290,16 @@ public class TileManager {
 	private boolean findExit(int xOnTile, int yOnTile, boolean[][][][] boolMap,
 			Tile tile, int xOnBoard, int yOnBoard) {
 		boolean res = false;
-//		 System.out.println("lancerPropagationSurTuile(" + xOnTile + ", " +
+//		 System.out.println("findExit(" + xOnTile + ", " +
 //		 yOnTile + ", " + tile.getType().getPath() +")");
 		boolMap[xOnBoard][yOnBoard][xOnTile][yOnTile] = true;
-		tilesTraversed.add(board.getBoard()[xOnBoard][yOnBoard]);
-
+		boolean test = tilesTraversed.add(board.getBoard()[xOnBoard][yOnBoard]);
+		if(!test && gameFinished) {
+//			System.out.println("Tuile non ajoutée (" + xOnBoard + ", " + yOnBoard + ")");
+		}
 		if (tile.getxOnTile() == xOnTile
 			&& tile.getyOnTile() == yOnTile) {
-			 System.out.println("Pion Trouvé sur zone!");
+//			 System.out.println("Pion Trouvé sur zone!");
 			 tilesWherePieceFound.add(board.getBoard()[xOnBoard][yOnBoard]);
 		}
 
@@ -387,6 +403,40 @@ public class TileManager {
 	public void setCurrentPlayerhasPlacedTile(boolean currentPlayerhasPlacedTile) {
 		this.currentPlayerhasPlacedTile = currentPlayerhasPlacedTile;
 	}
+	
+	public void resolveEndGamePoint() {
+		System.out.println("resolve end game points : ");
+		Tile [][] boardFinal = board.getBoard();	
+		boolean[][][][] boolMap = new boolean[board.getBoard().length][board.getBoard()[0].length][7][7];
+		for(int i = 0; i < boardFinal.length; i++){
+			for(int j = 0; j < boardFinal[0].length; j++){
+				Tile tile = boardFinal[i][j];
+				if(tile != null
+					&& tile.getStatus() != null
+					&& !tilesWherePieceFoundForEndGame.contains(tile)){
+					if(tile.getStatus() == Status.MONK){
+						resolveMonk(tile);
+					} else {
+						int x = tile.getxOnBoard();
+						int y = tile.getyOnBoard();
+						int xOnTile = tile.getxOnTile();
+						int yOnTile = tile.getyOnTile();
+						tilesWherePieceFound.clear();
+						tilesTraversed.clear();
+						boolMap = new boolean[board.getBoard().length][board.getBoard()[0].length][7][7];
+						findExit(xOnTile, yOnTile, boolMap, tile, x, y);
+						if(tile.getStatus() == Status.KNIGHT)
+							resolveCityOrRoadOrFarmer(1, 1, Status.KNIGHT);
+						else if(tile.getStatus() == Status.THIEF)
+							resolveCityOrRoadOrFarmer(1, 0, Status.THIEF);
+						else if(tile.getStatus() == Status.FARMER)
+							resolveCityOrRoadOrFarmer(0, 0, Status.FARMER);
+						tilesWherePieceFoundForEndGame.addAll(tilesWherePieceFound);
+					}
+				}
+			}
+		}
+	}
 
 	public void resolveZoneClose() {
 		List<Tile> nearTiles = new ArrayList<Tile>();
@@ -394,7 +444,7 @@ public class TileManager {
 		
 		for(Tile tile : nearTiles){
 			if(tile != null){
-				resolveCity(tile);
+				resolveCityOrRoad(tile);
 			}
 		}
 		
@@ -415,7 +465,7 @@ public class TileManager {
 		}
 	}
 	
-	private void resolveCity(Tile tile) {
+	private void resolveCityOrRoad(Tile tile) {
 		int x = tile.getxOnBoard();
 		int y = tile.getyOnBoard();
 		int xOnTile = -1;
@@ -428,12 +478,13 @@ public class TileManager {
 				tilesWherePieceFound.clear();
 				tilesTraversed.clear();
 			if(!findExit(xOnTile, yOnTile, boolMap, currentTile, x, y)){
-				System.out.println("ville fermée!");
-				if(tile.getSideValue(Tile.NORTH) == TileSideValue.CITY)
-					resolveCityOrRoadPlayer(2, Status.KNIGHT);
+				if(tile.getSideValue(Tile.NORTH) == TileSideValue.CITY) {
+					resolveCityOrRoadOrFarmer(2, 2, Status.KNIGHT);
+					cities.add(tilesTraversed);
+				}
 				else 
-					resolveCityOrRoadPlayer(1, Status.THIEF);
-			}
+					resolveCityOrRoadOrFarmer(1, 0, Status.THIEF);
+			} 
 		}
 		boolMap = new boolean[board.getBoard().length][board.getBoard()[0].length][7][7];
 		if(tile.getSideValue(Tile.EAST) == TileSideValue.CITY
@@ -443,11 +494,12 @@ public class TileManager {
 				tilesWherePieceFound.clear();
 				tilesTraversed.clear();
 			if(!findExit(xOnTile, yOnTile, boolMap, currentTile, x, y)){
-				System.out.println("ville fermée!");
-				if(tile.getSideValue(Tile.EAST) == TileSideValue.CITY)
-					resolveCityOrRoadPlayer(2, Status.KNIGHT);
+				if(tile.getSideValue(Tile.EAST) == TileSideValue.CITY) {
+					resolveCityOrRoadOrFarmer(2, 2, Status.KNIGHT);
+					cities.add(tilesTraversed);
+				}
 				else 
-					resolveCityOrRoadPlayer(1, Status.THIEF);
+					resolveCityOrRoadOrFarmer(1, 0, Status.THIEF);
 			}
 		}
 		boolMap = new boolean[board.getBoard().length][board.getBoard()[0].length][7][7];
@@ -458,11 +510,12 @@ public class TileManager {
 				tilesWherePieceFound.clear();
 				tilesTraversed.clear();
 			if(!findExit(xOnTile, yOnTile, boolMap, currentTile, x, y)){
-				System.out.println("ville fermée!");
-				if(tile.getSideValue(Tile.SOUTH) == TileSideValue.CITY)
-					resolveCityOrRoadPlayer(2, Status.KNIGHT);
+				if(tile.getSideValue(Tile.SOUTH) == TileSideValue.CITY) {
+					resolveCityOrRoadOrFarmer(2, 2, Status.KNIGHT);
+					cities.add(tilesTraversed);
+				}
 				else 
-					resolveCityOrRoadPlayer(1, Status.THIEF);
+					resolveCityOrRoadOrFarmer(1, 0, Status.THIEF);
 			} 
 		}
 		boolMap = new boolean[board.getBoard().length][board.getBoard()[0].length][7][7];
@@ -473,35 +526,69 @@ public class TileManager {
 				tilesWherePieceFound.clear();
 				tilesTraversed.clear();
 			if(!findExit(xOnTile, yOnTile, boolMap, currentTile, x, y)){
-				System.out.println("ville fermée!");
-				if(tile.getSideValue(Tile.WEST) == TileSideValue.CITY)
-					resolveCityOrRoadPlayer(2, Status.KNIGHT);
+				if(tile.getSideValue(Tile.WEST) == TileSideValue.CITY) {
+					resolveCityOrRoadOrFarmer(2, 2, Status.KNIGHT);
+					cities.add(tilesTraversed);
+				}
 				else 
-					resolveCityOrRoadPlayer(1, Status.THIEF);
+					resolveCityOrRoadOrFarmer(1, 0, Status.THIEF);
 			}
 		}
+	    if(gameFinished) {
+			}
 	}
-
+	
 	public void resolveMonk(Tile tile) {
-		int point = 0;
-		if(tile.getStatus() == Status.MONK && surroundedByTiles(tile)){
-			point = MONK_POINT;
-			tile.setxOnTile(-1);
-			tile.setxOnClick(-1);
-			tile.setyOnTile(-1);
-			tile.setyOnClick(-1);
-			tile.setStatus(null);		
+		if(tile.getStatus() == Status.MONK 
+			&& (surroundedByTiles(tile) || gameFinished)) {
+			int point = numberOfTilesSurrounding(tile) + 1;
 			Player player = tile.getPlayer();
 			player.setPoints(player.getPoints() + point);
+			System.out.println("(" + tile.getxOnBoard()+ ", " + tile.getyOnBoard() + ")" 
+					+ "[monk] " + player.getName() + " +" + point);
 			player.setPieceCount(player.getPieceCount() + 1);
-			tile.setPlayer(null);
+			if(!gameFinished) {
+				tile.setxOnTile(-1);
+				tile.setxOnClick(-1);
+				tile.setyOnTile(-1);
+				tile.setyOnClick(-1);
+				tile.setStatus(null);		
+				tile.setPlayer(null);
+			}
+			else {
+				tilesWherePieceFoundForEndGame.add(tile);
+			}
 			model.firePlayers();
 			model.fireBoard();
 		}
 	}
 	
-	public void resolveCityOrRoadPlayer(int bonusForTile, Status status) {
-		int bonusPennant = 2;
+	private int numberOfTilesSurrounding(Tile tile) {
+		int x = tile.getxOnBoard();
+		int y = tile.getyOnBoard();
+		int res = 0;
+		if(board.getBoard()[x + 1][y] != null) res++;
+		if(board.getBoard()[x - 1][y] != null) res++;
+		if(board.getBoard()[x][y + 1] != null) res++;
+		if(board.getBoard()[x][y - 1] != null) res++;
+		if(board.getBoard()[x + 1][y + 1] != null) res++;
+		if(board.getBoard()[x + 1][y - 1] != null) res++;
+		if(board.getBoard()[x - 1][y + 1] != null) res++;
+		if(board.getBoard()[x - 1][y - 1] != null) res++;
+		return res;
+	}
+
+	public void resolveCityOrRoadOrFarmer(int bonusForTile, int bonusPennant, Status status) {
+		int bonusForSuplyingCities = 3;
+		String statusString;
+		if(status == Status.THIEF)
+			statusString = "[thief]";
+		else if(status == Status.KNIGHT){
+			statusString = "[knight]";
+		}
+		else {
+			statusString = "[farmer]";
+		}
 		int points = 0;
 		Map<Player, Integer> players = new HashMap<Player, Integer>();
 		int maxCount = 0;
@@ -512,27 +599,55 @@ public class TileManager {
 				maxCount = count + 1;
 		}
 		for(Tile t : tilesWherePieceFound){
-			t.getPlayer().setPieceCount(t.getPlayer().getPieceCount() + 1);
-			t.setxOnTile(-1);
-			t.setxOnClick(-1);
-			t.setyOnTile(-1);
-			t.setyOnClick(-1);
-			t.setStatus(null);
-			t.setPlayer(null);
+			if(!gameFinished) {
+				t.getPlayer().setPieceCount(t.getPlayer().getPieceCount() + 1);
+				t.setxOnTile(-1);
+				t.setxOnClick(-1);
+				t.setyOnTile(-1);
+				t.setyOnClick(-1);
+				t.setStatus(null);
+				t.setPlayer(null);
+			}
 		}
 		for(Tile t : tilesTraversed) {
-			if(t.getType().hasPennant() && status == Status.KNIGHT)
+			if(t.getType().hasPennant())
 				points += bonusPennant;
 		}
-		points += tilesTraversed.size() * bonusForTile;
+		if(status != Status.FARMER)
+			points += tilesTraversed.size() * bonusForTile;
+		else {
+			points += supplyingCitiesByFarmNumber() * bonusForSuplyingCities;
+		}
 		for(Player player : players.keySet()){
-			if(players.get(player) == maxCount)
+			if(players.get(player) == maxCount) {
 				player.setPoints(player.getPoints() + points);
+//				Tile tile = ((Tile []) tilesTraversed.toArray())[0];
+			System.out.println(//"(" + tile.getxOnBoard()+ ", " + tile.getyOnBoard() + ")" +
+				statusString + " " + player.getName() + " +" + points);
+			}
 		}
 		model.firePlayers();
 		model.fireBoard();
 	}
 	
+	private int supplyingCitiesByFarmNumber() {
+		int res = 0;
+		Set<Set<Tile>> citiesRemoved = new HashSet<Set<Tile>>();
+		for(Tile t : tilesTraversed){
+			for(Set<Tile> city : cities) {
+				if(city.contains(t)){
+					res++;
+					citiesRemoved.add(city);
+					cities.remove(city);
+				}
+			}
+		}
+		for(Set<Tile> city : citiesRemoved) {
+			cities.add(city);
+		}
+		return res;
+	}
+
 	public boolean surroundedByTiles(Tile tile) {
 		int x = tile.getxOnBoard();
 		int y = tile.getyOnBoard();
@@ -548,5 +663,7 @@ public class TileManager {
 		}
 		return  true;
 	}
-		
+	public boolean isGameFinished() {
+		return gameFinished;
+	}
 }

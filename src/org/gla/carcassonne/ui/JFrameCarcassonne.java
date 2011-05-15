@@ -49,7 +49,7 @@ public class JFrameCarcassonne extends JFrame {
 	// TODO sur le numberplayerdialog, le cancel ne quitte pas le jeu
 	// TODO S'assurer que faire 2 fois selectTileRandomly, ne supprime pas la carte
 	private static final long serialVersionUID = 2913853546299057427L;
-	private JMenuBar menuBar;
+	private JPanelMenu menuBar;
 	private JScrollPane jspPlateau;
 	private JButton[][] tabTile;
 	private JPanelImage imagePanel;
@@ -307,6 +307,11 @@ public class JFrameCarcassonne extends JFrame {
 		}
 		tabTile[tile.getxOnBoard()][tile.getyOnBoard()].setIcon(
 				new ImageIcon(imgPanel.bufferedImage));
+	}
+
+
+	public JPanelMenu getMenuBarCarcassonne() {
+		return menuBar;
 	}
 
 }

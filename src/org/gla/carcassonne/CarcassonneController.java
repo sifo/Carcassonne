@@ -61,14 +61,21 @@ public class CarcassonneController {
 	}
 
 	public void notifyConfirmAction() {
-		Player player = carcassonneModel.getPlayerManager().getCurrentPlayer();
-		if(carcassonneModel.getPlayerManager().getCurrentPlayerhasPlacedPiece())
-			player.setPieceCount(player.getPieceCount() - 1);
-		if(carcassonneModel.getTileManager().getCurrentPlayerHasPlacedTile()) {
-			carcassonneModel.getPlayerManager().setNextPlayer();
-			carcassonneModel.getTileManager().resolveZoneClose();
-			carcassonneModel.getTileManager().getNextTile();
-			carcassonneModel.getPlayerManager().setCurrentPlayerhasPlacedPiece(false);
+		if(!carcassonneModel.getTileManager().isGameFinished()) {
+			Player player = carcassonneModel.getPlayerManager().getCurrentPlayer();
+			if(carcassonneModel.getPlayerManager().getCurrentPlayerhasPlacedPiece())
+				player.setPieceCount(player.getPieceCount() - 1);
+			if(carcassonneModel.getTileManager().getCurrentPlayerHasPlacedTile()) {
+				carcassonneModel.getPlayerManager().setNextPlayer();
+				carcassonneModel.getTileManager().resolveZoneClose();
+				carcassonneModel.getTileManager().getNextTile();
+				carcassonneModel.getPlayerManager().setCurrentPlayerhasPlacedPiece(false);
+			}
+		} else {
+			if(!carcassonneModel.isShowedResults()) {
+				carcassonneModel.setShowedResults(true);
+				carcassonneModel.getTileManager().resolveEndGamePoint();
+			}
 		}
 	}
 
@@ -93,5 +100,8 @@ public class CarcassonneController {
 		} catch (NumberFormatException e) {
 			lobby.setConsoleMessage("== ERREUR == Mauvais format de données adresse serveur/port");
 		}
+	}
+
+	public void notifyNewGame() {
 	}
 }
