@@ -5,7 +5,9 @@ projets :
 [X] Creation des dossiers pour les tests et les sources (dossier 'test' et 'src')
 [X] Ecriture du premier test pour tester tout le système.
 [ ] Améliorer le fichier build.xml en utilisant des propriétés et des références
-
+[ ] Après un resolveZone(), il est préférable de redessinner la tuile uniquement, 
+	plutôt que tout le plateau.
+	 
 - cachier des charges
 [X] faire diagramme de paquets
 [ ] faire diagramme de classes

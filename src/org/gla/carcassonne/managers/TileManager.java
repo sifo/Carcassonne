@@ -3,6 +3,7 @@ package org.gla.carcassonne.managers;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -31,23 +32,26 @@ public class TileManager {
 	private static final int MONK_POINT = 9;
 
 	private static final int[] tilesCount = new int[] {
-			// f, m, n o, q, s sont des tuiles d'extensions
-			// inutiles pour l'instant
 			2, // Tuile A
 			4, // Tuile B
 			1, // Tuile C
 			4, // Tuile D
 			5, // Tuile E
-			3, // Tuile G
+			2, // Tuile F
+			1, // Tuile G
 			3, // Tuile H
 			2, // Tuile I
 			3, // Tuile J
 			3, // Tuile K
 			3, // Tuile L
-			5, // Tuile N
-			5, // Tuile P
-			4, // Tuile R
-			3, // Tuile T
+			2, // Tuile M
+			3, // Tuile N
+			2, // Tuile O
+			3, // Tuile P
+			1, // Tuile Q
+			3, // Tuile R
+			2, // Tuile S
+			1, // Tuile T
 			8, // Tuile U
 			9, // Tuile V
 			4, // Tuile W
@@ -426,11 +430,9 @@ public class TileManager {
 			if(!findExit(xOnTile, yOnTile, boolMap, currentTile, x, y)){
 				System.out.println("ville fermée!");
 				if(tile.getSideValue(Tile.NORTH) == TileSideValue.CITY)
-					resolveCityPlayer();
+					resolveCityOrRoadPlayer(2, Status.KNIGHT);
 				else 
-					resolveRoadPlayer();
-			} else {
-				System.out.println("ville ouverte!");
+					resolveCityOrRoadPlayer(1, Status.THIEF);
 			}
 		}
 		boolMap = new boolean[board.getBoard().length][board.getBoard()[0].length][7][7];
@@ -443,11 +445,9 @@ public class TileManager {
 			if(!findExit(xOnTile, yOnTile, boolMap, currentTile, x, y)){
 				System.out.println("ville fermée!");
 				if(tile.getSideValue(Tile.EAST) == TileSideValue.CITY)
-					resolveCityPlayer();
+					resolveCityOrRoadPlayer(2, Status.KNIGHT);
 				else 
-					resolveRoadPlayer();
-			} else {
-				System.out.println("ville ouverte!");
+					resolveCityOrRoadPlayer(1, Status.THIEF);
 			}
 		}
 		boolMap = new boolean[board.getBoard().length][board.getBoard()[0].length][7][7];
@@ -460,12 +460,10 @@ public class TileManager {
 			if(!findExit(xOnTile, yOnTile, boolMap, currentTile, x, y)){
 				System.out.println("ville fermée!");
 				if(tile.getSideValue(Tile.SOUTH) == TileSideValue.CITY)
-					resolveCityPlayer();
+					resolveCityOrRoadPlayer(2, Status.KNIGHT);
 				else 
-					resolveRoadPlayer();
-			} else {
-				System.out.println("ville ouverte!");
-			}
+					resolveCityOrRoadPlayer(1, Status.THIEF);
+			} 
 		}
 		boolMap = new boolean[board.getBoard().length][board.getBoard()[0].length][7][7];
 		if(tile.getSideValue(Tile.WEST) == TileSideValue.CITY
@@ -477,34 +475,11 @@ public class TileManager {
 			if(!findExit(xOnTile, yOnTile, boolMap, currentTile, x, y)){
 				System.out.println("ville fermée!");
 				if(tile.getSideValue(Tile.WEST) == TileSideValue.CITY)
-					resolveCityPlayer();
+					resolveCityOrRoadPlayer(2, Status.KNIGHT);
 				else 
-					resolveRoadPlayer();
-			} else {
-				System.out.println("ville ouverte!");
+					resolveCityOrRoadPlayer(1, Status.THIEF);
 			}
 		}
-	}
-	
-	private void resolveRoadPlayer() {
-		int bonusForPiece = 0;
-		int bonusForTile = 1;
-		Set<Player> playersOnZone = new HashSet<Player>();
-		for(Tile t : tilesWherePieceFound){
-			playersOnZone.add(t.getPlayer());
-			t.getPlayer().setPieceCount(t.getPlayer().getPieceCount() + 1);
-			t.getPlayer().setPoints(t.getPlayer().getPoints() + bonusForPiece);
-			t.setxOnTile(-1);
-			t.setxOnClick(-1);
-			t.setyOnTile(-1);
-			t.setyOnClick(-1);
-			t.setStatus(null);
-			t.setPlayer(null);
-		}
-		for(Player player : playersOnZone)
-			player.setPoints(player.getPoints() + tilesTraversed.size() * bonusForTile);
-		model.firePlayers();
-		model.fireBoard();
 	}
 
 	public void resolveMonk(Tile tile) {
@@ -525,14 +500,19 @@ public class TileManager {
 		}
 	}
 	
-	public void resolveCityPlayer() {
-		int bonusForPiece = 2;
-		int bonusForTile = 2;
-		Set<Player> playersOnZone = new HashSet<Player>();
+	public void resolveCityOrRoadPlayer(int bonusForTile, Status status) {
+		int bonusPennant = 2;
+		int points = 0;
+		Map<Player, Integer> players = new HashMap<Player, Integer>();
+		int maxCount = 0;
 		for(Tile t : tilesWherePieceFound){
-			playersOnZone.add(t.getPlayer());
+			int count = players.containsKey(t.getPlayer()) ? players.get(t.getPlayer()) : 0;
+			players.put(t.getPlayer(), count + 1);
+			if(count + 1 > maxCount)
+				maxCount = count + 1;
+		}
+		for(Tile t : tilesWherePieceFound){
 			t.getPlayer().setPieceCount(t.getPlayer().getPieceCount() + 1);
-			t.getPlayer().setPoints(t.getPlayer().getPoints() + bonusForPiece);
 			t.setxOnTile(-1);
 			t.setxOnClick(-1);
 			t.setyOnTile(-1);
@@ -540,8 +520,15 @@ public class TileManager {
 			t.setStatus(null);
 			t.setPlayer(null);
 		}
-		for(Player player : playersOnZone)
-			player.setPoints(player.getPoints() + tilesTraversed.size() * bonusForTile);
+		for(Tile t : tilesTraversed) {
+			if(t.getType().hasPennant() && status == Status.KNIGHT)
+				points += bonusPennant;
+		}
+		points += tilesTraversed.size() * bonusForTile;
+		for(Player player : players.keySet()){
+			if(players.get(player) == maxCount)
+				player.setPoints(player.getPoints() + points);
+		}
 		model.firePlayers();
 		model.fireBoard();
 	}

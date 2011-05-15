@@ -91,8 +91,17 @@ public class Tile {
 					{Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER}
 			});
 			break;
-			/*case TILE_F:
-			 */
+			case TILE_F:	
+				setZones(new Status[][] {
+					{Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER},
+					{Status.KNIGHT,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.KNIGHT},
+					{Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT},
+					{Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT},
+					{Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT},
+					{Status.KNIGHT,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.KNIGHT},
+					{Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER}
+			});
+				break;
 		case TILE_G:
 			setZones(new Status[][] {
 					{Status.FARMER,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.FARMER},
@@ -159,9 +168,7 @@ public class Tile {
 					{Status.FARMER,Status.FARMER,Status.THIEF,Status.THIEF,Status.FARMER,Status.FARMER,Status.NONE}
 			});
 			break;
-			/*case TILE_M:
-
-			break;*/
+		case TILE_M:
 		case TILE_N:
 			setZones(new Status[][] {
 					{Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.NONE},
@@ -173,9 +180,7 @@ public class Tile {
 					{Status.NONE,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER}
 			});
 			break;
-			/*case TILE_O:
-
-			break;*/
+		case TILE_O:
 		case TILE_P:
 			setZones(new Status[][] {
 					{Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.NONE},
@@ -187,9 +192,7 @@ public class Tile {
 					{Status.NONE,Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.FARMER,Status.FARMER}
 			});
 			break;
-			/*case TILE_Q:
-
-			break;*/
+		case TILE_Q:
 		case TILE_R:
 			setZones(new Status[][] {
 					{Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT},
@@ -201,9 +204,7 @@ public class Tile {
 					{Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER}
 			});
 			break;
-			/*case TILE_S:
-
-			break;*/
+		case TILE_S:
 		case TILE_T:
 			setZones(new Status[][] {
 					{Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT},
@@ -299,13 +300,13 @@ public class Tile {
 					TileSideValue.GRASS,
 					TileSideValue.GRASS};
 			break;
-			/*case TILE_F:
-				sideValue = new TileSideValue[] {
+			case TILE_F:
+				sideValues = new TileSideValue[] {
 						TileSideValue.GRASS,
 						TileSideValue.CITY,
 						TileSideValue.GRASS,
 						TileSideValue.CITY};
-				break;*/
+				break;
 		case TILE_G:
 			sideValues = new TileSideValue[] {
 					TileSideValue.CITY,
@@ -348,13 +349,13 @@ public class Tile {
 					TileSideValue.ROAD,
 					TileSideValue.ROAD};
 			break;
-			/*case TILE_M:
-				sideValue = new TileSideValue[] {
+			case TILE_M:
+				sideValues = new TileSideValue[] {
 						TileSideValue.CITY,
 						TileSideValue.GRASS,
 						TileSideValue.GRASS,
 						TileSideValue.CITY};
-				break;*/
+				break;
 		case TILE_N:
 			sideValues = new TileSideValue[] {
 					TileSideValue.CITY,
@@ -362,13 +363,13 @@ public class Tile {
 					TileSideValue.GRASS,
 					TileSideValue.CITY};
 			break;
-			/*case TILE_O:
-				sideValue = new TileSideValue[] {
+			case TILE_O:
+				sideValues = new TileSideValue[] {
 						TileSideValue.CITY,
 						TileSideValue.ROAD,
 						TileSideValue.ROAD,
 						TileSideValue.CITY};
-				break;*/
+				break;
 		case TILE_P:
 			sideValues = new TileSideValue[] {
 					TileSideValue.CITY,
@@ -376,13 +377,13 @@ public class Tile {
 					TileSideValue.ROAD,
 					TileSideValue.CITY};
 			break;
-			/*case TILE_Q:
-				sideValue = new TileSideValue[] {
+			case TILE_Q:
+				sideValues = new TileSideValue[] {
 						TileSideValue.CITY,
 						TileSideValue.CITY,
 						TileSideValue.GRASS,
 						TileSideValue.CITY};
-				break;*/
+				break;
 		case TILE_R:
 			sideValues = new TileSideValue[] {
 					TileSideValue.CITY,
@@ -390,13 +391,13 @@ public class Tile {
 					TileSideValue.GRASS,
 					TileSideValue.CITY};
 			break;
-			/*case TILE_S:
-				sideValue = new TileSideValue[] {
+			case TILE_S:
+				sideValues = new TileSideValue[] {
 						TileSideValue.CITY,
 						TileSideValue.CITY,
 						TileSideValue.ROAD,
 						TileSideValue.CITY};
-				break;*/
+			break;
 		case TILE_T:
 			sideValues = new TileSideValue[] {
 					TileSideValue.CITY,
