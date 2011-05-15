@@ -3,14 +3,17 @@ package org.gla.carcassonne.managers;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.gla.carcassonne.CarcassonneModel;
 import org.gla.carcassonne.entities.Board;
 import org.gla.carcassonne.entities.Player;
 import org.gla.carcassonne.entities.Status;
 import org.gla.carcassonne.entities.Tile;
+import org.gla.carcassonne.entities.TileSideValue;
 import org.gla.carcassonne.entities.TileType;
 import org.gla.carcassonne.utils.RandomGenerator;
 
@@ -22,6 +25,8 @@ public class TileManager {
 	private Tile currentTile;
 	private CarcassonneModel model;
 	private boolean currentPlayerhasPlacedTile;
+	private Set<Tile> tilesWherePieceFound;
+	private Set<Tile> tilesTraversed;
 	public static final int BUTTON_WIDTH = 72;
 	private static final int MONK_POINT = 9;
 
@@ -55,6 +60,8 @@ public class TileManager {
 		numberOfTileRemaining = MAX_TILE_NUMBER;
 		currentTile = null;
 		board = new Board(model);
+		tilesWherePieceFound = new HashSet<Tile>();
+		tilesTraversed = new HashSet<Tile>();
 		this.model = model;
 		tiles = new EnumMap<TileType, Integer>(TileType.class);
 
@@ -151,10 +158,6 @@ public class TileManager {
 			currentTile.setStatus();
 			currentTile.setxOnClick(arg0.getX());
 			currentTile.setyOnClick(arg0.getY());
-//			System.out.println("on tile (" + currentTile.getxOnTile() + ", "
-//					+ currentTile.getyOnTile() + ")");
-//			System.out.println("zone("
-//					+ currentTile.getZones()[xOnTile][yOnTile] + ")");
 			if (!model.getPlayerManager().getCurrentPlayerhasPlacedPiece()) {
 				model.getPlayerManager().setCurrentPlayerhasPlacedPiece(true);
 			}
@@ -167,11 +170,11 @@ public class TileManager {
 			int xOnBoard, int yOnBoard) {
 		boolean[][][][] boolMap = new boolean[board.getBoard().length][board
 				.getBoard()[0].length][7][7];
-		return !findTile(xOnTile, yOnTile, boolMap, currentTile, xOnBoard,
+		return !findPiece(xOnTile, yOnTile, boolMap, currentTile, xOnBoard,
 				yOnBoard);
 	}
 
-	private boolean findTile(int xOnTile, int yOnTile, boolean[][][][] boolMap,
+	private boolean findPiece(int xOnTile, int yOnTile, boolean[][][][] boolMap,
 			Tile tile, int xOnBoard, int yOnBoard) {
 		boolean res = false;
 //		 System.out.println("lancerPropagationSurTuile(" + xOnTile + ", " +
@@ -189,7 +192,7 @@ public class TileManager {
 			&& (tile.getZoneValue(xOnTile, yOnTile) 
 				== tile.getZoneValue(xOnTile + 1, yOnTile))
 			&& (!boolMap[xOnBoard][yOnBoard][xOnTile + 1][yOnTile])) {
-			res = res || findTile(xOnTile + 1, yOnTile, boolMap, tile, xOnBoard,
+			res = res || findPiece(xOnTile + 1, yOnTile, boolMap, tile, xOnBoard,
 							yOnBoard);
 		} else if ((xOnTile + 1 == 7) 
 					&& (yOnBoard - 1) >= 0) {
@@ -200,7 +203,7 @@ public class TileManager {
 				&& tile.getZoneValue(xOnTile, yOnTile) 
 					== nextTile.getZoneValue(0, yOnTile)
 				&& !boolMap[xOnBoard][yOnBoard - 1][0][yOnTile]) {
-				res = res || findTile(0, yOnTile, boolMap, nextTile, xOnBoard,
+				res = res || findPiece(0, yOnTile, boolMap, nextTile, xOnBoard,
 								yOnBoard - 1);
 			}
 		}
@@ -209,7 +212,7 @@ public class TileManager {
 			&& tile.getZoneValue(xOnTile, yOnTile) 
 				== tile.getZoneValue(xOnTile - 1, yOnTile)
 			&& !boolMap[xOnBoard][yOnBoard][xOnTile - 1][yOnTile]) {
-			res = res || findTile(xOnTile - 1, yOnTile, boolMap, tile, xOnBoard,
+			res = res || findPiece(xOnTile - 1, yOnTile, boolMap, tile, xOnBoard,
 							yOnBoard);
 		} else if ((xOnTile - 1) < 0
 				&& (yOnBoard + 1) < board.getBoard()[0].length) {
@@ -220,7 +223,7 @@ public class TileManager {
 				&& tile.getZoneValue(xOnTile, yOnTile) 
 					== nextTile.getZoneValue(6, yOnTile)
 				&& !boolMap[xOnBoard][yOnBoard + 1][6][yOnTile]) {
-				res = res || findTile(6, yOnTile, boolMap, nextTile, xOnBoard,
+				res = res || findPiece(6, yOnTile, boolMap, nextTile, xOnBoard,
 								yOnBoard + 1);
 			}
 		}
@@ -229,7 +232,7 @@ public class TileManager {
 			&& tile.getZoneValue(xOnTile, yOnTile) 
 				== tile.getZoneValue(xOnTile, yOnTile + 1)
 			&& !boolMap[xOnBoard][yOnBoard][xOnTile][yOnTile + 1]) {
-			res = res || findTile(xOnTile, yOnTile + 1, boolMap, tile, xOnBoard,
+			res = res || findPiece(xOnTile, yOnTile + 1, boolMap, tile, xOnBoard,
 							yOnBoard);
 		} else if ((yOnTile + 1) == 7
 				&& (xOnBoard + 1) < board.getBoard().length) {
@@ -240,7 +243,7 @@ public class TileManager {
 				&& tile.getZoneValue(xOnTile, yOnTile) 
 					== nextTile.getZoneValue(xOnTile, 0)
 				&& !boolMap[xOnBoard + 1][yOnBoard][xOnTile][0]) {
-				res = res || findTile(xOnTile, 0, boolMap, nextTile,
+				res = res || findPiece(xOnTile, 0, boolMap, nextTile,
 								xOnBoard + 1, yOnBoard);
 			}
 		}
@@ -249,7 +252,7 @@ public class TileManager {
 			&& tile.getZoneValue(xOnTile, yOnTile) 
 				== tile.getZoneValue(xOnTile, yOnTile - 1)
 			&& !boolMap[xOnBoard][yOnBoard][xOnTile][yOnTile - 1]) {
-			res = res || findTile(xOnTile, yOnTile - 1, boolMap, tile, xOnBoard,
+			res = res || findPiece(xOnTile, yOnTile - 1, boolMap, tile, xOnBoard,
 							yOnBoard);
 		} else if ((yOnTile - 1) < 0 && (xOnBoard - 1) >= 0) {
 			Tile nextTile = getBoard().getBoard()[xOnBoard - 1][yOnBoard];
@@ -259,13 +262,120 @@ public class TileManager {
 				&& tile.getZoneValue(xOnTile, yOnTile) 
 					== nextTile.getZoneValue(xOnTile, 6)
 				&& !boolMap[xOnBoard - 1][yOnBoard][xOnTile][6]) {
-				res = res || findTile(xOnTile, 6, boolMap, nextTile,
+				res = res || findPiece(xOnTile, 6, boolMap, nextTile,
 								xOnBoard - 1, yOnBoard);
 			}
 		}
 		return res;
 	}
- 
+	
+	private boolean findExit(int xOnTile, int yOnTile, boolean[][][][] boolMap,
+			Tile tile, int xOnBoard, int yOnBoard) {
+		boolean res = false;
+//		 System.out.println("lancerPropagationSurTuile(" + xOnTile + ", " +
+//		 yOnTile + ", " + tile.getType().getPath() +")");
+		boolMap[xOnBoard][yOnBoard][xOnTile][yOnTile] = true;
+		tilesTraversed.add(board.getBoard()[xOnBoard][yOnBoard]);
+
+		if (tile.getxOnTile() == xOnTile
+			&& tile.getyOnTile() == yOnTile) {
+			 System.out.println("Pion Trouvé sur zone!");
+			 tilesWherePieceFound.add(board.getBoard()[xOnBoard][yOnBoard]);
+		}
+
+		if ((xOnTile + 1) < 7
+			&& (tile.getZoneValue(xOnTile, yOnTile) 
+				== tile.getZoneValue(xOnTile + 1, yOnTile))
+			&& (!boolMap[xOnBoard][yOnBoard][xOnTile + 1][yOnTile])) {
+			res = res || findExit(xOnTile + 1, yOnTile, boolMap, tile, xOnBoard,
+							yOnBoard);
+		} else if ((xOnTile + 1 == 7) 
+					&& (yOnBoard - 1) >= 0) {
+			Tile nextTile = getBoard().getBoard()[xOnBoard][yOnBoard - 1];
+			if(nextTile != null){
+				if (tile.getSideValue(Tile.SOUTH) 
+						== nextTile.getSideValue(Tile.NORTH)
+					&& tile.getZoneValue(xOnTile, yOnTile) 
+						== nextTile.getZoneValue(0, yOnTile)
+					&& !boolMap[xOnBoard][yOnBoard - 1][0][yOnTile]) {
+					res = res || findExit(0, yOnTile, boolMap, nextTile, xOnBoard,
+									yOnBoard - 1);
+				}
+			} else {
+				res = true;
+			}
+		}
+
+		if ((xOnTile - 1) >= 0
+			&& tile.getZoneValue(xOnTile, yOnTile) 
+				== tile.getZoneValue(xOnTile - 1, yOnTile)
+			&& !boolMap[xOnBoard][yOnBoard][xOnTile - 1][yOnTile]) {
+			res = res || findExit(xOnTile - 1, yOnTile, boolMap, tile, xOnBoard,
+							yOnBoard);
+		} else if ((xOnTile - 1) < 0
+				&& (yOnBoard + 1) < board.getBoard()[0].length) {
+			Tile nextTile = getBoard().getBoard()[xOnBoard][yOnBoard + 1];
+			if(nextTile != null){
+				if (tile.getSideValue(Tile.NORTH) 
+						== nextTile.getSideValue(Tile.SOUTH)
+					&& tile.getZoneValue(xOnTile, yOnTile) 
+						== nextTile.getZoneValue(6, yOnTile)
+					&& !boolMap[xOnBoard][yOnBoard + 1][6][yOnTile]) {
+					res = res || findExit(6, yOnTile, boolMap, nextTile, xOnBoard,
+									yOnBoard + 1);
+				}
+			} else {
+				res = true;
+			}
+		}
+
+		if ((yOnTile + 1) < 7
+			&& tile.getZoneValue(xOnTile, yOnTile) 
+				== tile.getZoneValue(xOnTile, yOnTile + 1)
+			&& !boolMap[xOnBoard][yOnBoard][xOnTile][yOnTile + 1]) {
+			res = res || findExit(xOnTile, yOnTile + 1, boolMap, tile, xOnBoard,
+							yOnBoard);
+		} else if ((yOnTile + 1) == 7
+				&& (xOnBoard + 1) < board.getBoard().length) {
+			Tile nextTile = getBoard().getBoard()[xOnBoard + 1][yOnBoard];
+			if(nextTile != null){
+				if (tile.getSideValue(Tile.EAST) 
+						== nextTile.getSideValue(Tile.WEST)
+					&& tile.getZoneValue(xOnTile, yOnTile) 
+						== nextTile.getZoneValue(xOnTile, 0)
+					&& !boolMap[xOnBoard + 1][yOnBoard][xOnTile][0]) {
+					res = res || findExit(xOnTile, 0, boolMap, nextTile,
+									xOnBoard + 1, yOnBoard);
+				}
+			} else {
+				res = true;
+			}
+		}
+
+		if ((yOnTile - 1) >= 0
+			&& tile.getZoneValue(xOnTile, yOnTile) 
+				== tile.getZoneValue(xOnTile, yOnTile - 1)
+			&& !boolMap[xOnBoard][yOnBoard][xOnTile][yOnTile - 1]) {
+			res = res || findExit(xOnTile, yOnTile - 1, boolMap, tile, xOnBoard,
+							yOnBoard);
+		} else if ((yOnTile - 1) < 0 && (xOnBoard - 1) >= 0) {
+			Tile nextTile = getBoard().getBoard()[xOnBoard - 1][yOnBoard];
+			if (nextTile != null) {
+					if(tile.getSideValue(Tile.WEST) 
+						== nextTile.getSideValue(Tile.EAST)
+					&& tile.getZoneValue(xOnTile, yOnTile) 
+						== nextTile.getZoneValue(xOnTile, 6)
+					&& !boolMap[xOnBoard - 1][yOnBoard][xOnTile][6]) {
+					res = res || findExit(xOnTile, 6, boolMap, nextTile,
+									xOnBoard - 1, yOnBoard);
+				}
+			} else {
+				res = true;
+			}
+		}
+		return res;
+	}
+	
 	public boolean getCurrentPlayerHasPlacedTile() {
 		return currentPlayerhasPlacedTile;
 	}
@@ -277,6 +387,12 @@ public class TileManager {
 	public void resolveZoneClose() {
 		List<Tile> nearTiles = new ArrayList<Tile>();
 		nearTiles.add(currentTile);
+		
+		for(Tile tile : nearTiles){
+			if(tile != null){
+				resolveCity(tile);
+			}
+		}
 		
 		nearTiles.add(board.getBoard()[currentTile.getxOnBoard()][currentTile.getyOnBoard() + 1]);
 		nearTiles.add(board.getBoard()[currentTile.getxOnBoard()][currentTile.getyOnBoard() - 1]);
@@ -295,20 +411,139 @@ public class TileManager {
 		}
 	}
 	
+	private void resolveCity(Tile tile) {
+		int x = tile.getxOnBoard();
+		int y = tile.getyOnBoard();
+		int xOnTile = -1;
+		int yOnTile = -1;
+		boolean[][][][] boolMap = new boolean[board.getBoard().length][board.getBoard()[0].length][7][7];
+		if(tile.getSideValue(Tile.NORTH) == TileSideValue.CITY
+			|| tile.getSideValue(Tile.NORTH) == TileSideValue.ROAD){
+			xOnTile = 0;
+			yOnTile = 3;
+				tilesWherePieceFound.clear();
+				tilesTraversed.clear();
+			if(!findExit(xOnTile, yOnTile, boolMap, currentTile, x, y)){
+				System.out.println("ville fermée!");
+				if(tile.getSideValue(Tile.NORTH) == TileSideValue.CITY)
+					resolveCityPlayer();
+				else 
+					resolveRoadPlayer();
+			} else {
+				System.out.println("ville ouverte!");
+			}
+		}
+		boolMap = new boolean[board.getBoard().length][board.getBoard()[0].length][7][7];
+		if(tile.getSideValue(Tile.EAST) == TileSideValue.CITY
+			|| tile.getSideValue(Tile.EAST) == TileSideValue.ROAD){
+			xOnTile = 3;
+			yOnTile = 6;
+				tilesWherePieceFound.clear();
+				tilesTraversed.clear();
+			if(!findExit(xOnTile, yOnTile, boolMap, currentTile, x, y)){
+				System.out.println("ville fermée!");
+				if(tile.getSideValue(Tile.EAST) == TileSideValue.CITY)
+					resolveCityPlayer();
+				else 
+					resolveRoadPlayer();
+			} else {
+				System.out.println("ville ouverte!");
+			}
+		}
+		boolMap = new boolean[board.getBoard().length][board.getBoard()[0].length][7][7];
+		if(tile.getSideValue(Tile.SOUTH) == TileSideValue.CITY
+			|| tile.getSideValue(Tile.SOUTH) == TileSideValue.ROAD){
+			xOnTile = 6;
+			yOnTile = 3;
+				tilesWherePieceFound.clear();
+				tilesTraversed.clear();
+			if(!findExit(xOnTile, yOnTile, boolMap, currentTile, x, y)){
+				System.out.println("ville fermée!");
+				if(tile.getSideValue(Tile.SOUTH) == TileSideValue.CITY)
+					resolveCityPlayer();
+				else 
+					resolveRoadPlayer();
+			} else {
+				System.out.println("ville ouverte!");
+			}
+		}
+		boolMap = new boolean[board.getBoard().length][board.getBoard()[0].length][7][7];
+		if(tile.getSideValue(Tile.WEST) == TileSideValue.CITY
+			|| tile.getSideValue(Tile.WEST) == TileSideValue.ROAD) {
+			xOnTile = 3;
+			yOnTile = 0;
+				tilesWherePieceFound.clear();
+				tilesTraversed.clear();
+			if(!findExit(xOnTile, yOnTile, boolMap, currentTile, x, y)){
+				System.out.println("ville fermée!");
+				if(tile.getSideValue(Tile.WEST) == TileSideValue.CITY)
+					resolveCityPlayer();
+				else 
+					resolveRoadPlayer();
+			} else {
+				System.out.println("ville ouverte!");
+			}
+		}
+	}
+	
+	private void resolveRoadPlayer() {
+		int bonusForPiece = 0;
+		int bonusForTile = 1;
+		Set<Player> playersOnZone = new HashSet<Player>();
+		for(Tile t : tilesWherePieceFound){
+			playersOnZone.add(t.getPlayer());
+			t.getPlayer().setPieceCount(t.getPlayer().getPieceCount() + 1);
+			t.getPlayer().setPoints(t.getPlayer().getPoints() + bonusForPiece);
+			t.setxOnTile(-1);
+			t.setxOnClick(-1);
+			t.setyOnTile(-1);
+			t.setyOnClick(-1);
+			t.setStatus(null);
+			t.setPlayer(null);
+		}
+		for(Player player : playersOnZone)
+			player.setPoints(player.getPoints() + tilesTraversed.size() * bonusForTile);
+		model.firePlayers();
+		model.fireBoard();
+	}
+
 	public void resolveMonk(Tile tile) {
+		int point = 0;
 		if(tile.getStatus() == Status.MONK && surroundedByTiles(tile)){
+			point = MONK_POINT;
 			tile.setxOnTile(-1);
 			tile.setxOnClick(-1);
 			tile.setyOnTile(-1);
 			tile.setyOnClick(-1);
 			tile.setStatus(null);		
 			Player player = tile.getPlayer();
-			player.setPoints(player.getPoints() + MONK_POINT);
+			player.setPoints(player.getPoints() + point);
 			player.setPieceCount(player.getPieceCount() + 1);
 			tile.setPlayer(null);
 			model.firePlayers();
 			model.fireBoard();
 		}
+	}
+	
+	public void resolveCityPlayer() {
+		int bonusForPiece = 2;
+		int bonusForTile = 2;
+		Set<Player> playersOnZone = new HashSet<Player>();
+		for(Tile t : tilesWherePieceFound){
+			playersOnZone.add(t.getPlayer());
+			t.getPlayer().setPieceCount(t.getPlayer().getPieceCount() + 1);
+			t.getPlayer().setPoints(t.getPlayer().getPoints() + bonusForPiece);
+			t.setxOnTile(-1);
+			t.setxOnClick(-1);
+			t.setyOnTile(-1);
+			t.setyOnClick(-1);
+			t.setStatus(null);
+			t.setPlayer(null);
+		}
+		for(Player player : playersOnZone)
+			player.setPoints(player.getPoints() + tilesTraversed.size() * bonusForTile);
+		model.firePlayers();
+		model.fireBoard();
 	}
 	
 	public boolean surroundedByTiles(Tile tile) {

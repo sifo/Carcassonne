@@ -1,11 +1,5 @@
 package org.gla.carcassonne.entities;
 
-enum TileSideValue {
-	ROAD,
-	GRASS,
-	CITY
-}
-
 public class Tile {
 	private int xOnTile;
 	private int yOnTile;
@@ -137,8 +131,8 @@ public class Tile {
 					{Status.NONE,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.NONE},
 					{Status.FARMER,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.FARMER},
 					{Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER},
-					{Status.FARMER,Status.FARMER,Status.FARMER,Status.THIEF,Status.THIEF,Status.THIEF,Status.THIEF},
-					{Status.FARMER,Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.FARMER,Status.FARMER},
+					{Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.THIEF,Status.THIEF,Status.THIEF},
+					{Status.FARMER,Status.FARMER,Status.FARMER,Status.THIEF,Status.THIEF,Status.FARMER,Status.FARMER},
 					{Status.FARMER,Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.FARMER,Status.FARMER},
 					{Status.FARMER,Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.FARMER,Status.FARMER}
 			});
