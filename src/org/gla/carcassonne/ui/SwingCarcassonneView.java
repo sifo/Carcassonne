@@ -6,20 +6,7 @@ import javax.swing.JFrame;
 
 import org.gla.carcassonne.CarcassonneController;
 import org.gla.carcassonne.CarcassonneView;
-import org.gla.carcassonne.events.AddTileEvent;
-import org.gla.carcassonne.events.BoardEvent;
-import org.gla.carcassonne.events.CantAddTileEvent;
-import org.gla.carcassonne.events.CardBackEvent;
-import org.gla.carcassonne.events.ConfigDialogEvent;
-import org.gla.carcassonne.events.ListenerOnCurrentTileEvent;
-import org.gla.carcassonne.events.LockConfirmButtonEvent;
-import org.gla.carcassonne.events.NextTileEvent;
-import org.gla.carcassonne.events.PlacePieceOnTileEvent;
-import org.gla.carcassonne.events.PlayersEvent;
-import org.gla.carcassonne.events.RemainingTileEvent;
-import org.gla.carcassonne.events.RotateLeftEvent;
-import org.gla.carcassonne.events.RotateRightEvent;
-import org.gla.carcassonne.events.UnlockConfirmButtonEvent;
+import org.gla.carcassonne.events.*;
 
 public class SwingCarcassonneView extends CarcassonneView {
 
@@ -60,6 +47,10 @@ public class SwingCarcassonneView extends CarcassonneView {
 	public void configDialog(ConfigDialogEvent event) {
 		jframe.showNbPlayer();
 	}
+	
+	public void lobbyDialog(LobbyDialogEvent event) {
+		jframe.startMultiplayer();
+	}
 
 	public void addTile(AddTileEvent event) {
 		jframe.addTile(event);
@@ -89,7 +80,6 @@ public class SwingCarcassonneView extends CarcassonneView {
 		jframe.rotateRight(event);
 	}
 	
-
 	public void players(PlayersEvent event){
 		jframe.players(event);
 	}

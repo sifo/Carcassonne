@@ -5,21 +5,18 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Set;
 
+import org.gla.carcassonne.CarcassonneModel;
 import org.gla.carcassonne.entities.Tile;
 
 public class CarcassonneClient extends Socket implements ClientFactory {
 	
-	public Client client;
+	private Client client;
+	private CarcassonneModel model;
 	
-	public CarcassonneClient(String host, int port) {
-		try {
-			client = new Client(host, port, this);
-			client.start();
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public CarcassonneClient(String host, int port, CarcassonneModel model) throws UnknownHostException, IOException {
+		this.model = model;
+		client = new Client(host, port, this);
+		client.start();
 	}
 
 	public Object getPlayers(Set<Integer> p) {

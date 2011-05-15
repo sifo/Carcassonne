@@ -155,10 +155,10 @@ public class NumberPlayerDialog extends JDialog implements ActionListener {
 			this.setContentPane(buildComponent());
 			this.pack();
 			return;
-			}
-			if (e.getActionCommand().equals("ok")) {
+		}
+		if (e.getActionCommand().equals("ok")) {
 			clickedOnOk = true;
-			}
-			this.dispose();
-			}
+		}
+		this.dispose();
+	}
 }
