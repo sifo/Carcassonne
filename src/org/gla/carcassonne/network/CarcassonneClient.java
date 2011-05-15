@@ -11,7 +11,7 @@ public class CarcassonneClient extends Socket implements ClientFactory {
 	}
 
 	public Object getPlayers(Set<Integer> p) {
-		return null;
+		return (Set<Integer>)p;
 	}
 
 	public int setX(Object o) {

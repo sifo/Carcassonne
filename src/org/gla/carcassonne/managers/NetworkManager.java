@@ -1,9 +1,12 @@
 package org.gla.carcassonne.managers;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.Set;
 
 import org.gla.carcassonne.CarcassonneModel;
+import org.gla.carcassonne.entities.Player;
 import org.gla.carcassonne.network.CarcassonneClient;
 import org.gla.carcassonne.network.CarcassonneServer;
 import org.gla.carcassonne.network.Client;
@@ -41,8 +44,18 @@ public class NetworkManager extends Thread {
 	}
 	
 	public void run() {
+		int clientCounter = 0;
+		
 		while(!client.hasStarted()) {
-			System.out.println("test");
+			Set<Integer> set = (Set<Integer>) client.getPlayers();
+
+			if (set.size() > clientCounter) {
+				clientCounter++;
+				lobby.getPlayersList()[clientCounter-1].setText("Joueur "+clientCounter);
+				
+				Player p = new Player("Joueur"+clientCounter, "blue", Color.blue);
+				model.getPlayerManager().getPlayers().add(p);
+			}
 		}
 		
 		lobby.dispose();

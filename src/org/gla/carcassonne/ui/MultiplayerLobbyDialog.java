@@ -166,4 +166,8 @@ public class MultiplayerLobbyDialog extends JDialog implements ActionListener {
 	public void setConsoleMessage(String message) {
 		console.setText(message);
 	}
+	
+	public JLabel[] getPlayersList() {
+		return playersList;
+	}
 }
