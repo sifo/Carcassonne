@@ -84,12 +84,12 @@ public class SwingCarcassonneView extends CarcassonneView {
 		jframe.players(event);
 	}
 
-	public void unlockConfirmButton(UnlockConfirmButtonEvent event) {
-		jframe.unlockConfirmButton();
+	public void unlockConfirmLockRotate(UnlockConfirmLockRotateEvent event) {
+		jframe.unlockConfirmLockRotate();
 	}
 	
-	public void lockConfirmButton(LockConfirmButtonEvent event) {
-		jframe.lockConfirmButton();
+	public void lockConfirmUnlockRotate(LockConfirmUnlockRotateEvent event) {
+		jframe.lockConfirmUnlockRotate();
 	}
 	
 	public void cardBack(CardBackEvent event){

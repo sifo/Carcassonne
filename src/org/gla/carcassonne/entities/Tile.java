@@ -44,8 +44,8 @@ public class Tile {
 					{Status.FARMER,Status.FARMER,Status.MONK,Status.MONK,Status.MONK,Status.FARMER,Status.FARMER},
 					{Status.FARMER,Status.FARMER,Status.MONK,Status.MONK,Status.MONK,Status.FARMER,Status.FARMER},
 					{Status.FARMER,Status.FARMER,Status.MONK,Status.MONK,Status.MONK,Status.FARMER,Status.FARMER},
-					{Status.FARMER,Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.FARMER,Status.FARMER},
-					{Status.FARMER,Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.FARMER,Status.FARMER}});
+					{Status.FARMER,Status.FARMER,Status.THIEF,Status.THIEF,Status.FARMER,Status.FARMER,Status.FARMER},
+					{Status.FARMER,Status.FARMER,Status.THIEF,Status.THIEF,Status.FARMER,Status.FARMER,Status.FARMER}});
 			break;
 		case TILE_B:
 			setZones(new Status[][] {
@@ -185,8 +185,8 @@ public class Tile {
 			setZones(new Status[][] {
 					{Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.NONE},
 					{Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.FARMER},
-					{Status.KNIGHT,Status.KNIGHT,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER},
-					{Status.KNIGHT,Status.KNIGHT,Status.FARMER,Status.FARMER,Status.FARMER,Status.THIEF,Status.THIEF},
+					{Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER},
+					{Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.FARMER,Status.FARMER,Status.THIEF,Status.THIEF},
 					{Status.KNIGHT,Status.KNIGHT,Status.FARMER,Status.FARMER,Status.THIEF,Status.THIEF,Status.FARMER},
 					{Status.KNIGHT,Status.KNIGHT,Status.FARMER,Status.THIEF,Status.THIEF,Status.FARMER,Status.FARMER},
 					{Status.NONE,Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.FARMER,Status.FARMER}
@@ -616,5 +616,9 @@ public class Tile {
 
 	public Status getStatus() {
 		return status;
+	}
+
+	public Status getStatus(int x, int y) {
+		return zones[x][y];
 	}
 }
