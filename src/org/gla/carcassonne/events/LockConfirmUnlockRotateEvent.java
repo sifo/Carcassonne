@@ -2,11 +2,11 @@ package org.gla.carcassonne.events;
 
 import java.util.EventObject;
 
-public class LockConfirmButtonEvent extends EventObject {
+public class LockConfirmUnlockRotateEvent extends EventObject {
 
 	private static final long serialVersionUID = 8131692057726361919L;
 
-	public LockConfirmButtonEvent(Object source) {
+	public LockConfirmUnlockRotateEvent(Object source) {
 		super(source);
 	}
 }

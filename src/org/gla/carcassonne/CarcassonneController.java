@@ -74,7 +74,9 @@ public class CarcassonneController {
 		} else {
 			if(!carcassonneModel.isShowedResults()) {
 				carcassonneModel.setShowedResults(true);
+				carcassonneModel.getTileManager().resolveZoneClose();
 				carcassonneModel.getTileManager().resolveEndGamePoint();
+				carcassonneModel.fireLockConfirmButton();
 			}
 		}
 	}

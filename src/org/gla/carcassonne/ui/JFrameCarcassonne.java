@@ -58,6 +58,8 @@ public class JFrameCarcassonne extends JFrame {
 	private SwingCarcassonneView view;
 	private JLabel remainingTileNumber;
 	private JButton confirmButton;
+	private JButton turnLeftButton;
+	private JButton turnRightButton;
 	private static final int HEIGHT_MIN = 600;
 	private static final int WIDTH_MIN = 485;
 
@@ -65,16 +67,27 @@ public class JFrameCarcassonne extends JFrame {
 		super(title);
 		this.view = view;
 		confirmButton = new JButton();
-		confirmButton.setEnabled(false);
-		getContentPane().setLayout(new GridBagLayout());
+		turnLeftButton = new JButton();
+		turnRightButton = new JButton();
 		menuBar = new JPanelMenu(view);
 		remainingTileNumber = new JLabel("");
 		imagePanel = new JPanelImage();
 		jlabelPlayers = new ArrayList<JLabel>();
-		setJMenuBar(menuBar);
-		setPreferredSize(new Dimension(1000, 750));
-		setMinimumSize(new Dimension(HEIGHT_MIN, WIDTH_MIN));
-		pack();
+		confirmButton.setEnabled(false);
+		turnLeftButton.addActionListener(new RotateLeft(view));
+		turnRightButton.addActionListener(new RotateRight(view));
+		confirmButton.addActionListener(new ConfirmAction(view));
+		confirmButton.setIcon(new ImageIcon(
+		"res/drawable/accept.png"));
+		turnLeftButton.setIcon(new ImageIcon(
+				"res/drawable/rotate_anticlockwise.png"));
+		turnRightButton.setIcon(new ImageIcon(
+				"res/drawable/rotate_clockwise.png"));
+		this.getContentPane().setLayout(new GridBagLayout());
+		this.setJMenuBar(menuBar);
+		this.setPreferredSize(new Dimension(1000, 750));
+		this.setMinimumSize(new Dimension(HEIGHT_MIN, WIDTH_MIN));
+		this.pack();
 	}
 	
 
@@ -136,30 +149,11 @@ public class JFrameCarcassonne extends JFrame {
 		boxImagePanel.add(Box.createHorizontalStrut(30));
 		boxImagePanel.add(imagePanel);
 
-		Box peonBox = Box.createHorizontalBox();
-		JButton peonButton = new JButton();
-		peonButton.setText("Deposer un Pion");
-		peonButton.setActionCommand("deposite a peon");
-		// peonButton.addActionListener(new MyListener());
-		peonBox.add(peonButton, Box.CENTER_ALIGNMENT);
-
 		Box rotateButton = Box.createHorizontalBox();
-
-		JButton turnLeftButton = new JButton();
-		turnLeftButton.setIcon(new ImageIcon(
-				"res/drawable/rotate_anticlockwise.png"));
-		turnLeftButton.addActionListener(new RotateLeft(view));
 		rotateButton.add(turnLeftButton);
-
-		JButton turnRightButton = new JButton();
-		turnRightButton.setIcon(new ImageIcon(
-				"res/drawable/rotate_clockwise.png"));
-		turnRightButton.addActionListener(new RotateRight(view));
 		rotateButton.add(turnRightButton);
 		
-		confirmButton.setIcon(new ImageIcon(
-				"res/drawable/accept.png"));
-		confirmButton.addActionListener(new ConfirmAction(view));
+
 		Box confirmBox = Box.createHorizontalBox();
 		confirmBox.add(confirmButton);
 
@@ -261,11 +255,15 @@ public class JFrameCarcassonne extends JFrame {
 		}
 	}
 
-	public void unlockConfirmButton() {
+	public void unlockConfirmLockRotate() {
+		turnLeftButton.setEnabled(false);
+		turnRightButton.setEnabled(false);
 		confirmButton.setEnabled(true);
 	}
 
-	public void lockConfirmButton() {
+	public void lockConfirmUnlockRotate() {		
+		turnLeftButton.setEnabled(true);
+		turnRightButton.setEnabled(true);
 		confirmButton.setEnabled(false);
 	}
 

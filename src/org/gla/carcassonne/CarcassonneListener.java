@@ -15,8 +15,8 @@ public interface CarcassonneListener extends EventListener {
 	public void rotateLeft(RotateLeftEvent event);
 	public void rotateRight(RotateRightEvent event);
 	public void players(PlayersEvent event);
-	public void unlockConfirmButton(UnlockConfirmButtonEvent event);
-	public void lockConfirmButton(LockConfirmButtonEvent lockConfirmButtonEvent);
+	public void unlockConfirmLockRotate(UnlockConfirmLockRotateEvent event);
+	public void lockConfirmUnlockRotate(LockConfirmUnlockRotateEvent lockConfirmButtonEvent);
 	public void cardBack(CardBackEvent cardBackEvent);
 	public void listenerOnCurrentTile(
 			ListenerOnCurrentTileEvent listenerOnCurrentTileEvent);
