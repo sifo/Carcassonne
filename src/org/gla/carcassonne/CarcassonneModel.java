@@ -5,7 +5,21 @@ import java.io.IOException;
 import javax.swing.event.EventListenerList;
 
 import org.gla.carcassonne.entities.Game;
-import org.gla.carcassonne.events.*;
+import org.gla.carcassonne.events.AddTileEvent;
+import org.gla.carcassonne.events.BoardEvent;
+import org.gla.carcassonne.events.CantAddTileEvent;
+import org.gla.carcassonne.events.CardBackEvent;
+import org.gla.carcassonne.events.ConfigDialogEvent;
+import org.gla.carcassonne.events.ListenerOnCurrentTileEvent;
+import org.gla.carcassonne.events.LobbyDialogEvent;
+import org.gla.carcassonne.events.LockConfirmUnlockRotateEvent;
+import org.gla.carcassonne.events.NextTileEvent;
+import org.gla.carcassonne.events.PlacePieceOnTileEvent;
+import org.gla.carcassonne.events.PlayersEvent;
+import org.gla.carcassonne.events.RemainingTileEvent;
+import org.gla.carcassonne.events.RotateLeftEvent;
+import org.gla.carcassonne.events.RotateRightEvent;
+import org.gla.carcassonne.events.UnlockConfirmLockRotateEvent;
 import org.gla.carcassonne.managers.NetworkManager;
 import org.gla.carcassonne.managers.PlayerManager;
 import org.gla.carcassonne.managers.TileManager;
@@ -219,7 +233,7 @@ public class CarcassonneModel implements Game {
 		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
 				.getListeners(CarcassonneListener.class);
 		for (CarcassonneListener listener : listenerList) {
-			listener.unlockConfirmButton(new UnlockConfirmButtonEvent(this));
+			listener.unlockConfirmLockRotate(new UnlockConfirmLockRotateEvent(this));
 		}
 	}
 
@@ -227,7 +241,7 @@ public class CarcassonneModel implements Game {
 		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
 				.getListeners(CarcassonneListener.class);
 		for (CarcassonneListener listener : listenerList) {
-			listener.lockConfirmButton(new LockConfirmButtonEvent(this));
+			listener.lockConfirmUnlockRotate(new LockConfirmUnlockRotateEvent(this));
 		}
 	}
 
