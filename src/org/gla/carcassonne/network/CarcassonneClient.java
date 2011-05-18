@@ -20,13 +20,17 @@ public class CarcassonneClient extends Socket implements ClientFactory {
 	}
 
 	public int setX(Object o) {
-		Tile t = (Tile) o;
-		return t.getxOnBoard();
+		/*Tile t = (Tile) o;
+		return t.getxOnBoard();*/
+		int x = (Integer) o;
+		return x;
 	}
 
 	public int setY(Object o) {
-		Tile t = (Tile) o;
-		return t.getyOnBoard();
+		/*Tile t = (Tile) o;
+		return t.getyOnBoard();*/
+		int y = (Integer) o;
+		return y;
 	}
 
 	public String setOrientation(Object o) {

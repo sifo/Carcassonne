@@ -53,7 +53,9 @@ public class CarcassonneServer extends Thread {
 		hasStarted = false;
 		isFinished = false;
 		
-		System.out.println("DEMARRAGE SERVEUR : BIENVENUE");
+		System.out.println("=========================================");
+		System.out.println("===   DEMARRAGE SERVEUR : BIENVENUE   ===");
+		System.out.println("=========================================\n");
 		
 		// En attente de connexions : la partie n'a pas encore démarrée
 		while (!hasStarted) {
@@ -172,7 +174,8 @@ public class CarcassonneServer extends Thread {
 	 */
 	protected void sendMessageFromClient(Message m, CarcassonneThreadServer from) {
 		try {
-			System.out.println("Receive : "+m.toString());
+			System.out.println("Received from : "+from.getSocket().getInetAddress()+":"+from.getSocket().getPort());
+			System.out.println("Message : "+m.toString());
 			String type = m.getNthValue(0).toString();
 			
 			if (type.equals("READY")) {
@@ -211,12 +214,13 @@ public class CarcassonneServer extends Thread {
 					type.equals("CLOSE") || type.equals("FINISH") || type.equals("READY"))
 				m.getNthValue(1).setIntValue(clients.indexOf(from));
 			
-			System.out.println("Send : "+m.toString());
 
 			for(CarcassonneThreadServer client : clients) {
-				if (client.equals(from))	// On exclu l'émetteur de la liste
+				if (client.equals(from) && !type.equals("MOVE"))	// On exclu l'émetteur de la liste
 					continue;
 				
+				System.out.println("Send to : "+client.getSocket().getInetAddress()+":"+client.getSocket().getPort());
+				System.out.println("Message : "+m.toString());
 				client.sendMessageFromServer(m);
 			}
 		} catch (ProtocolError e) {
