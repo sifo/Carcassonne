@@ -61,22 +61,23 @@ public class CarcassonneController {
 	}
 
 	public void notifyConfirmAction() {
-		if(!carcassonneModel.getTileManager().isGameFinished()) {
-			Player player = carcassonneModel.getPlayerManager().getCurrentPlayer();
-			if(carcassonneModel.getPlayerManager().getCurrentPlayerhasPlacedPiece())
-				player.setPieceCount(player.getPieceCount() - 1);
-			if(carcassonneModel.getTileManager().getCurrentPlayerHasPlacedTile()) {
+		Player player = carcassonneModel.getPlayerManager().getCurrentPlayer();
+		if(carcassonneModel.getPlayerManager().getCurrentPlayerhasPlacedPiece())
+			player.setPieceCount(player.getPieceCount() - 1);
+		if(carcassonneModel.getTileManager().getCurrentPlayerHasPlacedTile()) {
+			carcassonneModel.getTileManager().resolveZoneClose();
+			if(carcassonneModel.getTileManager().getNumberOfTileRemaining() == 0)
+				carcassonneModel.getTileManager().setGameFinished(true);
+			if(!carcassonneModel.getTileManager().isGameFinished()) {
 				carcassonneModel.getPlayerManager().setNextPlayer();
-				carcassonneModel.getTileManager().resolveZoneClose();
 				carcassonneModel.getTileManager().getNextTile();
 				carcassonneModel.getPlayerManager().setCurrentPlayerhasPlacedPiece(false);
-			}
-		} else {
-			if(!carcassonneModel.isShowedResults()) {
-				carcassonneModel.setShowedResults(true);
-				carcassonneModel.getTileManager().resolveZoneClose();
-				carcassonneModel.getTileManager().resolveEndGamePoint();
-				carcassonneModel.fireLockConfirmButton();
+			} else {
+				if(!carcassonneModel.isShowedResults()) {
+					carcassonneModel.setShowedResults(true);
+					carcassonneModel.getTileManager().resolveEndGamePoint();
+					carcassonneModel.fireLockConfirmButton();
+				}
 			}
 		}
 	}
@@ -105,10 +106,14 @@ public class CarcassonneController {
 	}
 
 	public void notifyNewGame() {
-		
+		carcassonneModel.start();
 	}
 	
 	public void notifyReady() {
 		carcassonneModel.getNetworkManager().getClient().ready();
+	}
+
+	public void notifyPlay() {
+		carcassonneModel.play();
 	}
 }

@@ -180,8 +180,6 @@ public class CarcassonneModel implements Game {
 
 	public void start() {
 		fireConfigDialog();
-		fireBoard();
-		getTileManager().putFirstTileOnBoard();
 	}
 	
 	public void startMultiplayer() {
@@ -197,7 +195,8 @@ public class CarcassonneModel implements Game {
 	}
 
 	public void play() {
-
+		fireBoard();
+		getTileManager().putFirstTileOnBoard();
 	}
 	
 	public NetworkManager getNetworkManager() {

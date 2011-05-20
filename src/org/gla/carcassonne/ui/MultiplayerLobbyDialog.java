@@ -9,11 +9,11 @@ import java.awt.event.ActionListener;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.gla.carcassonne.ui.events.CloseWindow;
 import org.gla.carcassonne.ui.events.ReadyListener;
 import org.gla.carcassonne.ui.events.SendConnexion;
 
@@ -38,7 +38,7 @@ public class MultiplayerLobbyDialog extends JDialog implements ActionListener {
 
 	public MultiplayerLobbyDialog(SwingCarcassonneView view) {
 		this.view = view;
-		addWindowListener(new CloseWindow(view));
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setResizable(false);
 		this.setTitle("Lobby multijoueur");
 		this.setModal(true);

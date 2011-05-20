@@ -22,7 +22,11 @@
 	</target>
 
 	<target name="archive" depends="compile">
-		<jar basedir="build/classes" destfile="dist/carcassonne_project.jar"/>
+		<jar basedir="build/classes" destfile="dist/carcassonne_project.jar">
+			<fileset dir=".">
+			  <filename name="res/**/*"/>
+			</fileset>
+		</jar>
 		<jar destfile="dist/multiplayer.jar">
 			<fileset dir="build/classes">
 					<include name="**/network/*"/>

@@ -93,24 +93,24 @@ public class Tile {
 			break;
 			case TILE_F:	
 				setZones(new Status[][] {
-					{Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER},
+					{Status.NONE,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.NONE},
 					{Status.KNIGHT,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.KNIGHT},
 					{Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT},
 					{Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT},
 					{Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT},
 					{Status.KNIGHT,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.KNIGHT},
-					{Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER}
+					{Status.NONE,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.NONE}
 			});
 				break;
 		case TILE_G:
 			setZones(new Status[][] {
-					{Status.FARMER,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.FARMER},
+					{Status.NONE,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.NONE},
 					{Status.FARMER,Status.FARMER,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.FARMER,Status.FARMER},
 					{Status.FARMER,Status.FARMER,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.FARMER,Status.FARMER},
 					{Status.FARMER,Status.FARMER,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.FARMER,Status.FARMER},
 					{Status.FARMER,Status.FARMER,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.FARMER,Status.FARMER},
 					{Status.FARMER,Status.FARMER,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.FARMER,Status.FARMER},
-					{Status.FARMER,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.FARMER}
+					{Status.NONE,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.NONE}
 			});
 			break;
 		case TILE_H:
@@ -201,7 +201,7 @@ public class Tile {
 					{Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT},
 					{Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT},
 					{Status.KNIGHT,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.KNIGHT},
-					{Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER}
+					{Status.NONE,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.FARMER,Status.NONE}
 			});
 			break;
 		case TILE_S:
@@ -213,7 +213,7 @@ public class Tile {
 					{Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT},
 					{Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT,Status.KNIGHT},
 					{Status.KNIGHT,Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.FARMER,Status.KNIGHT},
-					{Status.FARMER,Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.FARMER,Status.FARMER}
+					{Status.NONE,Status.FARMER,Status.FARMER,Status.THIEF,Status.FARMER,Status.FARMER,Status.NONE}
 			});
 			break;
 		case TILE_U:

@@ -17,7 +17,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.gla.carcassonne.ui.events.CloseWindow;
-import org.gla.carcassonne.ui.events.QuitGame;
 import org.gla.carcassonne.ui.events.SendPlayerListListener;
 
 public class NumberPlayerDialog extends JDialog implements ActionListener {
@@ -39,7 +38,7 @@ public class NumberPlayerDialog extends JDialog implements ActionListener {
 		numberPlayer.setSelectedIndex(1);
 		this.view = view;
 		numberPlayer.addActionListener(this);
-		addWindowListener(new CloseWindow(view));
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setResizable(false);
 		this.setTitle("Nombre de joueur");
 		this.setModal(true);
@@ -100,8 +99,8 @@ public class NumberPlayerDialog extends JDialog implements ActionListener {
 		JButton okButton = new JButton("Jouer");
 		okButton.addActionListener(new SendPlayerListListener(view, this));
 
-		JButton cancelButton = new JButton("Quitter");
-		cancelButton.addActionListener(new QuitGame(view));
+		JButton cancelButton = new JButton("Annuler");
+		cancelButton.addActionListener(new CloseWindow(this));
 
 		hbox = Box.createHorizontalBox();
 		hbox.add(okButton);

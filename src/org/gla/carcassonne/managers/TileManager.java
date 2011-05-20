@@ -33,31 +33,58 @@ public class TileManager {
 	private boolean gameFinished;
 	public static final int BUTTON_WIDTH = 72;
 
+//	private static final int[] tilesCount = new int[] {
+//			2, // Tuile A
+//			4, // Tuile B
+//			1, // Tuile C
+//			4, // Tuile D
+//			5, // Tuile E
+//			2, // Tuile F
+//			1, // Tuile G
+//			3, // Tuile H
+//			2, // Tuile I
+//			3, // Tuile J
+//			3, // Tuile K
+//			3, // Tuile L
+//			2, // Tuile M
+//			3, // Tuile N
+//			2, // Tuile O
+//			3, // Tuile P
+//			1, // Tuile Q
+//			3, // Tuile R
+//			2, // Tuile S
+//			1, // Tuile T
+//			8, // Tuile U
+//			9, // Tuile V
+//			4, // Tuile W
+//			1 // Tuile X
+//	};
+	
 	private static final int[] tilesCount = new int[] {
-			2, // Tuile A
-			4, // Tuile B
-			1, // Tuile C
-			4, // Tuile D
-			5, // Tuile E
-			2, // Tuile F
-			1, // Tuile G
-			3, // Tuile H
-			2, // Tuile I
-			3, // Tuile J
-			3, // Tuile K
-			3, // Tuile L
-			2, // Tuile M
-			3, // Tuile N
-			2, // Tuile O
-			3, // Tuile P
-			1, // Tuile Q
-			3, // Tuile R
-			2, // Tuile S
-			1, // Tuile T
-			8, // Tuile U
-			9, // Tuile V
-			4, // Tuile W
-			1 // Tuile X
+			0, // Tuile A
+			0, // Tuile B
+			0, // Tuile C
+			0, // Tuile D
+			10, // Tuile E
+			0, // Tuile F
+			0, // Tuile G
+			0, // Tuile H
+			0, // Tuile I
+			0, // Tuile J
+			0, // Tuile K
+			0, // Tuile L
+			0, // Tuile M
+			0, // Tuile N
+			0, // Tuile O
+			0, // Tuile P
+			0, // Tuile Q
+			0, // Tuile R
+			0, // Tuile S
+			0, // Tuile T
+			0, // Tuile U
+			0, // Tuile V
+			0, // Tuile W 
+			0 // Tuile X
 	};
 	
 
@@ -121,8 +148,6 @@ public class TileManager {
 			currentTile = selectTileRandomly();
 			if (board.canPlaceSomeWhere(currentTile)) {
 				remove(currentTile);
-				if(numberOfTileRemaining == 0)
-					gameFinished = true;
 				currentPlayerhasPlacedTile = false;
 				model.fireLockConfirmButton();
 				model.fireNextTile();
@@ -590,5 +615,9 @@ public class TileManager {
 	
 	public boolean isGameFinished() {
 		return gameFinished;
+	}
+	
+	public void setGameFinished(boolean gameFinished) {
+		this.gameFinished = gameFinished;
 	}
 }

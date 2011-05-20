@@ -1,30 +1,19 @@
 package org.gla.carcassonne.ui.events;
 
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
-import org.gla.carcassonne.CarcassonneView;
-
-public class CloseWindow implements WindowListener {
-	private CarcassonneView view;	
+public class CloseWindow implements ActionListener {
+	private Window window;	
 	
-	public CloseWindow(CarcassonneView view){
-		this.view = view;
+	public CloseWindow(Window window){
+		this.window = window;
 	}
 
-	public void windowClosing(WindowEvent arg0) {
-		view.getController().notifyQuitGame();
+	public void actionPerformed(ActionEvent arg0) {
+		window.dispose();
 	}
 	
-	public void windowActivated(WindowEvent arg0) {	}
-
-	public void windowClosed(WindowEvent arg0) { }
-
-	public void windowDeactivated(WindowEvent arg0) { }
-
-	public void windowDeiconified(WindowEvent arg0) { }
-
-	public void windowIconified(WindowEvent arg0) { }
-
-	public void windowOpened(WindowEvent arg0) { }
 }

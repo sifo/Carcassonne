@@ -5,6 +5,6 @@ public class Main {
 		CarcassonneModel model = new CarcassonneModel();
 		CarcassonneController controller = new CarcassonneController(model);
 		controller.displayViews();
-		model.start();
+		//model.start();
 	}
 }

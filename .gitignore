@@ -1,0 +1,11 @@
+# ignorer les fichiers suivants
+.project
+.classpath
+.settings
+
+# ignorer les fichiers temporaires
+*~
+*.swp
+
+# ignorer binaires
+bin*
