@@ -53,6 +53,8 @@ public class Client extends Thread {
 				Message receive = Message.parse(in);
 				String type = receive.getNthValue(0).toString();
 				
+				System.out.println("CLIENT - received message is "+receive.toString());
+				
 				if (!ProtocolMessages.getTypesSet().contains(type))
 					throw new ProtocolError("Protocole incompatible ou non à jour.");
 				
@@ -76,8 +78,10 @@ public class Client extends Thread {
 						hasStarted = true;
 				}
 				else {
-					if (type.equals("TOKEN"))
+					if (type.equals("TOKEN")) {
 						token = getToken(receive);
+						System.out.println("Token value is "+token);
+					}
 
 					if (type.equals("READY"))
 						setPlayerReady(receive);
@@ -145,6 +149,7 @@ public class Client extends Thread {
 		MessageInt t = new MessageInt(token);
 		
 		Message m = new Message("MOVE", n, tile, x, y, o, piece, t);
+		System.out.println("Move is : "+m.toString());
 		
 		try {
 			m.format(out);
@@ -281,8 +286,8 @@ public class Client extends Thread {
 		} catch (ProtocolError e) {
 			System.out.println("Message TOKEN malformaté");
 			e.printStackTrace();
+			return 0;
 		}
-		return 0;
 	}
 	
 	/*

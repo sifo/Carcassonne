@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.gla.carcassonne.entities.Player;
 import org.gla.carcassonne.entities.Tile;
+import org.gla.carcassonne.managers.NetworkManager;
 import org.gla.carcassonne.ui.MultiplayerLobbyDialog;
 import org.gla.carcassonne.ui.SwingCarcassonneView;
 
@@ -40,6 +41,19 @@ public class CarcassonneController {
 	
 	public void notifyAddTile(int x, int y) {
 		Tile currentTile = carcassonneModel.getTileManager().getCurrentTile();
+		NetworkManager networkManager = carcassonneModel.getNetworkManager();
+		if (networkManager != null) {
+			if (networkManager.getClient().getToken() > 0) {
+				synchronized(this) {
+					networkManager.getClient().move(currentTile, currentTile, currentTile, currentTile, currentTile);
+					notifyAll();
+				}
+			}
+			else {
+				System.out.println("Ce n'est pas votre tour de jouer !");
+				return;
+			}
+		}
 		carcassonneModel.getTileManager().getBoard().add(x, y, currentTile);
 	}
 
