@@ -25,7 +25,7 @@ public class RandomGenerator {
 		}
 		
 		Random generator = new Random();
-		int value = generator.nextInt(valuesSum);
+		int value = generator.nextInt(valuesSum)+1;   // On ne veut surtout pas 0
 		
 		for(Entry<TileType, Integer> entry : map.entrySet()) {
 			value -= entry.getValue();
