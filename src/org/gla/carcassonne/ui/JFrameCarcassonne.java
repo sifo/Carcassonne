@@ -255,18 +255,6 @@ public class JFrameCarcassonne extends JFrame {
 		}
 	}
 
-	public void unlockConfirmLockRotate() {
-		turnLeftButton.setEnabled(false);
-		turnRightButton.setEnabled(false);
-		confirmButton.setEnabled(true);
-	}
-
-	public void lockConfirmUnlockRotate() {		
-		turnLeftButton.setEnabled(true);
-		turnRightButton.setEnabled(true);
-		confirmButton.setEnabled(false);
-	}
-
 	public void cardBack(CardBackEvent event) {
 		imagePanel.setImage("res/drawable/card-back.png");
 	}
@@ -310,6 +298,25 @@ public class JFrameCarcassonne extends JFrame {
 
 	public JPanelMenu getMenuBarCarcassonne() {
 		return menuBar;
+	}
+
+	public void unlockConfirmButton() {
+		confirmButton.setEnabled(true);
+	}
+
+	public void lockConfirmButton() {		
+		confirmButton.setEnabled(false);
+	}
+
+	public void unlockRotateButtons() {
+		turnLeftButton.setEnabled(true);
+		turnRightButton.setEnabled(true);
+	}
+
+
+	public void lockRotateButtons() {
+		turnLeftButton.setEnabled(false);
+		turnRightButton.setEnabled(false);
 	}
 
 }

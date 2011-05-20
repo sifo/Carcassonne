@@ -15,10 +15,12 @@ public interface CarcassonneListener extends EventListener {
 	public void rotateLeft(RotateLeftEvent event);
 	public void rotateRight(RotateRightEvent event);
 	public void players(PlayersEvent event);
-	public void unlockConfirmLockRotate(UnlockConfirmLockRotateEvent event);
-	public void lockConfirmUnlockRotate(LockConfirmUnlockRotateEvent lockConfirmButtonEvent);
 	public void cardBack(CardBackEvent cardBackEvent);
 	public void listenerOnCurrentTile(
-			ListenerOnCurrentTileEvent listenerOnCurrentTileEvent);
-	public void placePieceOnTile(PlacePieceOnTileEvent placePieceOnTileEvent);
+			ListenerOnCurrentTileEvent event);
+	public void placePieceOnTile(PlacePieceOnTileEvent event);
+	public void unlockConfirmButton(UnlockConfirmButtonEvent event);
+	public void lockConfirmButton(LockConfirmButtonEvent event);
+	public void unlockRotateButtons(UnlockRotateButtonsEvent event);
+	public void lockRotateButtons(LockRotateButtonsEvent event);
 }

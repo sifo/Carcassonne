@@ -12,14 +12,16 @@ import org.gla.carcassonne.events.CardBackEvent;
 import org.gla.carcassonne.events.ConfigDialogEvent;
 import org.gla.carcassonne.events.ListenerOnCurrentTileEvent;
 import org.gla.carcassonne.events.LobbyDialogEvent;
-import org.gla.carcassonne.events.LockConfirmUnlockRotateEvent;
+import org.gla.carcassonne.events.LockConfirmButtonEvent;
+import org.gla.carcassonne.events.LockRotateButtonsEvent;
 import org.gla.carcassonne.events.NextTileEvent;
 import org.gla.carcassonne.events.PlacePieceOnTileEvent;
 import org.gla.carcassonne.events.PlayersEvent;
 import org.gla.carcassonne.events.RemainingTileEvent;
 import org.gla.carcassonne.events.RotateLeftEvent;
 import org.gla.carcassonne.events.RotateRightEvent;
-import org.gla.carcassonne.events.UnlockConfirmLockRotateEvent;
+import org.gla.carcassonne.events.UnlockConfirmButtonEvent;
+import org.gla.carcassonne.events.UnlockRotateButtonsEvent;
 import org.gla.carcassonne.managers.NetworkManager;
 import org.gla.carcassonne.managers.PlayerManager;
 import org.gla.carcassonne.managers.TileManager;
@@ -74,30 +76,6 @@ public class CarcassonneModel implements Game {
 		}
 	}
 
-	public void fireExitGame() {
-		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
-				.getListeners(CarcassonneListener.class);
-		for (CarcassonneListener listener : listenerList) {
-			// listener.exitGame(new ExitGameEvent(this));
-		}
-	}
-
-	public void fireNextPlayer() {
-		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
-				.getListeners(CarcassonneListener.class);
-		for (CarcassonneListener listener : listenerList) {
-			// listener.NextPlayer(new NextPlayerEvent(this));
-		}
-	}
-
-	public void firePickTile() {
-		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
-				.getListeners(CarcassonneListener.class);
-		for (CarcassonneListener listener : listenerList) {
-			// listener.PickTile(new PickTileEvent(this));
-		}
-	}
-
 	public void firePlacePieceOnTile() {
 		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
 				.getListeners(CarcassonneListener.class);
@@ -122,22 +100,6 @@ public class CarcassonneModel implements Game {
 		for (CarcassonneListener listener : listenerList) {
 			listener.rotateRight(new RotateRightEvent(this, tileManager
 					.getCurrentTile().getRotationCount()));
-		}
-	}
-
-	public void fireAddPlayer() {
-		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
-				.getListeners(CarcassonneListener.class);
-		for (CarcassonneListener listener : listenerList) {
-			// listener.AddPlayer(new AddPlayerEvent(this));
-		}
-	}
-
-	public void fireRemovePlayer() {
-		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
-				.getListeners(CarcassonneListener.class);
-		for (CarcassonneListener listener : listenerList) {
-			// listener.RemovePlayer(new RemovePlayerEvent(this));
 		}
 	}
 
@@ -228,22 +190,6 @@ public class CarcassonneModel implements Game {
 		}
 	}
 
-	public void fireUnlockConfirmButton() {
-		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
-				.getListeners(CarcassonneListener.class);
-		for (CarcassonneListener listener : listenerList) {
-			listener.unlockConfirmLockRotate(new UnlockConfirmLockRotateEvent(this));
-		}
-	}
-
-	public void fireLockConfirmButton() {
-		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
-				.getListeners(CarcassonneListener.class);
-		for (CarcassonneListener listener : listenerList) {
-			listener.lockConfirmUnlockRotate(new LockConfirmUnlockRotateEvent(this));
-		}
-	}
-
 	public void fireCardBack() {
 		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
 				.getListeners(CarcassonneListener.class);
@@ -280,5 +226,37 @@ public class CarcassonneModel implements Game {
 		start();
 		fireBoard();
 		firePlayers();
+	}
+
+	public void fireLockConfirmButton() {
+		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
+				.getListeners(CarcassonneListener.class);
+		for (CarcassonneListener listener : listenerList) {
+			listener.lockConfirmButton(new LockConfirmButtonEvent(this));
+		}
+	}
+
+	public void fireUnlockConfirmButton() {
+		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
+				.getListeners(CarcassonneListener.class);
+		for (CarcassonneListener listener : listenerList) {
+			listener.unlockConfirmButton(new UnlockConfirmButtonEvent(this));
+		}
+	}
+	
+	public void fireLockRotateButtons() {
+		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
+				.getListeners(CarcassonneListener.class);
+		for (CarcassonneListener listener : listenerList) {
+			listener.lockRotateButtons(new LockRotateButtonsEvent(this));
+		}
+	}
+
+	public void fireUnlockRotateButtons() {
+		CarcassonneListener[] listenerList = (CarcassonneListener[]) listeners
+				.getListeners(CarcassonneListener.class);
+		for (CarcassonneListener listener : listenerList) {
+			listener.unlockRotateButtons(new UnlockRotateButtonsEvent(this));
+		}
 	}
 }

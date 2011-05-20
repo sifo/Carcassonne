@@ -91,6 +91,7 @@ public class CarcassonneController {
 					carcassonneModel.setShowedResults(true);
 					carcassonneModel.getTileManager().resolveEndGamePoint();
 					carcassonneModel.fireLockConfirmButton();
+					carcassonneModel.fireLockRotateButtons();
 				}
 			}
 		}

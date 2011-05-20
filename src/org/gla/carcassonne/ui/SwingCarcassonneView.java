@@ -6,7 +6,23 @@ import javax.swing.JFrame;
 
 import org.gla.carcassonne.CarcassonneController;
 import org.gla.carcassonne.CarcassonneView;
-import org.gla.carcassonne.events.*;
+import org.gla.carcassonne.events.AddTileEvent;
+import org.gla.carcassonne.events.BoardEvent;
+import org.gla.carcassonne.events.CantAddTileEvent;
+import org.gla.carcassonne.events.CardBackEvent;
+import org.gla.carcassonne.events.ConfigDialogEvent;
+import org.gla.carcassonne.events.ListenerOnCurrentTileEvent;
+import org.gla.carcassonne.events.LobbyDialogEvent;
+import org.gla.carcassonne.events.LockConfirmButtonEvent;
+import org.gla.carcassonne.events.LockRotateButtonsEvent;
+import org.gla.carcassonne.events.NextTileEvent;
+import org.gla.carcassonne.events.PlacePieceOnTileEvent;
+import org.gla.carcassonne.events.PlayersEvent;
+import org.gla.carcassonne.events.RemainingTileEvent;
+import org.gla.carcassonne.events.RotateLeftEvent;
+import org.gla.carcassonne.events.RotateRightEvent;
+import org.gla.carcassonne.events.UnlockConfirmButtonEvent;
+import org.gla.carcassonne.events.UnlockRotateButtonsEvent;
 
 public class SwingCarcassonneView extends CarcassonneView {
 
@@ -84,12 +100,20 @@ public class SwingCarcassonneView extends CarcassonneView {
 		jframe.players(event);
 	}
 
-	public void unlockConfirmLockRotate(UnlockConfirmLockRotateEvent event) {
-		jframe.unlockConfirmLockRotate();
+	public void unlockConfirmButton(UnlockConfirmButtonEvent event) {
+		jframe.unlockConfirmButton();
 	}
 	
-	public void lockConfirmUnlockRotate(LockConfirmUnlockRotateEvent event) {
-		jframe.lockConfirmUnlockRotate();
+	public void lockConfirmButton(LockConfirmButtonEvent event) {
+		jframe.lockConfirmButton();
+	}
+	
+	public void unlockRotateButtons(UnlockRotateButtonsEvent event) {
+		jframe.unlockRotateButtons();
+	}
+	
+	public void lockRotateButtons(LockRotateButtonsEvent event) {
+		jframe.lockRotateButtons();
 	}
 	
 	public void cardBack(CardBackEvent event){

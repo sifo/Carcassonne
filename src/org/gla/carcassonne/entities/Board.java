@@ -36,6 +36,7 @@ public class Board {
 				model.getTileManager().setCurrentPlayerhasPlacedTile(true);
 				tile.setPlayer(model.getPlayerManager().getCurrentPlayer());
 				model.fireUnlockConfirmButton();
+				model.fireLockRotateButtons();
 				model.fireCardBack();
 				model.fireListenerOnCurrentTile();
 			}

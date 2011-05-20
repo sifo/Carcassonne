@@ -150,6 +150,7 @@ public class TileManager {
 				remove(currentTile);
 				currentPlayerhasPlacedTile = false;
 				model.fireLockConfirmButton();
+				model.fireUnlockRotateButtons();
 				model.fireNextTile();
 				return;
 			} else {

@@ -9,3 +9,5 @@
 
 # ignorer binaires
 bin*
+build*
+dist*
