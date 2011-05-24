@@ -70,7 +70,7 @@
 			<formatter type="xml"/>
 			<batchtest todir="build/test/data">
 			  <fileset dir="build/test/classes"
-				    includes="**/test/*Test.class"/>
+				    includes="**/test/**/*Test.class"/>
 			</batchtest>
 		</junit>
 		<!-- <junitreport todir="build/test/data">

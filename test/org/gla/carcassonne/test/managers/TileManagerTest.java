@@ -30,7 +30,7 @@ public class TileManagerTest extends TestCase {
 	public void testGetNextTile() {
 		int numberOfTileRemaining = tileManager.getNumberOfTileRemaining();
 		tileManager.putFirstTileOnBoard();
-		assertEquals(numberOfTileRemaining - 1,
+		assertEquals(numberOfTileRemaining - 2,
 				tileManager.getNumberOfTileRemaining());
 	}
 	
