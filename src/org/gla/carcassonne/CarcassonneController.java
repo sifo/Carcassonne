@@ -121,7 +121,7 @@ public class CarcassonneController {
 	}
 
 	public void notifyNewGame() {
-		carcassonneModel.start();
+		carcassonneModel.newGame();
 	}
 	
 	public void notifyReady() {

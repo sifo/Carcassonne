@@ -60,12 +60,14 @@ public class JFrameCarcassonne extends JFrame {
 	private JButton confirmButton;
 	private JButton turnLeftButton;
 	private JButton turnRightButton;
+	private Box vLabel;
 	private static final int HEIGHT_MIN = 600;
 	private static final int WIDTH_MIN = 485;
 
 	public JFrameCarcassonne(String title, SwingCarcassonneView view) {
 		super(title);
 		this.view = view;
+		vLabel = Box.createVerticalBox();
 		confirmButton = new JButton();
 		turnLeftButton = new JButton();
 		turnRightButton = new JButton();
@@ -136,9 +138,8 @@ public class JFrameCarcassonne extends JFrame {
 
 		Box remainingTileNumberBox = Box.createHorizontalBox();
 		remainingTileNumberBox.add(remainingTileNumber);
-
-		Box vLabel = Box.createVerticalBox();
-
+		
+		vLabel.removeAll();
 		for (JLabel labelPlayer : jlabelPlayers) {
 			vLabel.add(Box.createVerticalStrut(10));
 			vLabel.add(labelPlayer);
@@ -227,11 +228,9 @@ public class JFrameCarcassonne extends JFrame {
 	public void players(PlayersEvent event) {
 		String turn;
 		String text;
-		boolean addLabel = false;
 		List<Player> players = event.getPlayers();
+		jlabelPlayers.clear();
 
-		if (jlabelPlayers.isEmpty())
-			addLabel = true;
 		for (int i = 0; i < players.size(); i++) {
 			if (event.getCurrentPlayer() == players.get(i))
 				turn = "$&nbsp;&nbsp;";
@@ -247,11 +246,13 @@ public class JFrameCarcassonne extends JFrame {
 					+ "</p><p>&nbsp;&nbsp;&nbsp;&nbsp;"
 					+ players.get(i).getPoints() + " | "
 					+ players.get(i).getPieceCount() + "</p><html>";
-			if (addLabel) {
-				jlabelPlayers.add(new JLabel(text));
-			} else {
-				jlabelPlayers.get(i).setText(text);
-			}
+			jlabelPlayers.add(new JLabel(text));
+			jlabelPlayers.get(i).setText(text);
+		}
+		vLabel.removeAll();
+		for (JLabel labelPlayer : jlabelPlayers) {
+			vLabel.add(Box.createVerticalStrut(10));
+			vLabel.add(labelPlayer);
 		}
 	}
 

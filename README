@@ -63,7 +63,7 @@ Options :
 - compile : compile les sources
 - execute : exécute le programme
 - archive : crée un .jar des .class après la compilation
-- clean : efface tous les fichiers et dossiers qui ont été crés avec la commande '$ ant'
+- clean : efface tous les fichiers et dossiers qui ont été crés avec la commande '$ ant clean'
 - test-init : crée des dossiers
 - test-compile : compile les sources du test
 - test : lance les tests

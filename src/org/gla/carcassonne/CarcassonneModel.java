@@ -157,7 +157,12 @@ public class CarcassonneModel implements Game {
 	}
 
 	public void play() {
+		tileManager = new TileManager(this);
+		playerManager = new PlayerManager(this);
+		networkManager = null;
+		showedResults = false;
 		fireBoard();
+		//firePlayers();
 		getTileManager().putFirstTileOnBoard();
 	}
 	
@@ -218,14 +223,9 @@ public class CarcassonneModel implements Game {
 	}		
 	
 	public void newGame() {
-		tileManager = new TileManager(this);
-		playerManager = new PlayerManager(this);
-		listeners = new EventListenerList();
-		networkManager = null;
-		showedResults = false;
 		start();
-		fireBoard();
-		firePlayers();
+		//fireBoard();
+		//firePlayers();
 	}
 
 	public void fireLockConfirmButton() {

@@ -16,9 +16,9 @@ public class SendPlayerListListener implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
+		view.getController().notifyPlay();
 		view.getController().notifyPlayerList(
 				numberPlayerDialog.getPlayersNames());
-		view.getController().notifyPlay();
 		numberPlayerDialog.dispose();
 	}
 }
