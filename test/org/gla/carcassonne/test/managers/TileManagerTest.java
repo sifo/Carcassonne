@@ -23,7 +23,7 @@ public class TileManagerTest extends TestCase {
 		tileManager.putFirstTileOnBoard();
 		assertEquals(numberOfTileOnBoard + 1, tileManager.getBoard()
 				.getTileCount());
-		assertEquals(numberOfTileRemaining - 1,
+		assertEquals(numberOfTileRemaining - 2,
 				tileManager.getNumberOfTileRemaining());
 	}
 
