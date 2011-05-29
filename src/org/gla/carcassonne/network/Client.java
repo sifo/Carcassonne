@@ -8,6 +8,12 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.gla.carcassonne.network.utils.Message;
+import org.gla.carcassonne.network.utils.MessageInt;
+import org.gla.carcassonne.network.utils.MessageString;
+import org.gla.carcassonne.network.utils.ProtocolError;
+import org.gla.carcassonne.network.utils.ProtocolMessages;
+import org.gla.carcassonne.network.utils.ProtocolParseError;
 import org.gla.carcassonne.utils.*;
 
 public class Client extends Thread {

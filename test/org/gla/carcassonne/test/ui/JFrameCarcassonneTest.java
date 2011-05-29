@@ -2,21 +2,21 @@ package org.gla.carcassonne.test.ui;
 
 import junit.framework.TestCase;
 
-import org.gla.carcassonne.CarcassonneController;
-import org.gla.carcassonne.CarcassonneModel;
-import org.gla.carcassonne.ui.JFrameCarcassonne;
-import org.gla.carcassonne.ui.SwingCarcassonneView;
+import org.gla.carcassonne.Controller;
+import org.gla.carcassonne.Model;
+import org.gla.carcassonne.ui.MainFrame;
+import org.gla.carcassonne.ui.SwingView;
 
 public class JFrameCarcassonneTest extends TestCase {
 	
-	private JFrameCarcassonne jframeCarcassonne;
+	private MainFrame jframeCarcassonne;
 	private final static String TITLE = "JFrame test";
 
 	protected void setUp() {
-		CarcassonneModel model = new CarcassonneModel();
-		CarcassonneController controller = new CarcassonneController(model);
-		SwingCarcassonneView view =  new SwingCarcassonneView(controller);
-		jframeCarcassonne = new JFrameCarcassonne(TITLE, view);
+		Model model = new Model();
+		Controller controller = new Controller(model);
+		SwingView view =  new SwingView(controller);
+		jframeCarcassonne = new MainFrame(TITLE, view);
 	}
 
 	protected void tearDown() {

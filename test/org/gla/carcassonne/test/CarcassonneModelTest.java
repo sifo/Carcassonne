@@ -3,21 +3,21 @@ package org.gla.carcassonne.test;
 import java.util.EventListener;
 
 import junit.framework.TestCase;
-import org.gla.carcassonne.CarcassonneController;
-import org.gla.carcassonne.CarcassonneListener;
-import org.gla.carcassonne.CarcassonneModel;
-import org.gla.carcassonne.ui.SwingCarcassonneView;
+import org.gla.carcassonne.Controller;
+import org.gla.carcassonne.Listener;
+import org.gla.carcassonne.Model;
+import org.gla.carcassonne.ui.SwingView;
 
 public class CarcassonneModelTest extends TestCase {
 	
-	private CarcassonneModel model;
-	private CarcassonneController controller;
-	private CarcassonneListener listener;
+	private Model model;
+	private Controller controller;
+	private Listener listener;
 
 	protected void setUp() {
-		model = new CarcassonneModel();
-		controller = new CarcassonneController(model);
-		listener = new SwingCarcassonneView(controller);
+		model = new Model();
+		controller = new Controller(model);
+		listener = new SwingView(controller);
 	}
 
 	public void testCarcassonneModel() {
@@ -25,30 +25,30 @@ public class CarcassonneModelTest extends TestCase {
 	}
 
 	public void testAddCarcassonneListener() {
-		model = new CarcassonneModel();
+		model = new Model();
 		model.addCarcassonneListener(listener);
 		int count = model.getListeners()
-			.getListenerCount(CarcassonneListener.class);
+			.getListenerCount(Listener.class);
 		
 		EventListener [] eventListeners = model.getListeners()
-				.getListeners(CarcassonneListener.class);
+				.getListeners(Listener.class);
 
-		CarcassonneListener lastListener = 
-			(CarcassonneListener) eventListeners[count - 1];
+		Listener lastListener = 
+			(Listener) eventListeners[count - 1];
 
 		assertEquals(listener, lastListener);
 	}
 
 	public void testRemoveCarcassonneListener() {
-		model = new CarcassonneModel();
+		model = new Model();
 		model.addCarcassonneListener(listener);
 		int count = model.getListeners()
-			.getListenerCount(CarcassonneListener.class);
+			.getListenerCount(Listener.class);
 		assertEquals("count = " + count, 1, count);
 
 		model.removeCarcassonneListener(listener);
 		count = model.getListeners()
-			.getListenerCount(CarcassonneListener.class);
+			.getListenerCount(Listener.class);
 		assertEquals("count = " + count, 0, count);
 	}
 	

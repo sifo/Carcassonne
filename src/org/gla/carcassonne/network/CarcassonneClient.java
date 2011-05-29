@@ -3,15 +3,15 @@ package org.gla.carcassonne.network;
 import java.net.Socket;
 import java.util.Set;
 
-import org.gla.carcassonne.CarcassonneModel;
+import org.gla.carcassonne.Model;
 import org.gla.carcassonne.entities.Tile;
 import org.gla.carcassonne.entities.TileType;
 
 public class CarcassonneClient extends Socket implements ClientFactory {
 
-	CarcassonneModel model;
+	Model model;
 	
-	public CarcassonneClient(CarcassonneModel model) {
+	public CarcassonneClient(Model model) {
 		this.model = model;
 	}
 
@@ -97,7 +97,7 @@ public class CarcassonneClient extends Socket implements ClientFactory {
 		Tile t = new Tile(type);
 		t.setRotationCount(rotation);
 		
-		if (model.getTileManager().getBoard().canPlace(x, y, t)) {
+		if (model.getTileManager().getBoard().isPlacable(x, y, t)) {
 			model.getTileManager().getBoard().add(x, y, t);
 			return true;
 		}

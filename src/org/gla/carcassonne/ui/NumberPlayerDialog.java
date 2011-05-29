@@ -16,8 +16,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.gla.carcassonne.ui.events.CloseWindow;
-import org.gla.carcassonne.ui.events.SendPlayerListListener;
+import org.gla.carcassonne.ui.events.CloseWindowEvent;
+import org.gla.carcassonne.ui.events.PlayerListEvent;
 
 public class NumberPlayerDialog extends JDialog implements ActionListener {
 
@@ -28,11 +28,11 @@ public class NumberPlayerDialog extends JDialog implements ActionListener {
 	JTextField[] playerNameField;
 	JComboBox[] aiComboxBox;
 	List<String> names;
-	SwingCarcassonneView view;
+	SwingView view;
 
 	boolean clickedOnOk = false;
 
-	public NumberPlayerDialog(SwingCarcassonneView view) {
+	public NumberPlayerDialog(SwingView view) {
 		numberPlayer = new JComboBox(new String[] { "1", "2", "3", "4", "5",
 				"6" });
 		numberPlayer.setSelectedIndex(1);
@@ -97,10 +97,10 @@ public class NumberPlayerDialog extends JDialog implements ActionListener {
 		}
 
 		JButton okButton = new JButton("Jouer");
-		okButton.addActionListener(new SendPlayerListListener(view, this));
+		okButton.addActionListener(new PlayerListEvent(view, this));
 
 		JButton cancelButton = new JButton("Annuler");
-		cancelButton.addActionListener(new CloseWindow(this));
+		cancelButton.addActionListener(new CloseWindowEvent(this));
 
 		hbox = Box.createHorizontalBox();
 		hbox.add(okButton);

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.gla.carcassonne.CarcassonneModel;
+import org.gla.carcassonne.Model;
 import org.gla.carcassonne.entities.Board;
 import org.gla.carcassonne.entities.Player;
 import org.gla.carcassonne.entities.Status;
@@ -24,7 +24,7 @@ public class TileManager {
 	private Map<TileType, Integer> tiles;
 	private int numberOfTileRemaining;
 	private Tile currentTile;
-	private CarcassonneModel model;
+	private Model model;
 	private boolean currentPlayerhasPlacedTile;
 	private Set<Tile> tilesWherePieceFound;
 	private Set<Tile> tilesWherePieceFoundForEndGame;
@@ -61,10 +61,10 @@ public class TileManager {
 	};
 	
 
-	public TileManager(CarcassonneModel model) {
+	public TileManager(Model model) {
 		int i = 0;
 		currentPlayerhasPlacedTile = false;
-		numberOfTileRemaining = maxTileNumber();
+		numberOfTileRemaining = getMaxTileNumber();
 		currentTile = null;
 		board = new Board(model);
 		tilesWherePieceFound = new HashSet<Tile>();
@@ -80,7 +80,7 @@ public class TileManager {
 		}
 	}
 
-	private int maxTileNumber() {
+	private int getMaxTileNumber() {
 		int res = 0;
 		for(int i : tilesCount)
 			res += i;
@@ -119,12 +119,12 @@ public class TileManager {
 	public void getNextTile() {
 		if (numberOfTileRemaining > 0) {
 			currentTile = selectTileRandomly();
-			if (board.canPlaceSomeWhere(currentTile)) {
+			if (board.isPlacableSomeWhere(currentTile)) {
 				remove(currentTile);
 				currentPlayerhasPlacedTile = false;
 				model.fireLockConfirmButton();
 				model.fireUnlockRotateButtons();
-				model.fireNextTile();
+				model.fireDrawNextTile();
 				return;
 			} else {
 				getNextTile();
@@ -151,14 +151,14 @@ public class TileManager {
 	public void rotateLeft() {
 		if(!currentPlayerhasPlacedTile) {
 			currentTile.rotateLeft();
-			model.fireRotateLeft();
+			model.fireDrawNextTile();
 		}
 	}
 
 	public void rotateRight() {
 		if(!currentPlayerhasPlacedTile) {
 			currentTile.rotateRight();
-			model.fireRotateRight();
+			model.fireDrawNextTile();
 		}
 	}
 
@@ -485,7 +485,7 @@ public class TileManager {
 			else {
 				tilesWherePieceFoundForEndGame.add(tile);
 			}
-			model.firePlayers();
+			model.fireDrawPlayerList();
 			model.fireBoard();
 		}
 	}
@@ -553,7 +553,7 @@ public class TileManager {
 				statusString + " " + player.getName() + " +" + points);
 			}
 		}
-		model.firePlayers();
+		model.fireDrawPlayerList();
 		model.fireBoard();
 	}
 	

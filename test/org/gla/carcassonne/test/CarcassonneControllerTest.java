@@ -1,19 +1,19 @@
 package org.gla.carcassonne.test;
 
 import junit.framework.TestCase;
-import org.gla.carcassonne.CarcassonneController;
-import org.gla.carcassonne.CarcassonneListener;
-import org.gla.carcassonne.CarcassonneModel;
-import org.gla.carcassonne.ui.SwingCarcassonneView;
+import org.gla.carcassonne.Controller;
+import org.gla.carcassonne.Listener;
+import org.gla.carcassonne.Model;
+import org.gla.carcassonne.ui.SwingView;
 
 public class CarcassonneControllerTest extends TestCase {
 
-	private CarcassonneController controller;
-	private CarcassonneModel model;
+	private Controller controller;
+	private Model model;
 
 	protected void setUp() {
-		model = new CarcassonneModel();
-		controller = new CarcassonneController(model);	
+		model = new Model();
+		controller = new Controller(model);	
 	}
 
 	protected void tearDown() {
@@ -21,29 +21,29 @@ public class CarcassonneControllerTest extends TestCase {
 	}
 
 	public void testCarcassonneController() {
-		assertEquals(model, controller.getCarcassonneModel());
-		assertNotNull(controller.getCarcassonneView());
-		assertTrue(controller.getCarcassonneModel().getListeners()
+		assertEquals(model, controller.getModel());
+		assertNotNull(controller.getView());
+		assertTrue(controller.getModel().getListeners()
 			.getListenerCount() != 0);
 	}
 
 	public void testCloseViews() {
 		controller.displayViews();
 		controller.closeViews();
-		assertFalse(((SwingCarcassonneView)controller.getCarcassonneView())
+		assertFalse(((SwingView)controller.getView())
 			.getJFrame().isVisible());
 	}
 
 	public void testDisplayViews() {
 		controller.displayViews();
-		assertTrue(((SwingCarcassonneView)controller.getCarcassonneView())
+		assertTrue(((SwingView)controller.getView())
 			.getJFrame().isVisible());
 	}
 
 	public void testAddListenersToModel() {
 		controller.addListenersToModel();
-		assertEquals(controller.getCarcassonneModel().getListeners()
-			.getListeners(CarcassonneListener.class)[0],
-			controller.getCarcassonneView());
+		assertEquals(controller.getModel().getListeners()
+			.getListeners(Listener.class)[0],
+			controller.getView());
 	}
 }

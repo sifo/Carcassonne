@@ -23,6 +23,12 @@ projets :
 [X] module multijoueur
 [X] abstraction suffisante pour extensibilité
 [/] Gestions des erreurs
+[ ] Click droit pour rotate
+
+- Board
+[ ] Lors du test pour savoir si une pièce peut être posée, éviter que la 
+	propagation sur fasse sur la même zone si on refait le test.
+	La zone de test doit devenir plus petite (très petite).
 
 - A la fin du projet
 [X] Regarder nos échanges d'emails pour voir si certaines informations doivent être ajouter au cahier des charges.  

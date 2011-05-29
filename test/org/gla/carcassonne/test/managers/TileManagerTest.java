@@ -2,14 +2,14 @@ package org.gla.carcassonne.test.managers;
 
 import junit.framework.TestCase;
 
-import org.gla.carcassonne.CarcassonneModel;
+import org.gla.carcassonne.Model;
 import org.gla.carcassonne.managers.TileManager;
 
 public class TileManagerTest extends TestCase {
 	TileManager tileManager;
 
 	protected void setUp() {
-		tileManager = new TileManager(new CarcassonneModel());
+		tileManager = new TileManager(new Model());
 	}
 
 	public void testTileManager() {

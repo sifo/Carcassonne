@@ -1,14 +1,14 @@
 package org.gla.carcassonne.entities;
 
-import org.gla.carcassonne.CarcassonneModel;
+import org.gla.carcassonne.Model;
 
 public class Board {
 	private static final int DEFAULT_SIZE = 5;
 	private Tile[][] board;
 	private int tileCount;
-	private CarcassonneModel model;
+	private Model model;
 
-	public Board(CarcassonneModel model) {
+	public Board(Model model) {
 		this.model = model;
 		board = new Tile[DEFAULT_SIZE][DEFAULT_SIZE];
 		tileCount = 0;
@@ -23,7 +23,7 @@ public class Board {
 	}
 
 	public void add(int x, int y, Tile tile) {
-		if (!canPlace(x, y, tile) 
+		if (!isPlacable(x, y, tile) 
 				|| model.getTileManager().getCurrentPlayerHasPlacedTile()) {
 			model.fireCantAddTile(x, y);
 		} else {
@@ -95,7 +95,7 @@ public class Board {
 		}
 	}
 
-	public boolean willNeedResize(int x, int y) {
+	public boolean isResizeNeeded(int x, int y) {
 		if (y == 0 || y == board[0].length - 1 || x == 0
 				|| x == board.length - 1)
 			return true;
@@ -129,7 +129,7 @@ public class Board {
 		return false;
 	}
 	
-	public boolean canPlace(int x, int y, Tile tile) {
+	public boolean isPlacable(int x, int y, Tile tile) {
 		if (tileCount == 0) {
 			return true;
 		}
@@ -169,14 +169,14 @@ public class Board {
 		return false;
 	}
 
-	public boolean canPlaceSomeWhere(Tile tile) {
+	public boolean isPlacableSomeWhere(Tile tile) {
 		int initialRotationCount = 0;
 		int maxRotationCount = 3;
 		for(int i = 0; i < board.length; i++){
 			for(int j = 0; j < board[i].length; j++){
 				for(int k = initialRotationCount; k <= maxRotationCount; k++){
 					tile.setRotationCount(k);
-					if(canPlace(i, j, tile)){
+					if(isPlacable(i, j, tile)){
 						tile.setRotationCount(initialRotationCount);
 						return true;
 					}

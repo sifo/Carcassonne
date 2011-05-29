@@ -65,6 +65,7 @@
 		  <classpath>
 				<pathelement location="build/test/classes"/>
 				<pathelement location="build/classes"/>
+					<pathelement location="/usr/share/java/junit.jar" />
 			</classpath>
 			<formatter type="brief" usefile="false"/>
 			<formatter type="xml"/>

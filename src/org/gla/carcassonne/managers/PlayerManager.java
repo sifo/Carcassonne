@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.gla.carcassonne.CarcassonneModel;
+import org.gla.carcassonne.Model;
 import org.gla.carcassonne.entities.Player;
 
 public class PlayerManager {
@@ -13,11 +13,11 @@ public class PlayerManager {
 	private List<Player> order;
 	private int indexInOrder;
 	private boolean currentPlayerhasPlacedPiece;
-	private CarcassonneModel model;
+	private Model model;
 
 	private final static int MAX_PLAYER_NUMBER = 6;
 
-	public PlayerManager(CarcassonneModel model) {
+	public PlayerManager(Model model) {
 		players = new ArrayList<Player>();
 		order = players;
 		indexInOrder = 0;
@@ -48,7 +48,7 @@ public class PlayerManager {
 		/*
 		 * players.add(new Player("tom")); players.add(new Player("pierre"));
 		 */
-		model.firePlayers();
+		model.fireDrawPlayerList();
 	}
 
 	public List<Player> getOrder() {
@@ -64,7 +64,7 @@ public class PlayerManager {
 			indexInOrder = 0;
 		else
 			indexInOrder++;
-		model.firePlayers();
+		model.fireDrawPlayerList();
 	}
 
 	public int getIndexInOrder() {

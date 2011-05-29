@@ -6,6 +6,10 @@ import java.io.PushbackInputStream;
 import java.net.Socket;
 import java.net.SocketException;
 
+import org.gla.carcassonne.network.utils.Message;
+import org.gla.carcassonne.network.utils.ProtocolError;
+import org.gla.carcassonne.network.utils.ProtocolMessages;
+import org.gla.carcassonne.network.utils.ProtocolParseError;
 import org.gla.carcassonne.utils.*;
 
 public class CarcassonneThreadServer extends Thread {

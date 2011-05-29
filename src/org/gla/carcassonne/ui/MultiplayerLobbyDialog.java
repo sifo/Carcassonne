@@ -9,13 +9,12 @@ import java.awt.event.ActionListener;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.gla.carcassonne.ui.events.ReadyListener;
-import org.gla.carcassonne.ui.events.SendConnexion;
+import org.gla.carcassonne.ui.events.ReadyListenerEvent;
+import org.gla.carcassonne.ui.events.SendConnexionEvent;
 
 public class MultiplayerLobbyDialog extends JDialog implements ActionListener {
 
@@ -32,11 +31,11 @@ public class MultiplayerLobbyDialog extends JDialog implements ActionListener {
 	JTextField serverPortField;
 	JLabel[] playersList;
 	JLabel console;
-	SwingCarcassonneView view;
+	SwingView view;
 
 	boolean clickedOnOk = false;
 
-	public MultiplayerLobbyDialog(SwingCarcassonneView view) {
+	public MultiplayerLobbyDialog(SwingView view) {
 		this.view = view;
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setResizable(false);
@@ -66,11 +65,11 @@ public class MultiplayerLobbyDialog extends JDialog implements ActionListener {
 			playersList[i] = new JLabel("--");
 		
 		connectButton = new JButton(CONNECT);
-		connectButton.addActionListener(new SendConnexion(view, this));
+		connectButton.addActionListener(new SendConnexionEvent(view, this));
 		
 		readyButton = new JButton(READY);
 		readyButton.setEnabled(false);
-		readyButton.addActionListener(new ReadyListener(view, this));
+		readyButton.addActionListener(new ReadyListenerEvent(view, this));
 
 		JButton quitButton = new JButton(QUIT);
 		quitButton.setActionCommand("quit");

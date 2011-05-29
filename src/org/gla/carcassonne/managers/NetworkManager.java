@@ -5,10 +5,8 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.Set;
 
-import org.gla.carcassonne.CarcassonneModel;
+import org.gla.carcassonne.Model;
 import org.gla.carcassonne.entities.Player;
-import org.gla.carcassonne.entities.Tile;
-import org.gla.carcassonne.entities.TileType;
 import org.gla.carcassonne.network.CarcassonneClient;
 import org.gla.carcassonne.network.CarcassonneServer;
 import org.gla.carcassonne.network.Client;
@@ -16,14 +14,14 @@ import org.gla.carcassonne.ui.MultiplayerLobbyDialog;
 
 public class NetworkManager extends Thread {
 
-	private CarcassonneModel model;
+	private Model model;
 	private Client client;
 	private MultiplayerLobbyDialog lobby;
 	
 	// Servant à titre de tests
 	private CarcassonneServer server;
 	
-	public NetworkManager(CarcassonneModel model) throws IOException, InterruptedException {
+	public NetworkManager(Model model) throws IOException, InterruptedException {
 		this.model = model;
 		server = new CarcassonneServer();
 		server.start();

@@ -1,6 +1,7 @@
 package org.gla.carcassonne.network;
 
 import java.io.IOException;
+import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
@@ -8,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.gla.carcassonne.network.utils.Message;
+import org.gla.carcassonne.network.utils.MessageInt;
+import org.gla.carcassonne.network.utils.ProtocolError;
 import org.gla.carcassonne.utils.*;
 
 /**
@@ -28,13 +32,21 @@ public class CarcassonneServer extends Thread {
 
 	private final static String CONNECTION_ACCEPTED = "Connexion acceptée : ";
 	private final static int NUMBER_MAX_OF_CLIENTS = 5;
-	private final static int LISTENING_PORT = 54322;
+	private static int LISTENING_PORT = 54322;
 	private final static int SERVER_TIME_OUT = 500;
 
 	public CarcassonneServer() throws IOException, InterruptedException {
 		hasStarted = false;
 		isFinished = false;
-		serverSocket = new ServerSocket(LISTENING_PORT);
+		boolean portIsOk = false;
+		while(!portIsOk) {
+			try {
+				serverSocket = new ServerSocket(LISTENING_PORT);
+				portIsOk = true;
+			} catch (BindException e) {
+				LISTENING_PORT++;
+			}
+		}
 		clients = new ArrayList<CarcassonneThreadServer>();
 		serverSocket.setSoTimeout(SERVER_TIME_OUT);
 	}

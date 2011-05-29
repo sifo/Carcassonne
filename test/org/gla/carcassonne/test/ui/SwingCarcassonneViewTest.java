@@ -1,22 +1,22 @@
 package org.gla.carcassonne.test.ui;
 
-import org.gla.carcassonne.CarcassonneController;
-import org.gla.carcassonne.CarcassonneModel;
-import org.gla.carcassonne.ui.SwingCarcassonneView;
+import org.gla.carcassonne.Controller;
+import org.gla.carcassonne.Model;
+import org.gla.carcassonne.ui.SwingView;
 import java.awt.GridBagLayout;
 import javax.swing.JFrame;
 import junit.framework.TestCase;
 
 public class SwingCarcassonneViewTest extends TestCase {
 	
-	private SwingCarcassonneView view;
-	private CarcassonneController controller;
-	private CarcassonneModel model;
+	private SwingView view;
+	private Controller controller;
+	private Model model;
 
 	protected void setUp() {
-		model = new CarcassonneModel();
-		controller = new CarcassonneController(model);
-		view = new SwingCarcassonneView(controller);
+		model = new Model();
+		controller = new Controller(model);
+		view = new SwingView(controller);
 	}
 
 	protected void tearDown() {
