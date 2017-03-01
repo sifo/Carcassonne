@@ -4,16 +4,16 @@
 
 ### Composition du projet
 
-Moteur de jeu Carcassonne
-Interface graphique
-Système multijoueur
-Intégration lobby multijoueur dans l'interface graphique
+- Moteur de jeu Carcassonne
+- Interface graphique
+- Système multijoueur
+- Intégration lobby multijoueur dans l'interface graphique
 
-## INSTRUCTIONS
+## Instructions
 
 Outils requis :
 
-- Java 6.0
+- Java 6.0 or later
 - Ant
 - JUnit
 
