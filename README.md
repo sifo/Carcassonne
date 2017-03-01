@@ -1,6 +1,6 @@
 ## Projet Carcassonne
 
-![alt tag](medias/carcasonne.png)
+![alt tag](medias/carcassonne.png)
 
 ### Composition du projet
 
