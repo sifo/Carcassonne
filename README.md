@@ -1,4 +1,4 @@
-## Projet Carcassonne
+## Carcassonne
 
 ![alt tag](medias/carcassonne.png)
 
